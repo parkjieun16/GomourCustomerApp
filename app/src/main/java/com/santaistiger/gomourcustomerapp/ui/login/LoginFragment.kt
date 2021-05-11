@@ -26,14 +26,9 @@ import kotlinx.android.synthetic.main.activity_base.*
  */
 class LoginFragment : Fragment() {
 
-
-
     private var auth: FirebaseAuth? = null
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
-
-
-
 
     //  create a textWatcher member
     private val mTextWatcher: TextWatcher = object : TextWatcher {
@@ -55,11 +50,6 @@ class LoginFragment : Fragment() {
             loginButton.isEnabled = true
         }
     }
-
-
-
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

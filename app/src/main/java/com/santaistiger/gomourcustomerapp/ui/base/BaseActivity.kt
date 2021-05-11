@@ -26,18 +26,22 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         AutoPermissions.loadAllPermissions(this, 1)
 
         setSupportActionBar(toolbar)    // 툴바를 액티비티의 앱바로 지정
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)   // 툴바 홈버튼 활성화
-        supportActionBar?.setHomeAsUpIndicator(R.drawable.hamburger_btn)     // 홈버튼 이미지 변경
-        supportActionBar?.setDisplayShowTitleEnabled(false)     // 툴바에 앱 타이틀 보이지 않도록 설정
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)   // 툴바 홈버튼 활성화
+            setHomeAsUpIndicator(R.drawable.hamburger_btn)     // 홈버튼 이미지 변경
+            setDisplayShowTitleEnabled(false)     // 툴바에 앱 타이틀 보이지 않도록 설정
+        }
 
         // navigation 리스너 설정
         navigation_view.setNavigationItemSelectedListener(this)
 
         // 네비게이션 드로어 헤더 텍스트뷰 값 변경
         val header = navigation_view.getHeaderView(0)
-        header.user_name_string.setText("강단국")
-        header.user_phone_num_string.setText("010-1234-5678")
-        header.user_email_string.setText("32181234@dankook.ac.kr")
+        header.apply {
+            user_name_string.setText("강단국")
+            user_phone_num_string.setText("010-1234-5678")
+            user_email_string.setText("32181234@dankook.ac.kr")
+        }
     }
 
     // 메뉴 클릭 시 동작 정의
