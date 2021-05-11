@@ -13,5 +13,21 @@
 
     <string name="show_price_do_order_fragment">음식 가격 + %d원 (배달료)</string>
 
+    <!-- 기사 매칭 화면 관련 resource -->
+    <string name="matching_wait_match_fragment">기사 매칭 중입니다...</string>
+
+    <!-- 주문 목록 화면 관련 resource -->
+    <string name="title_order_list_fragment">주문 목록</string>
+    <string name="order_time_item_order_info">주문 시각</string>
+    <string name="delivery_status_item_order_info">배달 상태</string>
+    <string name="price_item_order_info">금액</string>
+    <string name="empty_order_list_fragment">주문 내역이 없습니다.</string>
+
+    <!-- 네비게이션 드로어 관련 resource -->
+    <string name="do_order_navdrawer_menu">주문하기</string>
+    <string name="order_list_navdrawer_menu">주문 목록</string>
+    <string name="modify_user_info_navdrawer_menu">회원 정보 변경</string>
+    <string name="logout_navdrawer_menu">로그아웃</string>
+
 
 </resources>

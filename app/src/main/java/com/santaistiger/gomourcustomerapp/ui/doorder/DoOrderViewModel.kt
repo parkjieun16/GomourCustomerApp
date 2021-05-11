@@ -59,8 +59,8 @@ class DoOrderViewModel : ViewModel() {
 
 
     private fun createOrderRequest(): OrderRequest = OrderRequest(
-            customerId = tmpUid,
-            stores = storeList as List<Store>,
+            customerUid = tmpUid,
+            stores = storeList as ArrayList<Store>,
             deliveryCharge = price.get(),
             destination = destination.get()!!,
             message = message.get()
