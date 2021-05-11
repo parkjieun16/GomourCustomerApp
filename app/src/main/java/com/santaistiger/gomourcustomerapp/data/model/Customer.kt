@@ -1,10 +1,10 @@
 package com.santaistiger.gomourcustomerapp.data.model
 
 data class Customer(
-    val email: String,
-    var password: String,
-    val name: String,
-    var phone: String,
-    var uid: String
+    val email: String? = null,
+    var password: String?= null,
+    val name: String? = null,
+    var phone: String? = null,
+    var uid: String? = null
 )
 
