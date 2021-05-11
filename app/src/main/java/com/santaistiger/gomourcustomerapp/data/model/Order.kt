@@ -9,7 +9,7 @@ data class Order(
         val orderId: String? = null,
         val customerUid: String? = null,
         val deliveryManUid: String? = null,
-        val stores: List<Store>? = null,
+        val stores: ArrayList<Store>? = null,
         val deliveryCharge: Int? = null,
         val destination: Place? = null,
         val message: String? = null,
