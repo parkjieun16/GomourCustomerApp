@@ -67,6 +67,7 @@ class JoinFragment : Fragment() {
     ): View? {
 
         setToolbar()
+
         auth = Firebase.auth
         binding = DataBindingUtil.inflate<FragmentJoinBinding>(inflater,
             R.layout.fragment_join,container,false)

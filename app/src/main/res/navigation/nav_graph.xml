@@ -12,10 +12,14 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_doOrderFragment"
-            app:destination="@id/doOrderFragment" />
+            app:destination="@id/doOrderFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loginFragment_to_joinFragment"
-            app:destination="@id/joinFragment" />
+            app:destination="@id/joinFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -132,9 +136,13 @@
         android:label="LoadingFragment" >
         <action
             android:id="@+id/action_loadingFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loadingFragment"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_loadingFragment_to_doOrderFragment"
-            app:destination="@id/doOrderFragment" />
+            app:destination="@id/doOrderFragment"
+            app:popUpTo="@id/loadingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

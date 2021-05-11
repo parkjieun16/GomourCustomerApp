@@ -43,6 +43,7 @@ class ModifyUserInfoFragment : Fragment() {
     ): View? {
 
         setToolbar()
+
         auth = Firebase.auth
         binding = DataBindingUtil.inflate<FragmentModifyUserInfoBinding>(inflater,R.layout.fragment_modify_user_info,container,false)
         viewModel = ViewModelProvider(this).get(ModifyUserInfoViewModel::class.java)
@@ -81,13 +82,7 @@ class ModifyUserInfoFragment : Fragment() {
             binding.withdrawalButton.setOnClickListener {
                 alertCancel()
             }
-
-
-
-
         }
-
-
         return binding.root
     }
 
