@@ -1,4 +1,6 @@
 package com.santaistiger.gomourcustomerapp.ui.modifyuserinfo
 
-class ModifyUserInfoViewModel {
+import androidx.lifecycle.ViewModel
+
+class ModifyUserInfoViewModel:ViewModel() {
 }

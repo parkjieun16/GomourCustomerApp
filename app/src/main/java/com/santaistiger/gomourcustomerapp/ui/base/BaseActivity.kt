@@ -1,12 +1,16 @@
 package com.santaistiger.gomourcustomerapp.ui.base
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.pedro.library.AutoPermissions
 import com.santaistiger.gomourcustomerapp.R
 import kotlinx.android.synthetic.main.activity_base.*
@@ -61,6 +65,17 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             // 로그아웃 클릭 시
             R.id.logout -> {
                 // 로그아웃 실행
+
+                // 현재 사용자 가져와서 로그아웃
+                var auth = Firebase.auth
+                auth?.signOut()
+
+                // 자동로그인 삭제
+                val auto = getSharedPreferences("auto", Context.MODE_PRIVATE)
+                val editor: SharedPreferences.Editor = auto.edit()
+                editor.clear()
+                editor.commit()
+
 
                 // 로그인 화면으로 이동
                 navController.navigate(R.id.loginFragment)

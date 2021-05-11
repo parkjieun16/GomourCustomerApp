@@ -5,6 +5,6 @@ data class Customer(
     var password: String,
     val name: String,
     var phone: String,
-    val uid: String
+    var uid: String
 )
 
