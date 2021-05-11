@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -20,6 +21,7 @@ import com.google.firebase.database.ValueEventListener
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.network.orderrequest.FirebaseApi
 import com.santaistiger.gomourcustomerapp.databinding.FragmentWaitMatchBinding
+import kotlinx.android.synthetic.main.activity_base.*
 
 /**
  * 배달원 매칭을 기다리는 화면
@@ -39,12 +41,14 @@ class WaitMatchFragment : Fragment() {
     private lateinit var orderId: String
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View? {
 
+        setToolbar()
+
         binding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_wait_match, container, false
+            inflater, R.layout.fragment_wait_match, container, false
         )
         viewModel = ViewModelProvider(this).get(WaitMatchViewModel::class.java)
         binding.waitMatchViewModel = viewModel
@@ -69,6 +73,13 @@ class WaitMatchFragment : Fragment() {
         return binding.root
     }
 
+    private fun setToolbar() {
+        requireActivity().apply {
+            toolbar.visibility = View.GONE    // 툴바 숨기기
+            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
+        }
+    }
+
     // 현재 주문이 realtime database에 존재하는지 확인
     fun checkDatabase(orderId: String) {
         val currentOrder = FirebaseApi.getCurrentOrder(orderId)
@@ -87,7 +98,11 @@ class WaitMatchFragment : Fragment() {
                     Log.d(TAG, "current order is not in realtime database")
                     // 주문상세 페이지로 이동
                     view?.findNavController()
-                            ?.navigate(WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(orderId))
+                        ?.navigate(
+                            WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(
+                                orderId
+                            )
+                        )
                 }
             }
 
@@ -109,13 +124,13 @@ class WaitMatchFragment : Fragment() {
     // 주문 취소 경고창
     fun alertCancel() {
         AlertDialog.Builder(requireActivity())
-                .setMessage("주문을 취소하시겠습니까?")
-                .setPositiveButton("예") { _, _ ->
-                    cancelOrder()
-                }
-                .setNegativeButton("아니오", null)
-                .create()
-                .show()
+            .setMessage("주문을 취소하시겠습니까?")
+            .setPositiveButton("예") { _, _ ->
+                cancelOrder()
+            }
+            .setNegativeButton("아니오", null)
+            .create()
+            .show()
     }
 
     // 뒤로 가기 버튼 누른 경우 주문을 취소할지 확인하는 경고창 띄우기

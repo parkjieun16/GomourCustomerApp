@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -17,6 +18,7 @@ import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.model.Store
 import com.santaistiger.gomourcustomerapp.databinding.FragmentSearchPlaceBinding
 import com.santaistiger.gomourcustomerapp.ui.doorder.DoOrderViewModel
+import kotlinx.android.synthetic.main.activity_base.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -37,12 +39,21 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
             savedInstanceState: Bundle?
     ): View {
 
+        setToolbar()
+
         init(inflater, container)
         initKakaoMap()
         addPlacesObserver()
         addSearchBtnObserver()
 
         return binding.root
+    }
+
+    private fun setToolbar() {
+        requireActivity().apply {
+            toolbar.visibility = View.GONE    // 툴바 숨기기
+            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
+        }
     }
 
     /**

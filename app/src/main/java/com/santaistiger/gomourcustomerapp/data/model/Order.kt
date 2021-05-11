@@ -6,13 +6,14 @@ package com.santaistiger.gomourcustomerapp.data.model
  */
 
 data class Order(
-        val orderId: String,
-        val customerUid: String,
-        val deliveryMan: String,
-        val stores: List<Store>,
-        val deliveryCharge: Int,
-        val destination: Place,
-        val message: String,
-        val orderDate: Long,
-        var deliveryTime: Long
+        val orderId: String? = null,
+        val customerUid: String? = null,
+        val deliveryManUid: String? = null,
+        val stores: List<Store>? = null,
+        val deliveryCharge: Int? = null,
+        val destination: Place? = null,
+        val message: String? = null,
+        val orderDate: Long? = null,
+        var deliveryTime: Long? = null,
+        var isCompleted: Boolean = false
 )

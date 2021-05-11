@@ -18,36 +18,6 @@
         android:paddingHorizontal="15dp" >
 
         <!-- 상단 레이아웃 - 햄버거 버튼 / 제목 -->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="20dp"
-            android:paddingHorizontal="5dp" >
-
-            <ImageButton
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:scaleType="fitXY"
-                android:src="@drawable/hamburger_btn"
-                android:background="#00000000"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/title_do_order_fragment"
-                android:gravity="center"
-                android:textSize="20dp"
-                android:textColor="@color/black"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <!-- 스크롤 - 정보 입력칸 / 확인 버튼 -->
         <ScrollView
