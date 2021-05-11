@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.santaistiger.gomourcustomerapp.ui.doorder.DoOrderViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="15dp" >
+
+        <!-- 상단 레이아웃 - 햄버거 버튼 / 제목 -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginBottom="20dp"
+            android:paddingHorizontal="5dp" >
+
+            <ImageButton
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:scaleType="fitXY"
+                android:src="@drawable/hamburger_btn"
+                android:background="#00000000"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/title_do_order_fragment"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:textColor="@color/black"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- 스크롤 - 정보 입력칸 / 확인 버튼 -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical" >
+
+                <!-- 출발지 및 목적지 -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp" >
+
+                    <!-- 제목 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/address_do_order_fragment"
+                        android:textSize="16dp"
+                        android:textColor="@color/black"
+                        android:paddingLeft="5dp" />
+
+                    <!-- 가게 -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_store"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false"
+                        bind_store_list="@{viewModel.storeList}" />
+
+                    <!-- 목적지 -->
+                    <com.santaistiger.gomourcustomerapp.ui.customview.DestinationView
+                        android:id="@+id/cv_destination"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        bind_destination="@{viewModel.destination}" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <!-- 배송 메시지 -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp" >
+
+                    <!-- 제목 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/message_do_order_fragment"
+                        android:textSize="16dp"
+                        android:textColor="@color/black"
+                        android:paddingLeft="5dp" />
+
+                    <!-- 메시지 -->
+                    <com.santaistiger.gomourcustomerapp.ui.customview.MessageView
+                        android:id="@+id/cv_message"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        bind_message="@={viewModel.message}" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <!-- 비용 -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginBottom="10dp" >
+
+                    <!-- 제목 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/price_do_order_fragment"
+                        android:textSize="16dp"
+                        android:textColor="@color/black"
+                        android:paddingLeft="5dp" />
+
+                    <!-- 가격 -->
+                    <com.santaistiger.gomourcustomerapp.ui.customview.PriceView
+                        android:id="@+id/cv_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        bind_price="@{viewModel.price}" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <!-- 주문 버튼 -->
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:text="@string/order_btn_do_order_fragment"
+                    android:onClick="@{() -> viewModel.onClickOrderBtn()}"/>
+            </LinearLayout>
+        </ScrollView>
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

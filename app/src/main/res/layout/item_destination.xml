@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="item"
+            type="com.santaistiger.gomourcustomerapp.data.model.Place" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="3dp"
+        app:cardUseCompatPadding="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingHorizontal="5dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iv_stopover"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:layout_weight="1"
+                android:padding="8dp"
+                app:srcCompat="@drawable/store" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_store_address"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="6"
+                android:textSize="14dp"
+                android:gravity="center_vertical"
+                android:hint="목적지를 설정하려면 클릭하세요"
+                android:text="@{item.getDisplayName}" />
+
+            <ImageButton
+                android:id="@+id/ib_add_item"
+                android:layout_width="0dp"
+                android:layout_height="40dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_add_store" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

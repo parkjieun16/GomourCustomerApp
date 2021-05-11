@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/doOrderFragment">
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.login.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" >
+        <action
+            android:id="@+id/action_loginFragment_to_doOrderFragment"
+            app:destination="@id/doOrderFragment" />
+        <action
+            android:id="@+id/action_loginFragment_to_joinFragment2"
+            app:destination="@id/joinFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/joinFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.join.JoinFragment"
+        android:label="fragment_join"
+        tools:layout="@layout/fragment_join" >
+        <action
+            android:id="@+id/action_joinFragment_to_doOrderFragment"
+            app:destination="@id/doOrderFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/modifyUserInfoFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.modifyuserinfo.ModifyUserInfoFragment"
+        android:label="fragment_modify_user_info"
+        tools:layout="@layout/fragment_modify_user_info" >
+        <action
+            android:id="@+id/action_modifyUserInfoFragment_to_orderListFragment"
+            app:destination="@id/orderListFragment" />
+        <action
+            android:id="@+id/action_modifyUserInfoFragment_to_doOrderFragment"
+            app:destination="@id/doOrderFragment"
+            app:popUpTo="@id/searchPlaceFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/doOrderFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.doorder.DoOrderFragment"
+        android:label="fragment_do_order"
+        tools:layout="@layout/fragment_do_order" >
+        <action
+            android:id="@+id/action_doOrderFragment_to_waitMatchFragment"
+            app:destination="@id/waitMatchFragment"
+            app:popUpTo="@id/doOrderFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_doOrderFragment_to_orderListFragment"
+            app:destination="@id/orderListFragment" />
+        <action
+            android:id="@+id/action_doOrderFragment_to_modifyUserInfoFragment"
+            app:destination="@id/modifyUserInfoFragment" />
+        <action
+            android:id="@+id/action_doOrderFragment_to_searchPlaceFragment"
+            app:destination="@id/searchPlaceFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/waitMatchFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.waitmatch.WaitMatchFragment"
+        android:label="fragment_wait_match"
+        tools:layout="@layout/fragment_wait_match" >
+        <action
+            android:id="@+id/action_waitMatchFragment_to_doOrderFragment"
+            app:destination="@id/doOrderFragment"
+            app:popUpTo="@id/waitMatchFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_waitMatchFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment"
+            app:popUpTo="@id/doOrderFragment"
+            app:popUpToInclusive="true" />
+
+        <argument
+            android:name="orderId"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.orderdetail.OrderDetailFragment"
+        android:label="fragment_order_detail"
+
+        tools:layout="@layout/fragment_order_detail">
+    <argument
+        android:name="orderId"
+        app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderListFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.orderlist.OrderListFragment"
+        android:label="fragment_order_list"
+        tools:layout="@layout/fragment_order_list" >
+        <action
+            android:id="@+id/action_orderListFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
+        <action
+            android:id="@+id/action_orderListFragment_to_modifyUserInfoFragment"
+            app:destination="@id/modifyUserInfoFragment" />
+        <action
+            android:id="@+id/action_orderListFragment_to_doOrderFragment"
+            app:destination="@id/doOrderFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchPlaceFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.searchplace.SearchPlaceFragment"
+        android:label="SearchPlaceFragment" >
+        <action
+            android:id="@+id/action_searchPlaceFragment_to_doOrderFragment"
+            app:destination="@id/doOrderFragment"
+            app:popUpTo="@id/searchPlaceFragment"
+            app:popUpToInclusive="true" />
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="-1" />
+    </fragment>
+</navigation>
