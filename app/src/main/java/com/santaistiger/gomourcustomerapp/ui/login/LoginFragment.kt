@@ -93,24 +93,30 @@ class LoginFragment : Fragment() {
     }
 
     private fun signIn(email:String, password:String){
-        auth?.signInWithEmailAndPassword(email, password)
-            ?.addOnCompleteListener(){ task ->
-                if(task.isSuccessful){
-                    val user = auth!!.currentUser
-                    val auto = this.requireActivity()
-                        .getSharedPreferences("auto", Context.MODE_PRIVATE)
+        if ( email.contains("@dankook.ac.kr")){
+            alertCancel()
+        }
+        else{
+            auth?.signInWithEmailAndPassword(email, password)
+                ?.addOnCompleteListener(){ task ->
+                    if(task.isSuccessful){
+                        val user = auth!!.currentUser
+                        val auto = this.requireActivity()
+                            .getSharedPreferences("auto", Context.MODE_PRIVATE)
 
-                    val autoLogin = auto.edit()
-                    autoLogin.putString("email",email)
-                    autoLogin.putString("password",password)
-                    autoLogin.commit()
-                    Toast.makeText(context,"commit 완료",Toast.LENGTH_LONG).show()
-                    findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
+                        val autoLogin = auto.edit()
+                        autoLogin.putString("email",email)
+                        autoLogin.putString("password",password)
+                        autoLogin.commit()
+                        Toast.makeText(context,"commit 완료",Toast.LENGTH_LONG).show()
+                        findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
+                    }
                 }
-            }
-            ?.addOnFailureListener {
-                alertCancel()
-            }
+                ?.addOnFailureListener {
+                    alertCancel()
+                }
+        }
+
 
     }
 
@@ -123,6 +129,8 @@ class LoginFragment : Fragment() {
             .create()
             .show()
     }
+
+
 
 
 
