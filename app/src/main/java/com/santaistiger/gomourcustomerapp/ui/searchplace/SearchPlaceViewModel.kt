@@ -13,7 +13,7 @@ import net.daum.mf.map.api.MapPoint
 
 
 class SearchPlaceViewModel: ViewModel() {
-    private val repository: Repository = RepositoryImpl()
+    private val repository: Repository = RepositoryImpl
 
     val places = MutableLiveData<List<Place>>()
     val buttonClicked = MutableLiveData<Boolean>()

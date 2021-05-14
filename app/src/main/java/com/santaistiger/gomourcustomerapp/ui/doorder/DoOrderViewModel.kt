@@ -27,7 +27,7 @@ class DoOrderViewModel : ViewModel() {
     val price = ObservableInt()
     val orderRequest = MutableLiveData<OrderRequest>()
 
-    private val repository: Repository = RepositoryImpl()
+    private val repository: Repository = RepositoryImpl
 
     init {
         addStore()

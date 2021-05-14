@@ -1,19 +1,18 @@
-package com.santaistiger.gomourcustomerapp.data.network.orderrequest
+package com.santaistiger.gomourcustomerapp.data.network.firebase
 
 import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.navigation.findNavController
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.Query
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.ui.orderlist.OrderListAdapter
 import com.santaistiger.gomourcustomerapp.ui.waitmatch.WaitMatchFragmentDirections
+import kotlinx.coroutines.tasks.await
+import java.lang.Exception
 
 private const val TAG: String = "FirebaseApiService"
 private const val ORDER_REQUEST_TABLE = "order_request"
@@ -26,6 +25,20 @@ object FirebaseApi {
 
     fun write(key: String, orderRequest: OrderRequest) {
         orderRequestTable.child(key).setValue(orderRequest)
+    }
+
+    suspend fun getOrderDetail(orderId: String): OrderResponse {
+        val response = OrderResponse()
+        try {
+            response.order = orderTable.child(orderId)
+                .get().await().getValue(Order::class.java)
+
+        } catch (e: Exception) {
+            response.exception = e
+            e.printStackTrace()
+        }
+
+        return response
     }
 
     // realtime database에 현재 주문이 존재하는지 확인

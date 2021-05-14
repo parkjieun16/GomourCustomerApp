@@ -1,14 +1,20 @@
 package com.santaistiger.gomourcustomerapp.data.repository
 
+import android.util.Log
+import com.google.firebase.database.DatabaseReference
+import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
+import com.santaistiger.gomourcustomerapp.data.network.firebase.FireStoreApi
+import com.santaistiger.gomourcustomerapp.data.network.firebase.FirebaseApi
+import com.santaistiger.gomourcustomerapp.data.network.firebase.FirebaseApi.write
 import com.santaistiger.gomourcustomerapp.data.network.map.KakaoMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.NaverMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.asDomainModel
-import com.santaistiger.gomourcustomerapp.data.network.orderrequest.FirebaseApi
 import net.daum.mf.map.api.MapPoint
 
-class RepositoryImpl : Repository {
+val TAG = "RepositoryImpl"
+object RepositoryImpl : Repository {
 
     /**
      * 출발지, 목적지, 경유지를 매개변수로 받아서
@@ -23,6 +29,11 @@ class RepositoryImpl : Repository {
                 NaverMapApi.retrofitService.getDirections(start, goal, waypoints)
 
         return jsonResponse.route["traoptimal"]?.get(0)?.summary?.distance?.toInt()
+    }
+
+    override suspend fun getOrderDetail(orderId: String): Order? {
+        val response =  FirebaseApi.getOrderDetail(orderId)
+        return response.order
     }
 
     /**
@@ -42,6 +53,12 @@ class RepositoryImpl : Repository {
      */
     override fun writeOrderRequest(orderRequest: OrderRequest) {
         val key = orderRequest.orderId
-        FirebaseApi.write(key, orderRequest)
+        write(key, orderRequest)
+    }
+
+    override suspend fun getDeliveryManPhone(deliveryManUid: String): String? {
+        val response = FireStoreApi.getDeliveryMan(deliveryManUid)
+        val deliveryMan = response.deliveryMan
+        return deliveryMan?.phone
     }
 }
