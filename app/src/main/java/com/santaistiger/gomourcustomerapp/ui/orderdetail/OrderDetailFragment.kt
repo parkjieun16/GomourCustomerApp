@@ -30,7 +30,6 @@ import net.daum.mf.map.api.MapView
 
 private val DANKOOKUNIV_LOCATION =
     MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
-const val TEST_ORDER_ID = "1620486408728a1s2d3f9"
 private val TAG = "OrderDetailFragment"
 
 class OrderDetailFragment : Fragment() {
@@ -63,8 +62,7 @@ class OrderDetailFragment : Fragment() {
             false
         )
 
-//        val orderId = OrderDetailFragmentArgs.fromBundle(requireArguments()).orderId
-        val orderId = TEST_ORDER_ID
+        val orderId = OrderDetailFragmentArgs.fromBundle(requireArguments()).orderId
         viewModel = ViewModelProvider(this, OrderDetailViewModelFactory(orderId))
             .get(OrderDetailViewModel::class.java)
         binding.viewModel = viewModel
