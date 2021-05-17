@@ -37,6 +37,7 @@ class LoadingFragment: Fragment() {
         }
     }
 
+    // 2초 대기
     private fun startLoading() {
         val handler = Handler()
         handler.postDelayed(Runnable {
@@ -45,23 +46,23 @@ class LoadingFragment: Fragment() {
         }, 2000)
     }
 
+    // 로그인 확인
     private fun auth() {
+
         var auth = Firebase.auth
         val auto = this.requireActivity().getSharedPreferences("auto", Context.MODE_PRIVATE)
         val loginEmail = auto.getString("email", null)
         val loginPwd = auto.getString("password", null)
+
         if (loginEmail != null && loginPwd != null) {
-            Log.d("hello","shared가 있음")
             auth = Firebase.auth
             auth?.signInWithEmailAndPassword(loginEmail, loginPwd)?.addOnSuccessListener {
                 findNavController().navigate(R.id.action_loadingFragment_to_doOrderFragment)
                 Toast.makeText(context, "안녕", Toast.LENGTH_LONG).show()
-
             }
         }
         else {
-            Log.d("hello","shared가 없음")
-            //로그인으로 가야지
+            // 저장된 로그인 정보가 없을 시 로그인 페이지로 이동
             findNavController().navigate(R.id.action_loadingFragment_to_loginFragment)
         }
 

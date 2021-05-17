@@ -36,7 +36,6 @@ class JoinFragment : Fragment() {
     val db = Firebase.firestore
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -58,8 +57,6 @@ class JoinFragment : Fragment() {
             passwordCheckEditText.addTextChangedListener(passwordCheckChangeWatcher)
             passwordEditText.addTextChangedListener(passwordChangeWatcher)
 
-
-
             // 가입버튼을 위해 비어있는지 확인
             emailEditText.addTextChangedListener(mTextWatcher)
             nameEditText.addTextChangedListener(mTextWatcher)
@@ -72,8 +69,8 @@ class JoinFragment : Fragment() {
         //이메일 중복 버튼
         binding.emailCheckButton.setOnClickListener {
 
-            checkEmail(object : CityCallback {
-                override fun isCityExist(exist: Boolean) {
+            checkEmail(object : EmailCallback {
+                override fun isEmailExist(exist: Boolean) {
                     if (exist){
                         binding.emailValid.visibility = View.VISIBLE
                         binding.emailValid.text = "이미 사용 중인 이메일입니다."
@@ -107,8 +104,8 @@ class JoinFragment : Fragment() {
             var customer = Customer(email, password, name, phone, uid )
 
             //이메일 검사 -> 비밀번호 검사 -> 계정 생성
-            checkEmail(object : CityCallback {
-                override fun isCityExist(exist: Boolean){
+            checkEmail(object : EmailCallback {
+                override fun isEmailExist(exist: Boolean) {
                     if (exist) {
                         binding.emailValid.visibility = View.VISIBLE
                         binding.emailValid.text = "이미 사용 중인 이메일입니다."
@@ -169,7 +166,6 @@ class JoinFragment : Fragment() {
     }
 
 
-
     //비밀번호 체크 변경될때마다 인식
     private val passwordCheckChangeWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -209,8 +205,6 @@ class JoinFragment : Fragment() {
             return false
         }
     }
-
-
 
 
     //패스워드 체크 제한 확인
@@ -260,8 +254,6 @@ class JoinFragment : Fragment() {
     }
 
 
-
-
     //이메일 형식 체크
     private fun emailValidCheck(){
         val email = binding.emailEditText.text .toString()
@@ -293,22 +285,22 @@ class JoinFragment : Fragment() {
 
 
 
-    interface CityCallback {
-        fun isCityExist(exist: Boolean)
+    interface EmailCallback {
+        fun isEmailExist(exist: Boolean)
     }
 
 
-    fun checkEmail(cityCallback: CityCallback){
+    fun checkEmail(emailCallback: EmailCallback){
         val db = FirebaseFirestore.getInstance()
         val email = binding.emailEditText.text.toString()
         db.collection("customer").whereEqualTo("email",email ).get()
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     if (task.result?.isEmpty == true){
-                        cityCallback.isCityExist((false)) //사용 가능
+                        emailCallback.isEmailExist((false)) //사용 가능
                     }
                     else{
-                        cityCallback.isCityExist(true) //사용 불가
+                        emailCallback.isEmailExist(true) //사용 불가
                     }
 
                 }
@@ -329,13 +321,16 @@ class JoinFragment : Fragment() {
                     db.collection("customer")
                         .document(customer.uid!!).set(customer)
                         .addOnSuccessListener { documentReference ->
+
+                            // 자동로그인에 저장
                             val auto = this.requireActivity()
                                 .getSharedPreferences("auto", Context.MODE_PRIVATE)
-
                             val autoLogin = auto.edit()
                             autoLogin.putString("email",customer.email)
                             autoLogin.putString("password",customer.password)
                             autoLogin.commit()
+
+                            // 회원가입 완료 후 주문하기 페이지로 이동
                             findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
                         }
                         .addOnFailureListener { e ->
@@ -344,7 +339,6 @@ class JoinFragment : Fragment() {
                 }
                 else{
                     Log.w("TEST","createUserWithEmail: failure",task.exception )
-                    Toast.makeText(context, "Authentication failed.", Toast.LENGTH_LONG).show()
                 }
             }
 

@@ -30,27 +30,6 @@ class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
 
-    //  create a textWatcher member
-    private val mTextWatcher: TextWatcher = object : TextWatcher {
-        override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
-        override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
-        override fun afterTextChanged(editable: Editable) {
-            // check Fields For Empty Values
-            checkFieldsForEmptyValues()
-        }
-    }
-
-    fun checkFieldsForEmptyValues() {
-        val loginButton = binding.loginButton
-        val email = binding.emailLogin.text.toString()
-        val password: String = binding.passwordLogin.text.toString()
-        if (email == "" || password == "") {
-            loginButton.isEnabled = false
-        } else {
-            loginButton.isEnabled = true
-        }
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -63,20 +42,18 @@ class LoginFragment : Fragment() {
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
 
+        binding.emailLogin.addTextChangedListener(mTextWatcher) // 이메일 입력 감지
+        binding.passwordLogin.addTextChangedListener(mTextWatcher) // 패스워드 입력 감지
 
-        binding.emailLogin.addTextChangedListener(mTextWatcher)
-        binding.passwordLogin.addTextChangedListener(mTextWatcher)
 
-        // run once to disable if empty
-        checkFieldsForEmptyValues();
-
+        //로그인
         binding.loginButton.setOnClickListener{
             val email = binding.emailLogin.text.toString()
             val password = binding.passwordLogin.text.toString()
             signIn(email,password)
         }
 
-
+        //회원가입 페이지로 이동
         binding.goSignUpPage.setOnClickListener{
             findNavController().navigate(R.id.action_loginFragment_to_joinFragment)
         }
@@ -92,7 +69,30 @@ class LoginFragment : Fragment() {
         }
     }
 
+    // 빈칸 감지
+    private val mTextWatcher: TextWatcher = object : TextWatcher {
+        override fun beforeTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
+        override fun onTextChanged(charSequence: CharSequence, i: Int, i2: Int, i3: Int) {}
+        override fun afterTextChanged(editable: Editable) {
+            checkFieldsForEmptyValues()
+        }
+    }
+
+    // 이메일 패스워드 입력 유무에 따라 로그인 버튼 활성화
+    fun checkFieldsForEmptyValues() {
+        val loginButton = binding.loginButton
+        val email = binding.emailLogin.text.toString()
+        val password: String = binding.passwordLogin.text.toString()
+        if (email == "" || password == "") {
+            loginButton.isEnabled = false
+        } else {
+            loginButton.isEnabled = true
+        }
+    }
+
+    // 로그인
     private fun signIn(email:String, password:String){
+        // 단국이메일인 경우
         if ( email.contains("@dankook.ac.kr")){
             alertCancel()
         }
@@ -101,26 +101,25 @@ class LoginFragment : Fragment() {
                 ?.addOnCompleteListener(){ task ->
                     if(task.isSuccessful){
                         val user = auth!!.currentUser
+
+                        // 자동로그인을 위해 shared preference에 정보 저장
                         val auto = this.requireActivity()
                             .getSharedPreferences("auto", Context.MODE_PRIVATE)
-
                         val autoLogin = auto.edit()
                         autoLogin.putString("email",email)
                         autoLogin.putString("password",password)
                         autoLogin.commit()
-                        Toast.makeText(context,"commit 완료",Toast.LENGTH_LONG).show()
+
+                        //로그인 후 주문하기 페이지로 이동
                         findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
                     }
                 }
+                    // 로그인 실패시
                 ?.addOnFailureListener {
                     alertCancel()
                 }
         }
-
-
     }
-
-
 
     fun alertCancel() {
         AlertDialog.Builder(requireActivity())
