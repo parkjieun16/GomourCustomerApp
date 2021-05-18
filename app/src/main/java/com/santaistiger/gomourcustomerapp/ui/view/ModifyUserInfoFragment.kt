@@ -25,6 +25,7 @@ import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.databinding.FragmentModifyUserInfoBinding
+import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.ModifyUserInfoViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 import java.util.regex.Pattern
@@ -215,6 +216,8 @@ class ModifyUserInfoFragment : Fragment() {
         else{
             findNavController().navigate(R.id.action_modifyUserInfoFragment_to_loginFragment)
         }
+
+        (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
     }
 
 
