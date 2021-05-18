@@ -25,17 +25,23 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Auto permission
         AutoPermissions.loadAllPermissions(this, 1)
 
+        setToolbar()    // 툴바 설정
+        navigation_view.setNavigationItemSelectedListener(this)     // navigation 리스너 설정
+        setNavigationDrawerHeader()     // 네비게이션 드로어 헤더 설정
+    }
+
+    // 툴바 설정
+    private fun setToolbar() {
         setSupportActionBar(toolbar)    // 툴바를 액티비티의 앱바로 지정
         supportActionBar?.apply {
             setDisplayHomeAsUpEnabled(true)   // 툴바 홈버튼 활성화
             setHomeAsUpIndicator(R.drawable.hamburger_btn)     // 홈버튼 이미지 변경
             setDisplayShowTitleEnabled(false)     // 툴바에 앱 타이틀 보이지 않도록 설정
         }
+    }
 
-        // navigation 리스너 설정
-        navigation_view.setNavigationItemSelectedListener(this)
-
-        // 네비게이션 드로어 헤더 텍스트뷰 값 변경
+    // 네비게이션 드로어 헤더에 현재 로그인한 회원 정보 설정
+    private fun setNavigationDrawerHeader() {
         val header = navigation_view.getHeaderView(0)
         header.apply {
             user_name_string.setText("강단국")
@@ -68,7 +74,6 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             // 로그아웃 클릭 시
             R.id.logout -> {
-                // 로그아웃 실행
 
                 // 현재 사용자 가져와서 로그아웃
                 var auth = Firebase.auth
@@ -79,7 +84,6 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 val editor: SharedPreferences.Editor = auto.edit()
                 editor.clear()
                 editor.commit()
-
 
                 // 로그인 화면으로 이동
                 navController.navigate(R.id.loginFragment)

@@ -49,12 +49,14 @@ object FirebaseApi {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 orders.clear()
                 adapter.orders.clear()
+
                 for (messageSnapshot in dataSnapshot.children) {
                     val order: Order? = messageSnapshot.getValue(Order::class.java)
                     if (order != null) {
                         orders.add(order)
                     }
                 }
+
                 // 날짜 역순으로 재배열 후 adapter의 orders에 할당
                 adapter.orders = orders.asReversed()
                 Log.d(TAG, "orders was changed")
