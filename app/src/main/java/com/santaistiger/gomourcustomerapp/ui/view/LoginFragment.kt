@@ -18,6 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.databinding.FragmentLoginBinding
+import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 
@@ -108,6 +109,7 @@ class LoginFragment : Fragment() {
 
                         //로그인 후 주문하기 페이지로 이동
                         findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
+                        (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
                     }
                 }
                     // 로그인 실패시

@@ -58,7 +58,7 @@ class LoadingFragment: Fragment() {
             auth?.signInWithEmailAndPassword(loginEmail, loginPwd)?.addOnSuccessListener {
                 findNavController().navigate(R.id.action_loadingFragment_to_doOrderFragment)
                 Toast.makeText(context, "안녕", Toast.LENGTH_LONG).show()
-                (activity as BaseActivity).setNavigationDrawerHeader()
+                (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
             }
         }
         else {

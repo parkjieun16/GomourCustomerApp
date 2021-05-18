@@ -324,7 +324,7 @@ class JoinFragment : Fragment() {
 
                             // 회원가입 완료 후 주문하기 페이지로 이동
                             findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
-                            (activity as BaseActivity).setNavigationDrawerHeader()
+                            (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
                         }
                         .addOnFailureListener { e ->
                             Log.w("TEST", "Error adding document", e)
