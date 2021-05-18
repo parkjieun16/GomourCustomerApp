@@ -1,19 +1,18 @@
 package com.santaistiger.gomourcustomerapp.data.repository
 
-import android.util.Log
-import com.google.firebase.database.DatabaseReference
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
-import com.santaistiger.gomourcustomerapp.data.network.firebase.FireStoreApi
-import com.santaistiger.gomourcustomerapp.data.network.firebase.FirebaseApi
-import com.santaistiger.gomourcustomerapp.data.network.firebase.FirebaseApi.write
+import com.santaistiger.gomourcustomerapp.data.network.database.AuthApi
+import com.santaistiger.gomourcustomerapp.data.network.database.FireStoreApi
+import com.santaistiger.gomourcustomerapp.data.network.database.RealtimeApi
 import com.santaistiger.gomourcustomerapp.data.network.map.KakaoMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.NaverMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.asDomainModel
 import net.daum.mf.map.api.MapPoint
 
 val TAG = "RepositoryImpl"
+
 object RepositoryImpl : Repository {
 
     /**
@@ -26,13 +25,13 @@ object RepositoryImpl : Repository {
 
     override suspend fun getDistance(start: String, goal: String, waypoints: String?): Int? {
         val jsonResponse =
-                NaverMapApi.retrofitService.getDirections(start, goal, waypoints)
+            NaverMapApi.retrofitService.getDirections(start, goal, waypoints)
 
         return jsonResponse.route["traoptimal"]?.get(0)?.summary?.distance?.toInt()
     }
 
-    override suspend fun getOrderDetail(orderId: String): Order? {
-        val response =  FirebaseApi.getOrderDetail(orderId)
+    override suspend fun readOrderDetail(orderId: String): Order? {
+        val response = RealtimeApi.readOrderDetail(orderId)
         return response.order
     }
 
@@ -40,9 +39,16 @@ object RepositoryImpl : Repository {
      * 찾고싶은 장소명 또는 키워드로 장소를 찾는 함수
      * 현재의 지도의 중심점에서 거리순으로 15개의 Place를 리턴함
      */
-    override suspend fun searchPlace(placeName: String, curMapPos: MapPoint.GeoCoordinate): List<Place> {
+    override suspend fun searchPlace(
+        placeName: String,
+        curMapPos: MapPoint.GeoCoordinate
+    ): List<Place> {
         val kakaoMapProperty =
-                KakaoMapApi.retrofitService.searchPlaces(placeName, curMapPos.longitude, curMapPos.latitude)
+            KakaoMapApi.retrofitService.searchPlaces(
+                placeName,
+                curMapPos.longitude,
+                curMapPos.latitude
+            )
 
         return kakaoMapProperty.documents.asDomainModel()
     }
@@ -53,12 +59,14 @@ object RepositoryImpl : Repository {
      */
     override fun writeOrderRequest(orderRequest: OrderRequest) {
         val key = orderRequest.orderId
-        write(key, orderRequest)
+        RealtimeApi.writeRequest(key, orderRequest)
     }
 
-    override suspend fun getDeliveryManPhone(deliveryManUid: String): String? {
+    override suspend fun readDeliveryManPhone(deliveryManUid: String): String? {
         val response = FireStoreApi.getDeliveryMan(deliveryManUid)
         val deliveryMan = response.deliveryMan
         return deliveryMan?.phone
     }
+
+    override fun getUid(): String = AuthApi.readUid()?:String()
 }

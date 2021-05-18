@@ -2,7 +2,6 @@ package com.santaistiger.gomourcustomerapp.utils
 
 import android.text.Editable
 import android.text.TextWatcher
-import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.databinding.*
@@ -14,8 +13,8 @@ import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.model.Status
 import com.santaistiger.gomourcustomerapp.data.model.Store
 import com.santaistiger.gomourcustomerapp.ui.customview.*
-import com.santaistiger.gomourcustomerapp.ui.doorder.StoreAdapter
-import com.santaistiger.gomourcustomerapp.ui.orderdetail.OrderDetailStoreAdapater
+import com.santaistiger.gomourcustomerapp.ui.adapter.DoOrderStoreAdapter
+import com.santaistiger.gomourcustomerapp.ui.adapter.OrderDetailStoreAdapater
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
@@ -28,9 +27,9 @@ object BindingUtils {
         if (recyclerView.adapter == null) {
             recyclerView.layoutManager =
                     LinearLayoutManager(recyclerView.context)
-            recyclerView.adapter = StoreAdapter()
+            recyclerView.adapter = DoOrderStoreAdapter()
         }
-        (recyclerView.adapter as StoreAdapter).items = items
+        (recyclerView.adapter as DoOrderStoreAdapter).items = items
         recyclerView.adapter?.notifyDataSetChanged()
     }
 

@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/orderListFragment">
+    app:startDestination="@id/loadingFragment">
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.login.LoginFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -22,7 +22,7 @@
 
     <fragment
         android:id="@+id/joinFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.join.JoinFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.JoinFragment"
         android:label="fragment_join"
         tools:layout="@layout/fragment_join" >
         <action
@@ -32,7 +32,7 @@
 
     <fragment
         android:id="@+id/modifyUserInfoFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.modifyuserinfo.ModifyUserInfoFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.ModifyUserInfoFragment"
         android:label="fragment_modify_user_info"
         tools:layout="@layout/fragment_modify_user_info" >
         <action
@@ -50,7 +50,7 @@
 
     <fragment
         android:id="@+id/doOrderFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.doorder.DoOrderFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.DoOrderFragment"
         android:label="fragment_do_order"
         tools:layout="@layout/fragment_do_order" >
         <action
@@ -71,7 +71,7 @@
 
     <fragment
         android:id="@+id/waitMatchFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.waitmatch.WaitMatchFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.WaitMatchFragment"
         android:label="fragment_wait_match"
         tools:layout="@layout/fragment_wait_match" >
         <action
@@ -91,7 +91,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderDetailFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.orderdetail.OrderDetailFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.OrderDetailFragment"
         android:label="fragment_order_detail"
 
         tools:layout="@layout/fragment_order_detail">
@@ -101,7 +101,7 @@
     </fragment>
     <fragment
         android:id="@+id/orderListFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.orderlist.OrderListFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.OrderListFragment"
         android:label="fragment_order_list"
         tools:layout="@layout/fragment_order_list" >
         <action
@@ -116,7 +116,7 @@
     </fragment>
     <fragment
         android:id="@+id/searchPlaceFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.searchplace.SearchPlaceFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.SearchPlaceFragment"
         android:label="SearchPlaceFragment" >
         <action
             android:id="@+id/action_searchPlaceFragment_to_doOrderFragment"
@@ -130,7 +130,7 @@
     </fragment>
     <fragment
         android:id="@+id/loadingFragment"
-        android:name="com.santaistiger.gomourcustomerapp.ui.loading.LoadingFragment"
+        android:name="com.santaistiger.gomourcustomerapp.ui.view.LoadingFragment"
         android:label="LoadingFragment" >
         <action
             android:id="@+id/action_loadingFragment_to_loginFragment"

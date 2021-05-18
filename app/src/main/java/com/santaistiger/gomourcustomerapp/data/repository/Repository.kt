@@ -10,7 +10,8 @@ interface Repository {
     suspend fun getDistance(start: String, goal: String): Int?
     suspend fun getDistance(start: String, goal: String, waypoints: String?): Int?
     suspend fun searchPlace(placeName: String, curMapPos: MapPoint.GeoCoordinate): List<Place>
-    suspend fun getOrderDetail(orderId: String): Order?
-    suspend fun getDeliveryManPhone(deliveryManUid: String): String?
+    suspend fun readOrderDetail(orderId: String): Order?
+    suspend fun readDeliveryManPhone(deliveryManUid: String): String?
     fun writeOrderRequest(orderRequest: OrderRequest)
+    fun getUid(): String
 }
