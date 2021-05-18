@@ -19,7 +19,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.santaistiger.gomourcustomerapp.R
-import com.santaistiger.gomourcustomerapp.data.network.orderrequest.FirebaseApi
+import com.santaistiger.gomourcustomerapp.data.network.firebase.FirebaseApi
 import com.santaistiger.gomourcustomerapp.databinding.FragmentWaitMatchBinding
 import kotlinx.android.synthetic.main.activity_base.*
 

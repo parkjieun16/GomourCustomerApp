@@ -4,5 +4,4 @@ import androidx.lifecycle.ViewModel
 
 class JoinViewModel: ViewModel() {
 
-    var Validation = false
 }

@@ -15,5 +15,8 @@ data class Order(
         val message: String? = null,
         val orderDate: Long? = null,
         var deliveryTime: Long? = null,
-        var isCompleted: Boolean = false
+        var status: Status = Status.PREPARING
 )
+
+
+

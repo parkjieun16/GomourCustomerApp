@@ -62,29 +62,31 @@ class ModifyUserInfoFragment : Fragment() {
             }
 
 
-            // 비어 있지 않을 때 비밀번호 감지하여 판단
-            //binding.passwordModify.addTextChangedListener(passwordChageWatcher)
-            //binding.passwordCheckModify.addTextChangedListener(passwordChageWatcher)
+            //비어 있지 않을 때 비밀번호 감지하여 판단
+            binding.passwordCheckModify.addTextChangedListener(passwordCheckChangeWatcher)
+            binding.passwordModify.addTextChangedListener(passwordChangeWatcher)
 
+            // 변경완료 버튼 클릭 시
             binding.modifyButton.setOnClickListener{
                 val password:String =binding.passwordModify.text.toString()
                 val passwordCheck: String  = binding.passwordCheckModify.text.toString()
 
-                if(passwordCheck(passwordCheck)){
+                if (passwordCheck(passwordCheck) && password(password)){
                     modifyUser()
                 }
                 else{
                     Toast.makeText(context,"정보를 다시 입력하세요", Toast.LENGTH_LONG).show()
                 }
-
             }
 
+            //탈퇴 버튼 클릭 시
             binding.withdrawalButton.setOnClickListener {
                 alertCancel()
             }
         }
         return binding.root
     }
+
 
     private fun setToolbar() {
         requireActivity().apply {
@@ -94,6 +96,83 @@ class ModifyUserInfoFragment : Fragment() {
         }
     }
 
+
+    //비밀번호 변경될때마다 인식
+    private val passwordChangeWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+        }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (s != null) {
+                password(s)
+            }
+        }
+    }
+
+    //비밀번호 체크 변경될때마다 인식
+    private val passwordCheckChangeWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {
+        }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+        }
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            if (s != null) {
+                passwordCheck(s)
+            }
+        }
+    }
+
+
+    //패스워드 제한
+    private fun password(password: CharSequence):Boolean{
+        val passwordCheck = binding.passwordCheckModify.text.toString()
+        val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
+        if (Pattern.matches(pwPattern, password)){
+            if(password== passwordCheck){
+                binding.passwordModifyValid.visibility = View.VISIBLE
+                binding.passwordModifyValid.text = "사용할 수 있는 비밀번호입니다."
+            }
+            else{
+                binding.passwordModifyValid.visibility = View.VISIBLE
+                binding.passwordModifyValid.text = "비밀번호가 같지 않습니다."
+
+            }
+
+            return true
+        }
+        else{
+            binding.passwordModifyValid.visibility = View.VISIBLE
+            binding.passwordModifyValid.text = "비밀번호는 대,소문자,숫자,특수문자 포함 8~16자여야합니다."
+            return false
+        }
+    }
+
+    //패스워드 체크 제한 확인
+    private fun passwordCheck(s: CharSequence):Boolean{
+        val password = binding.passwordModify.text.toString()
+        val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
+        if(password == s.toString()) {
+            if(Pattern.matches(pwPattern, password))
+            {
+                binding.passwordModifyValid.visibility = View.VISIBLE
+                binding.passwordModifyValid.text = "사용할 수 있는 비밀번호입니다."
+                return true
+            }
+            else{
+                binding.passwordModifyValid.visibility = View.VISIBLE
+                binding.passwordModifyValid.text = "비밀번호는 대,소문자,숫자,특수문자 포함 8~16자여야합니다."
+                return false
+            }
+        }
+        else{
+            binding.passwordModifyValid.visibility = View.VISIBLE
+            binding.passwordModifyValid.text = "비밀번호가 같지 않습니다."
+            return false
+        }
+    }
+
+    // 회원정보 변경 시
     private fun modifyUser(){
         val currentUser = auth?.currentUser
         // Add a new document with a generated ID
@@ -139,51 +218,11 @@ class ModifyUserInfoFragment : Fragment() {
 
 
 
-
-
-    //비밀번호 변경될때마다 인식
-    private val passwordChageWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {
-        }
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        }
-        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-            if (s != null) {
-                passwordCheck(s)
-            }
-
-
-        }
-    }
-
-    private fun passwordCheck(s: CharSequence):Boolean{
-        val password = binding.passwordModify.text.toString()
-
-        if(password == s.toString()){
-            if(Pattern.matches("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$", password))
-            {
-                binding.passwordModifyValid.visibility = View.VISIBLE
-                binding.passwordModifyValid.text = "사용할 수 있는 비밀번호입니다."
-                return true
-            }
-            else{
-                binding.passwordModifyValid.visibility = View.VISIBLE
-                binding.passwordModifyValid.text = "비밀번호는 대,소문자,숫자,특수문자 포함 8~16자여야합니다."
-                return false
-            }
-        }
-        else{
-            binding.passwordModifyValid.visibility = View.VISIBLE
-            binding.passwordModifyValid.text = "비밀번호가 같지 않습니다."
-            return false
-        }
-    }
-
-
     fun alertCancel() {
         AlertDialog.Builder(requireActivity())
             .setMessage("정말 탈퇴하시겠습니까?")
             .setPositiveButton("예") { _, _ ->
+                //탈퇴
                 withdrawal()
             }
             .setNegativeButton("아니오", null)
@@ -191,13 +230,16 @@ class ModifyUserInfoFragment : Fragment() {
             .show()
     }
 
+    //탈퇴
     private fun withdrawal(){
         var currentUser = Firebase.auth.currentUser
         var uid = currentUser.uid
         currentUser.delete()
-            .addOnFailureListener { //Toast.makeText(context,"탈퇴 실패",Toast.LENGTH_LONG).show()
+            .addOnFailureListener {
+                Toast.makeText(context,"탈퇴 실패",Toast.LENGTH_LONG).show()
             }
-            .addOnSuccessListener { //Toast.makeText(context,"탈퇴 성공",Toast.LENGTH_LONG).show()
+            .addOnSuccessListener {
+                Toast.makeText(context,"탈퇴 성공",Toast.LENGTH_LONG).show()
             }
 
         db.collection("customer").document(uid)
@@ -205,6 +247,7 @@ class ModifyUserInfoFragment : Fragment() {
             .addOnSuccessListener {
 
                 Toast.makeText(context,"탈퇴 성공", Toast.LENGTH_LONG).show()
+                //자동로그인 삭제
                 val auto = this.requireActivity()
                     .getSharedPreferences("auto", Context.MODE_PRIVATE)
                 val editor: SharedPreferences.Editor = auto.edit()
@@ -216,5 +259,4 @@ class ModifyUserInfoFragment : Fragment() {
             }
             .addOnFailureListener {Toast.makeText(context,"탈퇴 실패",Toast.LENGTH_LONG).show() }
     }
-
 }

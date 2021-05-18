@@ -4,10 +4,14 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.navigation.findNavController
+
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
 import com.google.firebase.database.ValueEventListener
+
+import com.google.firebase.database.*
+
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.data.model.Order
@@ -15,6 +19,8 @@ import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.ui.orderlist.OrderListAdapter
 import com.santaistiger.gomourcustomerapp.ui.waitmatch.WaitMatchFragmentDirections
 import kotlinx.coroutines.tasks.await
+import java.lang.Exception
+
 
 private const val TAG: String = "FirebaseApiService"
 private const val ORDER_REQUEST_TABLE = "order_request"
@@ -42,7 +48,6 @@ object FirebaseApi {
 
         return response
     }
-
 
 
     // realtime database에 현재 주문이 존재하는지 확인

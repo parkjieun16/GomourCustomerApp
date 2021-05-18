@@ -1,5 +1,7 @@
 package com.santaistiger.gomourcustomerapp.ui.doorder
 
+import android.app.AlertDialog
+import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -25,9 +27,9 @@ class DoOrderFragment : Fragment() {
     private val viewModel: DoOrderViewModel by activityViewModels()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
 
         setToolbar()
@@ -55,7 +57,8 @@ class DoOrderFragment : Fragment() {
         viewModel.orderRequest.observe(viewLifecycleOwner, { orderRequest ->
             if (orderRequest != null) {
                 findNavController().navigate(
-                        DoOrderFragmentDirections.actionDoOrderFragmentToWaitMatchFragment(orderRequest.orderId))
+                    DoOrderFragmentDirections.actionDoOrderFragmentToWaitMatchFragment(orderRequest.orderId)
+                )
                 viewModel.doneNavigateWaitMatch()
             }
         })
@@ -66,10 +69,11 @@ class DoOrderFragment : Fragment() {
      */
     private fun init(inflater: LayoutInflater, container: ViewGroup?) {
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_do_order,
-                container,
-                false)
+            inflater,
+            R.layout.fragment_do_order,
+            container,
+            false
+        )
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
     }
@@ -78,8 +82,24 @@ class DoOrderFragment : Fragment() {
      * DestinationView의 button, textView에 clickListener 설정
      */
     private fun addDestinationClickListener() {
-        binding.cvDestination.binding.ibAddItem.setOnClickListener { viewModel.addStore() }
+        binding.cvDestination.binding.ibAddItem.setOnClickListener { addStore() }
         binding.cvDestination.binding.tvStoreAddress.setOnClickListener { searchPlace() }
+    }
+
+    private fun addStore() {
+        if (viewModel.storeList.size < 3) {
+            viewModel.addStore()
+        } else {
+            showDenyDialog()
+        }
+    }
+
+    private fun showDenyDialog() {
+        AlertDialog.Builder(context)
+            .setMessage("주문 장소는 최대 3곳까지 가능합니다.")
+            .setNegativeButton("확인", null)
+            .create()
+            .show()
     }
 
     /**
@@ -87,7 +107,7 @@ class DoOrderFragment : Fragment() {
      */
     private fun searchPlace() {
         findNavController().navigate(
-                DoOrderFragmentDirections.actionDoOrderFragmentToSearchPlaceFragment()
+            DoOrderFragmentDirections.actionDoOrderFragmentToSearchPlaceFragment()
         )
     }
 }
