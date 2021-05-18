@@ -1,14 +1,156 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.orderdetail.OrderDetailFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="viewModel"
+            type="com.santaistiger.gomourcustomerapp.ui.orderdetail.OrderDetailViewModel" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp">
 
-</FrameLayout>
+        <!-- 스크롤 - 지도 / 정보 확인칸 / 연락 버튼 -->
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <!-- 지도 -->
+                <LinearLayout
+                    android:id="@+id/map_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical"
+                    tools:background="#55555555" />
+
+                <!-- 배달 시간 -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_delivery_time"
+                        bind_detail_delivery_time="@{viewModel.order}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="18dp"
+                        tools:text="2021-03-29 (금) 13:24 도착 예정" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <!-- 출발지 및 목적지 -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <!-- 제목 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:text="@string/address_do_order_fragment"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <!-- 가게 -->
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rv_store"
+                        bind_detail_store_list="@{viewModel.order}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+
+                    <!-- 목적지 -->
+                    <com.santaistiger.gomourcustomerapp.ui.customview.DetailDestinationView
+                        android:id="@+id/cv_destination"
+                        bind_detail_destination="@{viewModel.order}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <!-- 배송 메시지 -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <!-- 제목 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:text="@string/message_do_order_fragment"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <!-- 메시지 -->
+                    <com.santaistiger.gomourcustomerapp.ui.customview.DetailMessageView
+                        android:id="@+id/cv_message"
+                        bind_detail_message="@{viewModel.order}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <!-- 비용 -->
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="10dp"
+                    android:orientation="vertical">
+
+                    <!-- 제목 -->
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingLeft="5dp"
+                        android:text="@string/price_do_order_fragment"
+                        android:textColor="@color/black"
+                        android:textSize="16dp" />
+
+                    <!-- 가격 -->
+                    <com.santaistiger.gomourcustomerapp.ui.customview.DetailPriceView
+                        android:id="@+id/cv_price"
+                        bind_detail_price="@{viewModel.order}"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_call_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onCallBtnClick()}"
+                    android:text="주문자에게 전화하기" />
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:id="@+id/btn_text_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.onTextBtnClick()}"
+                    android:text="주문자에게 문자하기" />
+
+            </LinearLayout>
+        </ScrollView>
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

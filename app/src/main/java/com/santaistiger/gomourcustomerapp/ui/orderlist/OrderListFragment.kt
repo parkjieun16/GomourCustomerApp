@@ -13,7 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.santaistiger.gomourcustomerapp.R
-import com.santaistiger.gomourcustomerapp.data.network.orderrequest.FirebaseApi
+import com.santaistiger.gomourcustomerapp.data.network.firebase.FirebaseApi
 import com.santaistiger.gomourcustomerapp.databinding.FragmentOrderListBinding
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.fragment_order_list.view.*

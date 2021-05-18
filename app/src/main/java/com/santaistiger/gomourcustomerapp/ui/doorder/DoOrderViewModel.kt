@@ -25,9 +25,9 @@ class DoOrderViewModel : ViewModel() {
     val destination = ObservableParcelable<Place>()
     val message = ObservableField<String>()
     val price = ObservableInt()
-    val orderRequest = MutableLiveData<OrderRequest>()
+    val orderRequest = MutableLiveData<OrderRequest?>()
 
-    private val repository: Repository = RepositoryImpl()
+    private val repository: Repository = RepositoryImpl
 
     init {
         addStore()

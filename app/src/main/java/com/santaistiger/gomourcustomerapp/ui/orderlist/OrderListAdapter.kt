@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.santaistiger.gomourcustomerapp.data.model.Order
+import com.santaistiger.gomourcustomerapp.data.model.Status
 import com.santaistiger.gomourcustomerapp.databinding.ItemOrderInfoBinding
 import com.santaistiger.gomourcustomerapp.ui.customview.ListStoreView
 import kotlinx.android.synthetic.main.item_list_store.view.*
@@ -50,10 +51,10 @@ class OrderListAdapter(val context: Context?) : RecyclerView.Adapter<OrderListAd
             binding.orderTimeString.setText(dateFormat.format(orderDate))
 
             // 배달 상태
-            if (order.isCompleted == false) {
-                binding.orderStatusString.setText("배달 중")
-            } else {
-                binding.orderStatusString.setText("배달 완료")
+            binding.orderStatusString.text = when (order.status) {
+                Status.PREPARING -> "상품 준비중"
+                Status.PICKUP_COMPLETE -> "픽업 완료"
+                Status.DELIVERY_COMPLETE -> "배달 완료"
             }
 
             // 가게
