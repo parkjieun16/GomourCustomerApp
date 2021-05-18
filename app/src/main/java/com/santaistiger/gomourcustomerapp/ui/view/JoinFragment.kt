@@ -24,6 +24,7 @@ import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.databinding.FragmentJoinBinding
+import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.JoinViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.fragment_join.*
@@ -172,9 +173,9 @@ class JoinFragment : Fragment() {
 
     //비밀번호 체크 변경될때마다 인식
     private val passwordCheckChangeWatcher = object : TextWatcher {
-        override fun afterTextChanged(s: Editable?) {        }
+        override fun afterTextChanged(s: Editable?) {}
 
-        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {        }
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (s != null) {
@@ -244,11 +245,8 @@ class JoinFragment : Fragment() {
         val passwordCheck: String = binding.passwordCheckEditText.text.toString()
         val phone: String = binding.PhoneEditText.text.toString()
 
-        if (email == "" || password == "" || passwordCheck == "" || phone == "") {
-            signUpButton.isEnabled = false
-        } else {
-            signUpButton.isEnabled = true
-        }
+        signUpButton.isEnabled =
+            !(email == "" || password == "" || passwordCheck == "" || phone == "")
     }
 
 
@@ -326,6 +324,7 @@ class JoinFragment : Fragment() {
 
                             // 회원가입 완료 후 주문하기 페이지로 이동
                             findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
+                            (activity as BaseActivity).setNavigationDrawerHeader()
                         }
                         .addOnFailureListener { e ->
                             Log.w("TEST", "Error adding document", e)

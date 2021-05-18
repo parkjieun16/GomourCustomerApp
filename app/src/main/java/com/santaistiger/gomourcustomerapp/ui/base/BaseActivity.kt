@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.nav_header.view.*
 import java.util.*
 
 val TAG = "BaseActivityLog"
+
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     private val repository: Repository = RepositoryImpl
 
@@ -50,9 +51,8 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
 
-
     // 네비게이션 드로어 헤더에 현재 로그인한 회원 정보 설정
-    private fun setNavigationDrawerHeader() {
+    fun setNavigationDrawerHeader() {
         val tmpUid = repository.getUid()
         Log.d(TAG, "uid: $tmpUid")
         val header = navigation_view.getHeaderView(0)
@@ -63,7 +63,10 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 header.apply {
                     user_name_string.text = currentUserInfo.name
                     user_phone_num_string.text =
-                        PhoneNumberUtils.formatNumber(currentUserInfo.phone, Locale.getDefault().country)
+                        PhoneNumberUtils.formatNumber(
+                            currentUserInfo.phone,
+                            Locale.getDefault().country
+                        )
                     user_email_string.text = currentUserInfo.email
                 }
             }
@@ -82,12 +85,12 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
 
-        when(item.itemId){
+        when (item.itemId) {
             // 주문하기 클릭 시
             R.id.doOrderFragment -> navController.navigate(R.id.doOrderFragment)
 
             // 주문 목록 클릭 시
-            R.id.orderListFragment ->  navController.navigate(R.id.orderListFragment)
+            R.id.orderListFragment -> navController.navigate(R.id.orderListFragment)
 
             // 회원 정보 변경 클릭 시
             R.id.modifyUserInfoFragment -> navController.navigate(R.id.modifyUserInfoFragment)
@@ -115,8 +118,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // 툴바의 홈버튼 누르면 네비게이션 드로어 열리도록 설정
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        setNavigationDrawerHeader()
-        when(item.itemId){
+        when (item.itemId) {
             android.R.id.home -> {
                 drawer_layout.openDrawer(GravityCompat.START)
             }
@@ -126,9 +128,9 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // 뒤로가기 버튼 정의
     override fun onBackPressed() {
-        if(drawer_layout.isDrawerOpen(GravityCompat.START)){
+        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawers()
-        } else{
+        } else {
             super.onBackPressed()
         }
     }

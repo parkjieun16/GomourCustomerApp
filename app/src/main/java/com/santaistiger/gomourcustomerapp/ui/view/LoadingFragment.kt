@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.R
+import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_base.*
 
 class LoadingFragment: Fragment() {
@@ -57,6 +58,7 @@ class LoadingFragment: Fragment() {
             auth?.signInWithEmailAndPassword(loginEmail, loginPwd)?.addOnSuccessListener {
                 findNavController().navigate(R.id.action_loadingFragment_to_doOrderFragment)
                 Toast.makeText(context, "안녕", Toast.LENGTH_LONG).show()
+                (activity as BaseActivity).setNavigationDrawerHeader()
             }
         }
         else {
