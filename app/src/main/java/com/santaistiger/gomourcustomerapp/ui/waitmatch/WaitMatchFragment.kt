@@ -45,8 +45,6 @@ class WaitMatchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        setToolbar()
-
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_wait_match, container, false
         )
@@ -54,14 +52,14 @@ class WaitMatchFragment : Fragment() {
         binding.waitMatchViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        setToolbar()
+
         // 로딩 gif 이미지 설정
         Glide.with(this).load(R.raw.wait_match_loading).into(binding.loadingImage)
 
         // 주문하기 화면에서 받아온 현재 주문 번호 orderId에 저장
         val args = WaitMatchFragmentArgs.fromBundle(requireArguments())
         orderId = args.orderId
-
-        checkDatabase(orderId)
 
         // 주문 취소 버튼 누른 경우
         viewModel.eventCancelOrder.observe(viewLifecycleOwner, Observer<Boolean> { it ->
@@ -71,6 +69,12 @@ class WaitMatchFragment : Fragment() {
         })
 
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        checkDatabase(orderId)      // 데이터베이스에 현재 주문이 존재하는지 체크
     }
 
     private fun setToolbar() {
@@ -86,7 +90,6 @@ class WaitMatchFragment : Fragment() {
 
         currentOrder.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                Log.d(TAG, snapshot.toString())
 
                 // 현재 주문이 realtime database에 존재할 경우
                 if (snapshot.exists()) {
@@ -99,9 +102,7 @@ class WaitMatchFragment : Fragment() {
                     // 주문상세 페이지로 이동
                     view?.findNavController()
                         ?.navigate(
-                            WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(
-                                orderId
-                            )
+                            WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(orderId)
                         )
                 }
             }
