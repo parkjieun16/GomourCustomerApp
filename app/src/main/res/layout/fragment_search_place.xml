@@ -8,7 +8,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.santaistiger.gomourcustomerapp.ui.searchplace.SearchPlaceViewModel" />
+            type="com.santaistiger.gomourcustomerapp.ui.viewmodel.SearchPlaceViewModel" />
     </data>
 
     <LinearLayout

@@ -7,7 +7,7 @@
 
         <variable
             name="waitMatchViewModel"
-            type="com.santaistiger.gomourcustomerapp.ui.waitmatch.WaitMatchViewModel" />
+            type="com.santaistiger.gomourcustomerapp.ui.viewmodel.WaitMatchViewModel" />
     </data>
 
 

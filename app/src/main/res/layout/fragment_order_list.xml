@@ -7,7 +7,7 @@
 
         <variable
             name="orderListViewModel"
-            type="com.santaistiger.gomourcustomerapp.ui.orderlist.OrderListViewModel" />
+            type="com.santaistiger.gomourcustomerapp.ui.viewmodel.OrderListViewModel" />
     </data>
 
     <LinearLayout

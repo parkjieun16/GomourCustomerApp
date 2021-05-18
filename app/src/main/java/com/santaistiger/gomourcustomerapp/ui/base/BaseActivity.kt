@@ -4,20 +4,30 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.telephony.PhoneNumberUtils
+import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
 import com.pedro.library.AutoPermissions
 import com.santaistiger.gomourcustomerapp.R
+import com.santaistiger.gomourcustomerapp.data.model.Customer
+import com.santaistiger.gomourcustomerapp.data.repository.Repository
+import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.nav_header.view.*
+import java.util.*
 
-
+val TAG = "BaseActivityLog"
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    private val repository: Repository = RepositoryImpl
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_base)
@@ -25,9 +35,8 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         // Auto permission
         AutoPermissions.loadAllPermissions(this, 1)
 
-        setToolbar()    // 툴바 설정
+        setToolbar() // 툴바 설정
         navigation_view.setNavigationItemSelectedListener(this)     // navigation 리스너 설정
-        setNavigationDrawerHeader()     // 네비게이션 드로어 헤더 설정
     }
 
     // 툴바 설정
@@ -40,13 +49,24 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+
+
     // 네비게이션 드로어 헤더에 현재 로그인한 회원 정보 설정
     private fun setNavigationDrawerHeader() {
+        val tmpUid = repository.getUid()
+        Log.d(TAG, "uid: $tmpUid")
         val header = navigation_view.getHeaderView(0)
-        header.apply {
-            user_name_string.setText("강단국")
-            user_phone_num_string.setText("010-1234-5678")
-            user_email_string.setText("32181234@dankook.ac.kr")
+        val docRef = Firebase.firestore.collection("customer").document(tmpUid)
+        docRef.get().addOnSuccessListener { documentSnapshot ->
+            val currentUserInfo = documentSnapshot.toObject<Customer>()
+            if (currentUserInfo != null) {
+                header.apply {
+                    user_name_string.text = currentUserInfo.name
+                    user_phone_num_string.text =
+                        PhoneNumberUtils.formatNumber(currentUserInfo.phone, Locale.getDefault().country)
+                    user_email_string.text = currentUserInfo.email
+                }
+            }
         }
     }
 
@@ -95,6 +115,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     // 툴바의 홈버튼 누르면 네비게이션 드로어 열리도록 설정
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        setNavigationDrawerHeader()
         when(item.itemId){
             android.R.id.home -> {
                 drawer_layout.openDrawer(GravityCompat.START)

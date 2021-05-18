@@ -52,7 +52,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
-                <com.santaistiger.gomourcustomerapp.ui.customview.ListStoreView
+                <com.santaistiger.gomourcustomerapp.ui.customview.StoreNameView
                     android:id="@+id/destination_string"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
