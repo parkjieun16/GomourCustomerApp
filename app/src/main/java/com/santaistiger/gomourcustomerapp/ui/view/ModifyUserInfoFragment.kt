@@ -1,5 +1,6 @@
 package com.santaistiger.gomourcustomerapp.ui.view
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
@@ -232,6 +233,7 @@ class ModifyUserInfoFragment : Fragment() {
     }
 
     //탈퇴
+    @SuppressLint("RestrictedApi")
     private fun withdrawal(){
         var currentUser = Firebase.auth.currentUser
         var uid = currentUser.uid
@@ -240,7 +242,6 @@ class ModifyUserInfoFragment : Fragment() {
                 Toast.makeText(context,"탈퇴 실패",Toast.LENGTH_LONG).show()
             }
             .addOnSuccessListener {
-                Toast.makeText(context,"탈퇴 성공",Toast.LENGTH_LONG).show()
             }
 
         db.collection("customer").document(uid)
@@ -254,9 +255,14 @@ class ModifyUserInfoFragment : Fragment() {
                 val editor: SharedPreferences.Editor = auto.edit()
                 editor.clear()
                 editor.commit()
-                findNavController().navigate(R.id.action_modifyUserInfoFragment_to_loginFragment)
 
+                // 백스택 제거
+                for (i in 1..findNavController().backStack.count()) {
+                    findNavController().popBackStack()
+                }
 
+                // 로그인 페이지로 이동
+                findNavController().navigate(R.id.loginFragment)
             }
             .addOnFailureListener {Toast.makeText(context,"탈퇴 실패",Toast.LENGTH_LONG).show() }
     }
