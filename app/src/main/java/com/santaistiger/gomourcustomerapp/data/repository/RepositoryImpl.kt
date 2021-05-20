@@ -1,5 +1,6 @@
 package com.santaistiger.gomourcustomerapp.data.repository
 
+import android.util.Log
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
@@ -9,9 +10,10 @@ import com.santaistiger.gomourcustomerapp.data.network.database.RealtimeApi
 import com.santaistiger.gomourcustomerapp.data.network.map.KakaoMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.NaverMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.asDomainModel
+import com.santaistiger.gomourcustomerapp.data.network.map.getDistance
 import net.daum.mf.map.api.MapPoint
 
-val TAG = "RepositoryImpl"
+private const val TAG = "RepositoryImpl"
 
 object RepositoryImpl : Repository {
 
@@ -26,8 +28,9 @@ object RepositoryImpl : Repository {
     override suspend fun getDistance(start: String, goal: String, waypoints: String?): Int? {
         val jsonResponse =
             NaverMapApi.retrofitService.getDirections(start, goal, waypoints)
+        Log.i(TAG, "jsonResponse : $jsonResponse")
 
-        return jsonResponse.route["traoptimal"]?.get(0)?.summary?.distance?.toInt()
+        return jsonResponse.getDistance()
     }
 
     override suspend fun readOrderDetail(orderId: String): Order? {
@@ -50,6 +53,8 @@ object RepositoryImpl : Repository {
                 curMapPos.latitude
             )
 
+        Log.i(TAG, "kakaoMapProperty: $kakaoMapProperty")
+
         return kakaoMapProperty.documents.asDomainModel()
     }
 
@@ -57,7 +62,7 @@ object RepositoryImpl : Repository {
      * orderRequest를 받아서 Firebase Realtime Database의 order_reqeust 테이블에 write
      * 이때, data key는 orderRequest의 orderId를 사용
      */
-    override fun writeOrderRequest(orderRequest: OrderRequest) {
+    override suspend fun writeOrderRequest(orderRequest: OrderRequest) {
         val key = orderRequest.orderId
         RealtimeApi.writeRequest(key, orderRequest)
     }

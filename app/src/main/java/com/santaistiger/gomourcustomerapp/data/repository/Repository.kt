@@ -12,6 +12,6 @@ interface Repository {
     suspend fun searchPlace(placeName: String, curMapPos: MapPoint.GeoCoordinate): List<Place>
     suspend fun readOrderDetail(orderId: String): Order?
     suspend fun readDeliveryManPhone(deliveryManUid: String): String?
-    fun writeOrderRequest(orderRequest: OrderRequest)
+    suspend fun writeOrderRequest(orderRequest: OrderRequest)
     fun getUid(): String
 }

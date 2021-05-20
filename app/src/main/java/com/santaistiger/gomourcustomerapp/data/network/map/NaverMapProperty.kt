@@ -14,6 +14,10 @@ data class NaverMapProperty(
     val resultCode: Double
 )
 
+fun NaverMapProperty.getDistance() =
+    route["traoptimal"]?.get(0)?.summary?.distance?.toInt()
+
+
 data class Route(
     val summary: Summary,
     val path: List<List<Double>>

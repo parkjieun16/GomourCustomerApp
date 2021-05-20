@@ -14,9 +14,13 @@ import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-private val TAG = "OrderDetailViewModel"
+
 
 class OrderDetailViewModel(orderId: String) : ViewModel() {
+    companion object {
+        private val TAG = "OrderDetailViewModel"
+    }
+
     val order: MutableLiveData<Order> = liveData(Dispatchers.IO) {
         emit(repository.readOrderDetail(orderId))
     } as MutableLiveData<Order>

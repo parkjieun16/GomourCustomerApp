@@ -7,18 +7,17 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import com.santaistiger.gomourcustomerapp.R
-import com.santaistiger.gomourcustomerapp.databinding.ItemMessageBinding
-import com.santaistiger.gomourcustomerapp.databinding.ItemPriceBinding
+import com.santaistiger.gomourcustomerapp.databinding.ItemDoPriceBinding
 
 
 class PriceView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    val binding: ItemPriceBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            R.layout.item_price,
-            this,
-            true
+    val binding: ItemDoPriceBinding = DataBindingUtil.inflate(
+        LayoutInflater.from(context),
+        R.layout.item_do_price,
+        this,
+        true
     )
 }

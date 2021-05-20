@@ -8,16 +8,16 @@ import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import com.santaistiger.gomourcustomerapp.R
-import com.santaistiger.gomourcustomerapp.databinding.ItemStoreBinding
+import com.santaistiger.gomourcustomerapp.databinding.ItemDoStoreBinding
 
 
 class StoreView @JvmOverloads constructor(
         context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    val binding: ItemStoreBinding = DataBindingUtil.inflate(
+    val binding: ItemDoStoreBinding = DataBindingUtil.inflate(
             LayoutInflater.from(context),
-            R.layout.item_store,
+            R.layout.item_do_store,
             this,
             true
     )

@@ -9,16 +9,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.databinding.FragmentDoOrderBinding
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.DoOrderViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 
-private const val TAG = "DoOrderFragment"
-private const val MAX_SIZE = 4
-
 class DoOrderFragment : Fragment() {
+    companion object {
+        private const val TAG = "DoOrderFragment"
+        private const val MAX_SIZE = 3
+    }
 
     private lateinit var binding: FragmentDoOrderBinding
     private val viewModel: DoOrderViewModel by activityViewModels()
@@ -30,12 +32,25 @@ class DoOrderFragment : Fragment() {
     ): View {
 
         setToolbar()
-
         init(inflater, container)
-        addDestinationClickListener()
-        addOrderRequestObserver()
+        addObserver()
+        addClickListener()
 
         return binding.root
+    }
+
+    private fun addObserver() {
+        addOrderRequestObserver()
+        addNotEnteredExceptionObserver()
+    }
+
+    private fun addNotEnteredExceptionObserver() {
+        viewModel.notEnteredException.observe(viewLifecycleOwner, Observer { e ->
+            if (e != null) {
+                showDenyDialog(e.message!!)
+                viewModel.doneNotEnteredExceptionProcess()
+            }
+        })
     }
 
     private fun setToolbar() {
@@ -51,7 +66,7 @@ class DoOrderFragment : Fragment() {
      * orderRequest의 값이 null이 아니면 waitMatchFragment로 이동
      */
     private fun addOrderRequestObserver() {
-        viewModel.orderRequest.observe(viewLifecycleOwner, { orderRequest ->
+        viewModel.orderRequest.observe(viewLifecycleOwner, Observer { orderRequest ->
             if (orderRequest != null) {
                 findNavController().navigate(
                     DoOrderFragmentDirections.actionDoOrderFragmentToWaitMatchFragment(orderRequest.orderId)
@@ -78,22 +93,23 @@ class DoOrderFragment : Fragment() {
     /**
      * DestinationView의 button, textView에 clickListener 설정
      */
-    private fun addDestinationClickListener() {
-        binding.cvDestination.binding.ibAddItem.setOnClickListener { addStore() }
+    private fun addClickListener() {
+        binding.cvDestination.binding.ibAddItem.setOnClickListener { appendStore() }
         binding.cvDestination.binding.tvStoreAddress.setOnClickListener { searchPlace() }
+        binding.cvPrice.binding.ibRefresh.setOnClickListener { viewModel.getDeliveryCharge() }
     }
 
-    private fun addStore() {
-        if (viewModel.storeList.size < 3) {
-            viewModel.addStore()
+    private fun appendStore() {
+        if (viewModel.storeList.size < MAX_SIZE) {
+            viewModel.appendStore()
         } else {
-            showDenyDialog()
+            showDenyDialog("주문 장소는 최대 3곳까지 가능합니다.")
         }
     }
 
-    private fun showDenyDialog() {
+    private fun showDenyDialog(msg: String) {
         AlertDialog.Builder(context)
-            .setMessage("주문 장소는 최대 3곳까지 가능합니다.")
+            .setMessage(msg)
             .setNegativeButton("확인", null)
             .create()
             .show()

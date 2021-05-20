@@ -22,10 +22,12 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-private val DANKOOKUNIV_LOCATION =
-        MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
-
 class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
+    companion object {
+        private val DANKOOKUNIV_LOCATION =
+            MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
+        private const val TAG = "SearchPlaceFragment"
+    }
 
     private lateinit var binding: FragmentSearchPlaceBinding
     private lateinit var viewModel: SearchPlaceViewModel
@@ -39,7 +41,6 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
     ): View {
 
         setToolbar()
-
         init(inflater, container)
         initKakaoMap()
         addPlacesObserver()
@@ -102,7 +103,7 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
         viewModel.places.observe(viewLifecycleOwner, { places ->
             mapView.removeAllPOIItems()
             for (place: Place in places) {
-                Log.i("SearchPlaceFragment", "$place")
+                Log.i(TAG, "$place")
 
                 MapPOIItem().apply {
                     itemName = place.placeName
@@ -133,6 +134,7 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
                     .setPositiveButton("확인") { _, _ ->
                         val position = SearchPlaceFragmentArgs.fromBundle(requireArguments()).position
                         val place = item.userObject as Place
+                        Log.i(TAG, "item: $item")
 
                         if (position == -1) { // 목적지 주소 변경
                             sharedViewModel.destination.set(place)

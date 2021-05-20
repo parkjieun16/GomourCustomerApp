@@ -28,11 +28,13 @@ import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
-private val DANKOOKUNIV_LOCATION =
-    MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
-private val TAG = "OrderDetailFragment"
+
 
 class OrderDetailFragment : Fragment() {
+    private val DANKOOKUNIV_LOCATION =
+        MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
+
+    private val TAG = "OrderDetailFragment"
 
     private lateinit var binding: FragmentOrderDetailBinding
     private lateinit var viewModel: OrderDetailViewModel

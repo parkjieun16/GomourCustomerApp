@@ -7,10 +7,10 @@ import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Store
-import com.santaistiger.gomourcustomerapp.databinding.ItemStoreBinding
+import com.santaistiger.gomourcustomerapp.databinding.ItemDoStoreBinding
 import com.santaistiger.gomourcustomerapp.ui.view.DoOrderFragmentDirections
 
-class DoOrderStoreAdapter : RecyclerView.Adapter<DoOrderStoreAdapter.ViewHolder>(){
+class DoOrderStoreAdapter : RecyclerView.Adapter<DoOrderStoreAdapter.ViewHolder>() {
 
     var items = ArrayList<Store>()
 
@@ -23,7 +23,7 @@ class DoOrderStoreAdapter : RecyclerView.Adapter<DoOrderStoreAdapter.ViewHolder>
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         // 첫번째 StoreView가 아니면 '-'버튼과 클릭 리스너 등록
         if (position != 0) {
-            holder.viewBinding.ibDelItem.setImageResource(R.drawable.btn_delete_store)
+            holder.viewBinding.ibDelItem.setImageResource(R.drawable.ic_del_btn)
             holder.viewBinding.ibDelItem.setOnClickListener { deleteItem(position) }
         }
 
@@ -34,7 +34,7 @@ class DoOrderStoreAdapter : RecyclerView.Adapter<DoOrderStoreAdapter.ViewHolder>
 
     private fun searchPlace(view: View, position: Int) {
         DoOrderFragmentDirections.actionDoOrderFragmentToSearchPlaceFragment().let {
-                    it.position = position
+            it.position = position
             view.findNavController().navigate(it)
         }
     }
@@ -47,10 +47,10 @@ class DoOrderStoreAdapter : RecyclerView.Adapter<DoOrderStoreAdapter.ViewHolder>
         items.add(item)
     }
 
-    class ViewHolder private constructor(val viewBinding: ItemStoreBinding)
-        : RecyclerView.ViewHolder(viewBinding.root) {
+    class ViewHolder private constructor(val viewBinding: ItemDoStoreBinding) :
+        RecyclerView.ViewHolder(viewBinding.root) {
 
-        fun bind (item: Store) {
+        fun bind(item: Store) {
             viewBinding.item = item
             viewBinding.executePendingBindings()
         }
@@ -58,7 +58,7 @@ class DoOrderStoreAdapter : RecyclerView.Adapter<DoOrderStoreAdapter.ViewHolder>
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ItemStoreBinding.inflate(layoutInflater, parent, false)
+                val binding = ItemDoStoreBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }

@@ -8,6 +8,8 @@ import com.santaistiger.gomourcustomerapp.data.model.DeliveryMan
 import kotlinx.coroutines.tasks.await
 import java.lang.Exception
 
+private const val TAG = "FireStoreApiService"
+
 object FireStoreApi{
     private val database = Firebase.firestore
     private val customerTable = database.collection("customer")
@@ -22,7 +24,7 @@ object FireStoreApi{
             response.exception = e
         }
 
-        Log.i(com.santaistiger.gomourcustomerapp.data.repository.TAG, response.toString())
+        Log.i(TAG, response.toString())
         return response
     }
 }

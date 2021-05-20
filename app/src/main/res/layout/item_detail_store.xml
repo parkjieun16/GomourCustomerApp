@@ -47,7 +47,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="14dp"
                     android:text="@{item.place.getDisplayName}"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="6dp"
                     tools:text="가게 도로명 주소 (가게명)" />
 
                 <androidx.appcompat.widget.AppCompatTextView
