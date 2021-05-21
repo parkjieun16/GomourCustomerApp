@@ -13,6 +13,9 @@ import net.daum.mf.map.api.MapPoint
 
 
 class SearchPlaceViewModel: ViewModel() {
+    companion object {
+        private const val TAG = "SearchPlaceViewModel"
+    }
     private val repository: Repository = RepositoryImpl
 
     val places = MutableLiveData<List<Place>>()
@@ -38,7 +41,7 @@ class SearchPlaceViewModel: ViewModel() {
             try {
                 places.value = repository.searchPlace(placeName, curMapPos)
             } catch (e: Exception) {
-                Log.i("MapViewModel", "search failed:\n${e.printStackTrace()}")
+                e.printStackTrace()
                 places.value = ArrayList()
             }
         }

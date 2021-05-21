@@ -14,8 +14,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginHorizontal="3dp"
+        android:layout_marginTop="3dp"
         android:layout_marginBottom="5dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="3dp">
@@ -26,6 +26,19 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="5dp">
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_store"
+                android:layout_width="40dp"
+                android:layout_height="24dp"
+                android:background="@android:color/transparent"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:tint="@color/main"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_store" />
+
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="0dp"
@@ -34,7 +47,7 @@
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/ib_del_item"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_store"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <androidx.appcompat.widget.AppCompatTextView
@@ -42,7 +55,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
-                    android:fontFamily="@font/nsregular"
+                    android:fontFamily="@font/nsbold"
                     android:hint="주문 장소를 입력하려면 클릭하세요"
                     android:lineSpacingExtra="3dp"
                     android:text="@{item.place.getDisplayName}"
@@ -54,7 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
-                    android:fontFamily="@font/nslight"
+                    android:fontFamily="@font/nsregular"
                     android:hint="요청사항 입력"
                     android:lineSpacingExtra="3dp"
                     android:text="@={item.menu}"
@@ -62,13 +75,13 @@
                     android:textSize="13dp" />
             </LinearLayout>
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_del_item"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:background="@android:color/transparent"
                 android:padding="13dp"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
+
         <variable
             name="item"
             type="com.santaistiger.gomourcustomerapp.data.model.Place" />
@@ -12,8 +13,8 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="2dp"
+        android:layout_marginHorizontal="3dp"
+        android:layout_marginTop="3dp"
         android:layout_marginBottom="5dp"
         app:cardCornerRadius="10dp"
         app:cardElevation="3dp">
@@ -24,29 +25,42 @@
             android:paddingHorizontal="8dp"
             android:paddingVertical="5dp">
 
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/iv_destination"
+                android:layout_width="40dp"
+                android:layout_height="24dp"
+                android:background="@android:color/transparent"
+                android:padding="2dp"
+                android:scaleType="fitCenter"
+                android:tint="@color/main"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_destination" />
+
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_store_address"
-                android:text="@{item.getDisplayName}"
-                android:hint="목적지를 설정하려면 클릭하세요"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="7"
-                android:fontFamily="@font/nsregular"
+                android:fontFamily="@font/nsbold"
+                android:hint="목적지를 설정하려면 클릭하세요"
                 android:lineSpacingExtra="3dp"
+                android:text="@{item.getDisplayName}"
                 android:textColor="@color/black"
                 android:textSize="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/ib_add_item"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toEndOf="@id/iv_destination"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_add_item"
                 android:layout_width="40dp"
                 android:layout_height="24dp"
                 android:background="@android:color/transparent"
                 android:padding="5dp"
-                android:scaleType="centerInside"
+                android:scaleType="fitCenter"
                 android:src="@drawable/ic_add_btn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

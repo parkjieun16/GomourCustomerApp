@@ -18,6 +18,9 @@ import com.santaistiger.gomourcustomerapp.databinding.FragmentSearchPlaceBinding
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.DoOrderViewModel
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.SearchPlaceViewModel
 import kotlinx.android.synthetic.main.activity_base.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -76,10 +79,12 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
      * 지도의 중심점을 단국대학교로 이동
      */
     private fun initKakaoMap() {
-        mapView = MapView(context).apply {
-            binding.mapView.addView(this)
-            setPOIItemEventListener(this@SearchPlaceFragment)
-            setMapCenterPointAndZoomLevel(DANKOOKUNIV_LOCATION, 2, true)
+        CoroutineScope(Dispatchers.Main).launch {
+            mapView = MapView(context).apply {
+                binding.mapView.addView(this)
+                setPOIItemEventListener(this@SearchPlaceFragment)
+                setMapCenterPointAndZoomLevel(DANKOOKUNIV_LOCATION, 2, true)
+            }
         }
     }
 
