@@ -25,10 +25,11 @@
 
             <androidx.appcompat.widget.AppCompatEditText
                 android:id="@+id/et_message"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="@android:color/transparent"
                 android:fontFamily="@font/nsregular"
+                android:gravity="center_vertical"
                 android:hint="내용을 입력하세요"
                 android:lineSpacingExtra="3dp"
                 android:minHeight="24dp"

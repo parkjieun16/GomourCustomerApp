@@ -12,14 +12,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="15dp">
+        android:layout_marginBottom="15dp" >
 
         <!-- 스크롤 - 정보 입력칸 / 확인 버튼 -->
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="10dp"
+            android:paddingHorizontal="15dp"
+            android:paddingBottom="10dp"
             app:layout_constraintBottom_toTopOf="@+id/btn_do_order"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -47,21 +48,21 @@
                         android:fontFamily="@font/nsbold"
                         android:text="@string/address_do_order_fragment"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="17dp" />
 
                     <!-- 가게 -->
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rv_store"
-                        bind_store_list="@{viewModel.storeList}"
+                        bind_do_store_list="@{viewModel.storeList}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:clipToPadding="false"
                         android:nestedScrollingEnabled="false" />
 
                     <!-- 목적지 -->
-                    <com.santaistiger.gomourcustomerapp.ui.customview.DestinationView
+                    <com.santaistiger.gomourcustomerapp.ui.customview.DoDestinationView
                         android:id="@+id/cv_destination"
-                        bind_destination="@{viewModel.destination}"
+                        bind_do_destination="@{viewModel.destination}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -83,12 +84,12 @@
                         android:paddingLeft="5dp"
                         android:text="@string/message_do_order_fragment"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="17dp" />
 
                     <!-- 메시지 -->
-                    <com.santaistiger.gomourcustomerapp.ui.customview.MessageView
+                    <com.santaistiger.gomourcustomerapp.ui.customview.DoMessageView
                         android:id="@+id/cv_message"
-                        bind_message="@={viewModel.message}"
+                        bind_do_message="@={viewModel.message}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -110,12 +111,12 @@
                         android:paddingLeft="5dp"
                         android:text="@string/price_do_order_fragment"
                         android:textColor="@color/black"
-                        android:textSize="20dp" />
+                        android:textSize="17dp" />
 
                     <!-- 가격 -->
-                    <com.santaistiger.gomourcustomerapp.ui.customview.PriceView
+                    <com.santaistiger.gomourcustomerapp.ui.customview.DoPriceView
                         android:id="@+id/cv_price"
-                        bind_price="@{viewModel.price}"
+                        bind_do_price="@{viewModel.price}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -129,8 +130,7 @@
             android:layout_width="match_parent"
             android:layout_height="36dp"
             android:layout_gravity="bottom"
-            android:layout_marginHorizontal="5dp"
-            android:layout_marginStart="5dp"
+            android:layout_marginHorizontal="20dp"
             android:background="@drawable/shape_bottom_btn"
             android:fontFamily="@font/nsbold"
             android:onClick="@{() -> viewModel.onClickOrderBtn()}"

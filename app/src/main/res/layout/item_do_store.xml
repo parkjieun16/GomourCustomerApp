@@ -23,7 +23,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
+            android:paddingHorizontal="5dp"
             android:paddingVertical="5dp">
 
             <androidx.appcompat.widget.AppCompatImageView
@@ -33,7 +33,7 @@
                 android:background="@android:color/transparent"
                 android:padding="2dp"
                 android:scaleType="fitCenter"
-                android:tint="@color/main"
+                android:tint="@color/icon_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -45,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
+                android:layout_marginLeft="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/ib_del_item"
                 app:layout_constraintStart_toEndOf="@id/iv_store"
@@ -56,11 +57,11 @@
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="7dp"
                     android:fontFamily="@font/nsbold"
-                    android:hint="주문 장소를 입력하려면 클릭하세요"
                     android:lineSpacingExtra="3dp"
-                    android:text="@{item.place.getDisplayName}"
                     android:textColor="@color/black"
-                    android:textSize="14dp" />
+                    android:textSize="14dp"
+                    android:hint="주문 장소를 입력하려면 클릭하세요"
+                    android:text="@{item.place.getDisplayName}"/>
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_menu"
@@ -68,11 +69,11 @@
                     android:layout_height="wrap_content"
                     android:background="@android:color/transparent"
                     android:fontFamily="@font/nsregular"
-                    android:hint="요청사항 입력"
                     android:lineSpacingExtra="3dp"
-                    android:text="@={item.menu}"
                     android:textColor="@color/black"
-                    android:textSize="13dp" />
+                    android:textSize="13dp"
+                    android:hint="요청사항 입력"
+                    android:text="@={item.menu}" />
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatImageButton

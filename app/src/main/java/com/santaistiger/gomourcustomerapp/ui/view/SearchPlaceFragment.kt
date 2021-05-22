@@ -43,20 +43,10 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
             savedInstanceState: Bundle?
     ): View {
 
-        setToolbar()
         init(inflater, container)
-        initKakaoMap()
-        addPlacesObserver()
-        addSearchBtnObserver()
+        addObserver()
 
         return binding.root
-    }
-
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.GONE    // 툴바 숨기기
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
-        }
     }
 
     /**
@@ -72,6 +62,21 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
         viewModel = ViewModelProvider(this).get(SearchPlaceViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
+
+        setToolbar()
+        initKakaoMap()
+    }
+
+    private fun addObserver() {
+        addPlacesObserver()
+        addSearchBtnObserver()
+    }
+
+    private fun setToolbar() {
+        requireActivity().apply {
+            toolbar.visibility = View.GONE    // 툴바 숨기기
+            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
+        }
     }
 
     /**
@@ -79,25 +84,11 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
      * 지도의 중심점을 단국대학교로 이동
      */
     private fun initKakaoMap() {
-        CoroutineScope(Dispatchers.Main).launch {
-            mapView = MapView(context).apply {
-                binding.mapView.addView(this)
-                setPOIItemEventListener(this@SearchPlaceFragment)
-                setMapCenterPointAndZoomLevel(DANKOOKUNIV_LOCATION, 2, true)
-            }
+        mapView = MapView(context).apply {
+            binding.mapView.addView(this)
+            setPOIItemEventListener(this@SearchPlaceFragment)
+            setMapCenterPointAndZoomLevel(DANKOOKUNIV_LOCATION, 2, true)
         }
-    }
-
-    /**
-     * 검색 버튼이 클릭되면, 현재 지도의 위치를 전달해주는 Observer 추가
-     */
-    private fun addSearchBtnObserver() {
-        viewModel.buttonClicked.observe(viewLifecycleOwner, { clicked ->
-            if (clicked) {
-                viewModel.curMapPos = mapView.mapCenterPoint.mapPointGeoCoord
-                viewModel.doneSearchBtnClick()
-            }
-        })
     }
 
     /**
@@ -121,6 +112,19 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
             }
         })
     }
+
+    /**
+     * 검색 버튼이 클릭되면, 현재 지도의 위치를 전달해주는 Observer 추가
+     */
+    private fun addSearchBtnObserver() {
+        viewModel.buttonClicked.observe(viewLifecycleOwner, { clicked ->
+            if (clicked) {
+                viewModel.curMapPos = mapView.mapCenterPoint.mapPointGeoCoord
+                viewModel.doneSearchBtnClick()
+            }
+        })
+    }
+
 
     /**
      * 마커 클릭하면 위에 표시되는 말풍선 클릭했을 때, 아래와 같은 알림창 띄우기

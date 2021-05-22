@@ -22,7 +22,7 @@ import java.text.SimpleDateFormat
 object BindingUtils {
     val numberFormat = NumberFormat.getInstance()
 
-    @BindingAdapter("bind_store_list")
+    @BindingAdapter("bind_do_store_list")
     @JvmStatic fun bindStoreList(recyclerView: RecyclerView, items: ObservableArrayList<Store>) {
         if (recyclerView.adapter == null) {
             recyclerView.layoutManager =
@@ -33,27 +33,27 @@ object BindingUtils {
         recyclerView.adapter?.notifyDataSetChanged()
     }
 
-    @BindingAdapter("bind_destination")
-    @JvmStatic fun setDestination(view: DestinationView, item: ObservableParcelable<Place>) {
+    @BindingAdapter("bind_do_destination")
+    @JvmStatic fun setDestination(view: DoDestinationView, item: ObservableParcelable<Place>) {
         if (view.binding.item != item.get()) {
             view.binding.item = item.get()
         }
     }
 
-    @BindingAdapter("bind_message")
-    @JvmStatic fun setMessage(view: MessageView, item: ObservableField<String>) {
+    @BindingAdapter("bind_do_message")
+    @JvmStatic fun setMessage(view: DoMessageView, item: ObservableField<String>) {
         if (view.binding.message != item.get()) {
             view.binding.message = item.get()
         }
     }
 
-    @InverseBindingAdapter(attribute = "bind_message", event = "bind_messageAttrChanged")
-    @JvmStatic fun getMessage(view: MessageView) : String {
+    @InverseBindingAdapter(attribute = "bind_do_message", event = "bind_do_messageAttrChanged")
+    @JvmStatic fun getMessage(view: DoMessageView) : String {
         return view.getMessage()
     }
 
-    @BindingAdapter("bind_messageAttrChanged")
-    @JvmStatic fun setListener(view: MessageView, listener: InverseBindingListener?) {
+    @BindingAdapter("bind_do_messageAttrChanged")
+    @JvmStatic fun setListener(view: DoMessageView, listener: InverseBindingListener?) {
         view.binding.etMessage.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(s: Editable?) { listener?.onChange() }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -61,8 +61,8 @@ object BindingUtils {
         })
     }
 
-    @BindingAdapter("bind_price")
-    @JvmStatic fun setPrice(view: PriceView, item: ObservableInt) {
+    @BindingAdapter("bind_do_price")
+    @JvmStatic fun setPrice(view: DoPriceView, item: ObservableInt) {
         if (view.binding.price != item.get()) {
             view.binding.price = item.get()
         }

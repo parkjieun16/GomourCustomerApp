@@ -10,7 +10,7 @@ import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.databinding.ItemDoMessageBinding
 
 
-class MessageView @JvmOverloads constructor(
+class DoMessageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 

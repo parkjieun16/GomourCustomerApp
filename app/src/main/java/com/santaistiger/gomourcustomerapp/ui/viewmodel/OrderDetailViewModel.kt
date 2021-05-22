@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 
 
 
-class OrderDetailViewModel(orderId: String) : ViewModel() {
+class OrderDetailViewModel(val orderId: String) : ViewModel() {
     companion object {
-        private val TAG = "OrderDetailViewModel"
+        private const val TAG = "OrderDetailViewModel"
     }
 
     val order: MutableLiveData<Order> = liveData(Dispatchers.IO) {
@@ -29,6 +29,12 @@ class OrderDetailViewModel(orderId: String) : ViewModel() {
     val isTextBtnClick = MutableLiveData<Boolean>()
 
     private val repository: Repository = RepositoryImpl
+
+    fun refresh() {
+        viewModelScope.launch {
+            order.value = repository.readOrderDetail(orderId)
+        }
+    }
 
     fun onCallBtnClick() {
         isCallBtnClick.value = true

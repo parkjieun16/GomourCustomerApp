@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
@@ -20,13 +21,15 @@ import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
+import com.santaistiger.gomourcustomerapp.ui.view.OrderDetailFragment
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import java.util.*
 
-val TAG = "BaseActivityLog"
-
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    companion object {
+        private const val TAG = "BaseActivityLog"
+    }
     private val repository: Repository = RepositoryImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {

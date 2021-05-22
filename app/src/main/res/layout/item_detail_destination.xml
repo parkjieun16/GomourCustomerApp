@@ -4,63 +4,118 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true">
+        android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_destination"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="5dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingHorizontal="5dp">
+            android:minHeight="43dp"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            android:layout_marginLeft="3dp"
+            android:layout_marginRight="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/container_complete"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iv_stopover"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:padding="8dp"
-                app:srcCompat="@drawable/store" />
-
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_store_address"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_weight="6"
-                android:gravity="center_vertical"
-                android:textSize="14dp"
-                tools:text="도착주소주소\n도착 주소를 주소" />
-
-
-            <LinearLayout
-                android:layout_width="wrap_content"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="center_vertical"
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="5dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_destination"
+                    android:layout_width="40dp"
+                    android:layout_height="24dp"
+                    android:background="@android:color/transparent"
+                    android:padding="2dp"
+                    android:scaleType="fitCenter"
+                    android:tint="@color/icon_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_destination" />
 
                 <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_pickup_complete"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_store_address"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:background="#22000000"
-                    android:padding="5dp"
-                    android:layout_marginBottom="2dp"
+                    android:layout_weight="7"
+                    android:fontFamily="@font/nsbold"
+                    android:textColor="@color/black"
+                    android:textSize="14dp"
+                    android:lineSpacingExtra="3dp"
+                    tools:text="도착주소주소\n도착 주소를 주소"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_destination"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/container_complete"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:minHeight="20dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="1dp"
+                android:backgroundTint="@color/light_gray"
+                android:layout_marginHorizontal="3dp"
+                android:layout_marginVertical="3dp" >
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_gravity="center"
+                    android:id="@+id/tv_pickup_complete"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="10dp"
+                    android:fontFamily="@font/nsregular"
                     android:hint="픽업 완료" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="60dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:minHeight="20dp"
+                app:cardCornerRadius="6dp"
+                app:cardElevation="1dp"
+                android:backgroundTint="@color/light_gray"
+                android:layout_marginHorizontal="3dp"
+                android:layout_marginBottom="5dp" >
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_delivery_complete"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="#22000000"
-                    android:padding="5dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="10dp"
+                    android:fontFamily="@font/nsregular"
                     android:hint="배달 완료" />
-            </LinearLayout>
+            </androidx.cardview.widget.CardView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

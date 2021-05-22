@@ -1,74 +1,126 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
         <variable
             name="item"
             type="com.santaistiger.gomourcustomerapp.data.model.Store" />
     </data>
 
-    <androidx.cardview.widget.CardView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="3dp"
-        app:cardUseCompatPadding="true">
+        android:layout_height="wrap_content" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardView_store"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingHorizontal="5dp">
+            app:cardCornerRadius="10dp"
+            app:cardElevation="3dp"
+            android:layout_marginHorizontal="3dp"
+            android:layout_marginTop="3dp"
+            android:layout_marginBottom="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/container_cost"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iv_stopover"
-                android:layout_width="0dp"
-                android:layout_height="40dp"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:padding="8dp"
-                app:srcCompat="@drawable/store" />
-
-            <LinearLayout
-                android:layout_width="0dp"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="6"
-                android:orientation="vertical"
-                android:paddingVertical="5dp" >
+                android:paddingHorizontal="5dp"
+                android:paddingVertical="5dp">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/tv_store_address"
-                    android:layout_width="match_parent"
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_store"
+                    android:layout_width="40dp"
+                    android:layout_height="24dp"
+                    android:background="@android:color/transparent"
+                    android:padding="2dp"
+                    android:scaleType="fitCenter"
+                    android:tint="@color/icon_color"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_store" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textSize="14dp"
-                    android:text="@{item.place.getDisplayName}"
-                    android:layout_marginBottom="6dp"
-                    tools:text="가게 도로명 주소 (가게명)" />
+                    android:layout_gravity="center"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="3dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@id/iv_store"
+                    app:layout_constraintTop_toTopOf="parent">
 
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:id="@+id/et_menu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#00000000"
-                    android:textSize="14dp"
-                    android:text="@{item.menu}"
-                    tools:text="메뉴 메뉴 메뉴 메뉴 메뉴 \n메뉴 메뉴 메뉴 메뉴" />
-            </LinearLayout>
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_store_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="7dp"
+                        android:fontFamily="@font/nsbold"
+                        android:lineSpacingExtra="3dp"
+                        android:text="@{item.place.getDisplayName}"
+                        android:textColor="@color/black"
+                        android:textSize="14dp"
+                        tools:text="가게 도로명 주소 \n(가게명)" />
 
-            <androidx.appcompat.widget.AppCompatTextView
-                android:id="@+id/tv_input_price"
-                android:layout_width="wrap_content"
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_menu"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@android:color/transparent"
+                        android:fontFamily="@font/nsregular"
+                        android:lineSpacingExtra="3dp"
+                        android:text="@{item.menu}"
+                        android:textColor="@color/black"
+                        android:textSize="13dp"
+                        tools:text="메뉴 메뉴 메뉴 메뉴 메뉴 " />
+                </LinearLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:id="@+id/container_cost"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView_cost"
+                android:layout_width="60dp"
                 android:layout_height="match_parent"
-                android:background="#22000000"
-                android:layout_margin="5dp"
-                android:paddingHorizontal="10dp"
-                android:hint="가격\n입력"
-                bind_detail_cost="@{item.cost}" />
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
+                app:cardCornerRadius="10dp"
+                app:cardElevation="3dp"
+                android:layout_marginHorizontal="3dp"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="5dp" >
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_input_price"
+                    bind_detail_cost="@{item.cost}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/light_gray"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="10dp"
+                    android:fontFamily="@font/nsregular"
+                    android:hint="미입력" />
+            </androidx.cardview.widget.CardView>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -3,13 +3,12 @@ package com.santaistiger.gomourcustomerapp.ui.view
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.santaistiger.gomourcustomerapp.R
@@ -17,6 +16,7 @@ import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentOrderDetailBinding
+import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.OrderDetailViewModel
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.OrderDetailViewModelFactory
 import kotlinx.android.synthetic.main.activity_base.*
@@ -29,12 +29,13 @@ import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
 
 
-
 class OrderDetailFragment : Fragment() {
-    private val DANKOOKUNIV_LOCATION =
-        MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
+    companion object {
+        private val DANKOOKUNIV_LOCATION =
+            MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
 
-    private val TAG = "OrderDetailFragment"
+        private const val TAG = "OrderDetailFragment"
+    }
 
     private lateinit var binding: FragmentOrderDetailBinding
     private lateinit var viewModel: OrderDetailViewModel
@@ -64,7 +65,8 @@ class OrderDetailFragment : Fragment() {
             false
         )
 
-        val orderId = OrderDetailFragmentArgs.fromBundle(requireArguments()).orderId
+        val orderId = "1621533540427AA2m6EVCdYZG68XdYWKO2O5O6263"
+        // val orderID = OrderDetailFragmentArgs.fromBundle(requireArguments()).orderId
         viewModel = ViewModelProvider(this, OrderDetailViewModelFactory(orderId))
             .get(OrderDetailViewModel::class.java)
         binding.viewModel = viewModel
@@ -125,18 +127,19 @@ class OrderDetailFragment : Fragment() {
     }
 
     /**
-     * 주문자에게 문자하기 버튼 처리하는 함수
+     * 배달 기사에게 문자하기 버튼 처리하는 함수
      * 다이얼로그를 띄우고, 확인 버튼을 누르면 문자앱으로 이동
      */
     private fun setTextBtnObserver() {
         viewModel.isTextBtnClick.observe(viewLifecycleOwner, Observer { clicked ->
             if (clicked) {
-                AlertDialog.Builder(requireContext())
-                    .setMessage("배달 기사에게 문자를 전송하시겠습니까?")
-                    .setPositiveButton("확인") { _, _ ->
+                RoundedAlertDialog()
+                    .setMessage("배달 기사에게 문자를 보내시겠습니까?")
+                    .setPositiveButton("확인") {
                         CoroutineScope(Dispatchers.IO).launch {
                             val deliveryManUid = viewModel.getDeliveryManUid()
-                            val deferredPhone = async { repository.readDeliveryManPhone(deliveryManUid) }
+                            val deferredPhone =
+                                async { repository.readDeliveryManPhone(deliveryManUid) }
                             startActivity(
                                 Intent(Intent.ACTION_SENDTO)
                                     .setData(Uri.parse("smsto:${deferredPhone.await()}"))
@@ -145,39 +148,35 @@ class OrderDetailFragment : Fragment() {
                         }
                         viewModel.doneTextBtnClick()
                     }
-                    .setNegativeButton("취소") { _, _ ->
-                        viewModel.doneTextBtnClick()
-                    }
-                    .create()
-                    .show()
+                    .setNegativeButton("취소") { viewModel.doneTextBtnClick() }
+                    .show(requireActivity().supportFragmentManager, "rounded alert dialog")
             }
         })
     }
 
+
     /**
-     * 주문자에게 전화하기 버튼 처리하는 함수
+     * 배달 기사에게 전화하기 버튼 처리하는 함수
      * 다이얼로그를 띄우고, 확인 버튼을 누르면 전화앱으로 이동
      */
     private fun setCallBtnObserver() {
         viewModel.isCallBtnClick.observe(viewLifecycleOwner, Observer { clicked ->
             if (clicked) {
-                AlertDialog.Builder(requireContext())
+                RoundedAlertDialog()
                     .setMessage("배달 기사에게 전화를 거시겠습니까?")
-                    .setPositiveButton("확인") { _, _ ->
+                    .setPositiveButton("확인") {
                         CoroutineScope(Dispatchers.IO).launch {
                             val deliveryManUid = viewModel.getDeliveryManUid()
-                            val deferredPhone = async { repository.readDeliveryManPhone(deliveryManUid) }
+                            val deferredPhone =
+                                async { repository.readDeliveryManPhone(deliveryManUid) }
                             startActivity(
                                 Intent(Intent.ACTION_DIAL).setData(Uri.parse("tel:${deferredPhone.await()}"))
                             )
                         }
                         viewModel.doneCallBtnClick()
                     }
-                    .setNegativeButton("취소") { _, _ ->
-                        viewModel.doneCallBtnClick()
-                    }
-                    .create()
-                    .show()
+                    .setNegativeButton("취소") { viewModel.doneCallBtnClick() }
+                    .show(requireActivity().supportFragmentManager, "rounded alert dialog")
             }
         })
     }
