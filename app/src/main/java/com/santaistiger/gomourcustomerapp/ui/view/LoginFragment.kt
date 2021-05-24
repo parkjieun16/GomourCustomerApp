@@ -90,7 +90,7 @@ class LoginFragment : Fragment() {
     // 로그인
     private fun signIn(email:String, password:String){
         // 단국이메일인 경우
-        if ( email.contains("@dankook.ac.kr")){
+        if ( email.contains(R.string.dankook_domain.toString())){
             alertCancel()
         }
         else{
@@ -112,7 +112,7 @@ class LoginFragment : Fragment() {
                         (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
                     }
                 }
-                    // 로그인 실패시
+                // 로그인 실패시
                 ?.addOnFailureListener {
                     alertCancel()
                 }
@@ -121,8 +121,8 @@ class LoginFragment : Fragment() {
 
     fun alertCancel() {
         AlertDialog.Builder(requireActivity())
-            .setMessage("로그인에 실패하였습니다.")
-            .setPositiveButton("확인",null)
+            .setMessage(R.string.login_fail_dialog)
+            .setPositiveButton(R.string.login_fail_ok,null)
             .create()
             .show()
     }

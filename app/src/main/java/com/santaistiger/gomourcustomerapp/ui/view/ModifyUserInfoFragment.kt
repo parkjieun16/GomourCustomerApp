@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -51,15 +52,19 @@ class ModifyUserInfoFragment : Fragment() {
         binding = DataBindingUtil.inflate<FragmentModifyUserInfoBinding>(inflater,R.layout.fragment_modify_user_info,container,false)
         viewModel = ViewModelProvider(this).get(ModifyUserInfoViewModel::class.java)
         val currentUser = auth?.currentUser
+        var password:String = ""
+        var passwordCheck:String = ""
         if (currentUser != null) {
             val docRef = db.collection("customer").document(currentUser.uid)
             docRef.get().addOnSuccessListener { documentSnapshot ->
                 val data = documentSnapshot.toObject<Customer>()
                 if (data != null) {
-                    binding.nameModify.text = data.name
-                    binding.emailModify.text = data.email
-                    binding.passwordModify.setText(data.password)
-                    binding.passwordCheckModify.setText(data.password)
+                    password = data.password.toString()
+                    passwordCheck = data.password.toString()
+                    binding.nameModify.setText(data.name)
+                    binding.emailModify.setText(data.email)
+                    binding.passwordModify.setHint(R.string.password_star)
+                    binding.passwordCheckModify.setHint(R.string.password_star)
                     binding.phoneModify.setText(data.phone)
                 }
             }
@@ -71,15 +76,22 @@ class ModifyUserInfoFragment : Fragment() {
 
             // 변경완료 버튼 클릭 시
             binding.modifyButton.setOnClickListener{
-                val password:String =binding.passwordModify.text.toString()
-                val passwordCheck: String  = binding.passwordCheckModify.text.toString()
+
+                if(binding.passwordModify.toString() == "" && binding.passwordCheckModify.toString() ==""){
+                    // 변경사항 없음
+                }
+                else{
+                    password =binding.passwordModify.text.toString()
+                    passwordCheck  = binding.passwordCheckModify.text.toString()
+                }
 
                 if (passwordCheck(passwordCheck) && password(password)){
                     modifyUser()
                 }
                 else{
-                    Toast.makeText(context,"정보를 다시 입력하세요", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,R.string.confirm_fail, Toast.LENGTH_LONG).show()
                 }
+
             }
 
             //탈퇴 버튼 클릭 시
@@ -126,27 +138,32 @@ class ModifyUserInfoFragment : Fragment() {
         }
     }
 
-
     //패스워드 제한
     private fun password(password: CharSequence):Boolean{
         val passwordCheck = binding.passwordCheckModify.text.toString()
         val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
         if (Pattern.matches(pwPattern, password)){
             if(password== passwordCheck){
+                //사용가능 비밀번호
                 binding.passwordModifyValid.visibility = View.VISIBLE
-                binding.passwordModifyValid.text = "사용할 수 있는 비밀번호입니다."
+                binding.passwordModifyValid.setTextColor(Color.parseColor("#000000"))
+                binding.passwordModifyValid.setText(R.string.password_available_info)
             }
             else{
+                // 비밀번호 같지 않음
                 binding.passwordModifyValid.visibility = View.VISIBLE
-                binding.passwordModifyValid.text = "비밀번호가 같지 않습니다."
+                binding.passwordModifyValid.setTextColor(Color.parseColor("#FFF44336"))
+                binding.passwordModifyValid.setText(R.string.password_different_info)
 
             }
 
             return true
         }
         else{
+            // 비밀번호 형식 안맞음
             binding.passwordModifyValid.visibility = View.VISIBLE
-            binding.passwordModifyValid.text = "비밀번호는 대,소문자,숫자,특수문자 포함 8~16자여야합니다."
+            binding.passwordModifyValid.setTextColor(Color.parseColor("#FFF44336"))
+            binding.passwordModifyValid.setText(R.string.password_form_info)
             return false
         }
     }
@@ -158,22 +175,29 @@ class ModifyUserInfoFragment : Fragment() {
         if(password == s.toString()) {
             if(Pattern.matches(pwPattern, password))
             {
+                //사용가능 비밀번호
                 binding.passwordModifyValid.visibility = View.VISIBLE
-                binding.passwordModifyValid.text = "사용할 수 있는 비밀번호입니다."
+                binding.passwordModifyValid.setTextColor(Color.parseColor("#000000"))
+                binding.passwordModifyValid.setText(R.string.password_available_info)
                 return true
             }
             else{
+                // 비밀번호 형식 안맞음
                 binding.passwordModifyValid.visibility = View.VISIBLE
-                binding.passwordModifyValid.text = "비밀번호는 대,소문자,숫자,특수문자 포함 8~16자여야합니다."
+                binding.passwordModifyValid.setTextColor(Color.parseColor("#FFF44336"))
+                binding.passwordModifyValid.setText(R.string.password_form_info)
                 return false
             }
         }
         else{
+            // 비밀번호 같지 않음
             binding.passwordModifyValid.visibility = View.VISIBLE
-            binding.passwordModifyValid.text = "비밀번호가 같지 않습니다."
+            binding.passwordModifyValid.setTextColor(Color.parseColor("#FFF44336"))
+            binding.passwordModifyValid.setText(R.string.password_different_info)
             return false
         }
     }
+
 
     // 회원정보 변경 시
     private fun modifyUser(){
@@ -185,8 +209,8 @@ class ModifyUserInfoFragment : Fragment() {
 
         if (currentUser != null) {
             currentUser.updatePassword(password)
-                .addOnSuccessListener { Toast.makeText(context,"비밀번호 변경 성공",Toast.LENGTH_LONG).show() }
-                .addOnFailureListener {  Toast.makeText(context,"비밀번호 변경 실패",Toast.LENGTH_LONG).show()}
+                .addOnSuccessListener { Toast.makeText(context,R.string.modify_password_success,Toast.LENGTH_SHORT).show() }
+                .addOnFailureListener {  Toast.makeText(context,R.string.modify_password_fail,Toast.LENGTH_SHORT).show()}
 
             db.collection("customer")
                 .document(currentUser.uid!!)
@@ -225,12 +249,12 @@ class ModifyUserInfoFragment : Fragment() {
 
     fun alertCancel() {
         AlertDialog.Builder(requireActivity())
-            .setMessage("정말 탈퇴하시겠습니까?")
-            .setPositiveButton("예") { _, _ ->
+            .setMessage(R.string.withdrawal_dialog)
+            .setPositiveButton(R.string.withdrawal_yes) { _, _ ->
                 //탈퇴
                 withdrawal()
             }
-            .setNegativeButton("아니오", null)
+            .setNegativeButton(R.string.withdrawal_no, null)
             .create()
             .show()
     }
@@ -242,7 +266,7 @@ class ModifyUserInfoFragment : Fragment() {
         var uid = currentUser.uid
         currentUser.delete()
             .addOnFailureListener {
-                Toast.makeText(context,"탈퇴 실패",Toast.LENGTH_LONG).show()
+                Toast.makeText(context,R.string.withdrawal_fail,Toast.LENGTH_LONG).show()
             }
             .addOnSuccessListener {
             }
@@ -251,7 +275,7 @@ class ModifyUserInfoFragment : Fragment() {
             .delete()
             .addOnSuccessListener {
 
-                Toast.makeText(context,"탈퇴 성공", Toast.LENGTH_LONG).show()
+                Toast.makeText(context,R.string.withdrawal_success, Toast.LENGTH_LONG).show()
                 //자동로그인 삭제
                 val auto = this.requireActivity()
                     .getSharedPreferences("auto", Context.MODE_PRIVATE)
@@ -267,6 +291,6 @@ class ModifyUserInfoFragment : Fragment() {
                 // 로그인 페이지로 이동
                 findNavController().navigate(R.id.loginFragment)
             }
-            .addOnFailureListener {Toast.makeText(context,"탈퇴 실패",Toast.LENGTH_LONG).show() }
+            .addOnFailureListener {Toast.makeText(context,R.string.withdrawal_fail,Toast.LENGTH_LONG).show() }
     }
 }

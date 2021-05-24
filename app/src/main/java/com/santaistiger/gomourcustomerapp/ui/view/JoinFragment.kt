@@ -76,12 +76,17 @@ class JoinFragment : Fragment() {
             checkEmail(object : EmailCallback {
                 override fun isEmailExist(exist: Boolean) {
                     if (exist) {
+                        // 이미 사용중인 이메일
                         binding.emailValid.visibility = View.VISIBLE
-                        binding.emailValid.text = "이미 사용 중인 이메일입니다."
+                        binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
+                        binding.emailValid.setText(R.string.join_email_duplicate_info)
+
 
                     } else {
+                        // 사용가능한 이메일
                         binding.emailValid.visibility = View.VISIBLE
-                        binding.emailValid.text = "사용가능한 이메일입니다."
+                        binding.emailValid.setTextColor(Color.parseColor("#000000"))
+                        binding.emailValid.setText(R.string.join_email_available_info)
 
                     }
                 }
@@ -107,21 +112,31 @@ class JoinFragment : Fragment() {
             var customer = Customer(email, password, name, phone, uid)
 
             //이메일 검사 -> 비밀번호 검사 -> 계정 생성
-            checkEmail(object : EmailCallback {
-                override fun isEmailExist(exist: Boolean) {
-                    if (exist) {
-                        binding.emailValid.visibility = View.VISIBLE
-                        binding.emailValid.text = "이미 사용 중인 이메일입니다."
-                        Toast.makeText(context, "정보를 다시 입력하세요", Toast.LENGTH_LONG).show()
-                    } else {
-                        binding.emailValid.visibility = View.VISIBLE
-                        binding.emailValid.text = "사용가능한 이메일입니다."
-                        if (passwordCheck(passwordCheck) && password(password)) {
-                            createAccount(customer, passwordCheck)
+            if(emailValidCheck()==true){
+                checkEmail(object : EmailCallback {
+                    override fun isEmailExist(exist: Boolean) {
+                        if (exist) {
+                            // 이미 사용중인 이메일입니다.
+                            binding.emailValid.visibility = View.VISIBLE
+                            binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
+                            binding.emailValid.setText(R.string.join_email_duplicate_info)
+                            Toast.makeText(context, R.string.confirm_fail, Toast.LENGTH_LONG).show()
+                        } else {
+                            // 사용가능 이메일
+                            binding.emailValid.visibility = View.VISIBLE
+                            binding.emailValid.setTextColor(Color.parseColor("#000000"))
+                            binding.emailValid.setText(R.string.join_email_available_info)
+                            if (passwordCheck(passwordCheck) && password(password)) {
+                                createAccount(customer, passwordCheck)
+                            }
                         }
                     }
-                }
-            })
+                })
+            }
+            else{
+                Toast.makeText(context,R.string.confirm_fail,Toast.LENGTH_SHORT).show()
+            }
+
 
 
         }
@@ -190,21 +205,25 @@ class JoinFragment : Fragment() {
         val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
         if (Pattern.matches(pwPattern, password)) {
             if (password == passwordCheck) {
+                // 사용할 수 있는 비밀번호 입니다.
+                binding.passwordValid.visibility = View.VISIBLE
                 binding.passwordValid.setTextColor(Color.parseColor("#000000"))
-
-                binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.text = "사용할 수 있는 비밀번호입니다."
-            } else {
-                binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
-                binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.text = "비밀번호가 같지 않습니다."
+                binding.passwordValid.setText(R.string.password_available_info)
             }
 
+            else {
+                // 비밀번호가 같지 않을 때
+                binding.passwordValid.visibility = View.VISIBLE
+                binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
+                binding.passwordValid.setText(R.string.password_different_info)
+            }
             return true
-        } else {
+        }
+        else {
+            // 비밀번호 형식 맞지 않을떄
             binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
             binding.passwordValid.visibility = View.VISIBLE
-            binding.passwordValid.text = "비밀번호는 대,소문자,숫자,특수문자 포함 8~16자여야합니다."
+            binding.passwordValid.setText(R.string.password_form_info)
             return false
         }
     }
@@ -216,22 +235,23 @@ class JoinFragment : Fragment() {
         val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
         if (password == s.toString()) {
             if (Pattern.matches(pwPattern, password)) {
-                binding.passwordValid.setTextColor(Color.parseColor("#000000"))
-
+                // 사용할 수 있는 비밀번호 입니다.
                 binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.text = "사용할 수 있는 비밀번호입니다."
+                binding.passwordValid.setTextColor(Color.parseColor("#000000"))
+                binding.passwordValid.setText(R.string.password_available_info)
                 return true
             } else {
+                // 비밀번호 형식 맞지 않을떄
                 binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
-
                 binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.text = "비밀번호는 대,소문자,숫자,특수문자 포함 8~16자여야합니다."
+                binding.passwordValid.setText(R.string.password_form_info)
                 return false
             }
         } else {
-            binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
+            // 비밀번호가 같지 않을 때
             binding.passwordValid.visibility = View.VISIBLE
-            binding.passwordValid.text = "비밀번호가 같지 않습니다."
+            binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
+            binding.passwordValid.setText(R.string.password_different_info)
             return false
         }
     }
@@ -251,28 +271,33 @@ class JoinFragment : Fragment() {
 
 
     //이메일 형식 체크
-    private fun emailValidCheck() {
+    private fun emailValidCheck():Boolean{
         val email = binding.emailEditText.text.toString()
 
         //이메일 형식이 맞지 않을 경우
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.emailValid.visibility = View.VISIBLE
-            binding.emailValid.text = "이메일 형식이 아닙니다."
+            binding.emailValid.setTextColor(Color.parseColor("#FFF44336"))
+            binding.emailValid.setText(R.string.join_email_form_info)
             emailCheckButton.isEnabled = false
-
+            return false
         }
         //이메일 형식이 맞는 경우
         else {
             binding.emailValid.visibility = View.GONE
             //단국이메일인경우
-            if (email.contains("@dankook.ac.kr")) {
+            if (email.contains(R.string.dankook_domain.toString())) {
                 binding.emailValid.visibility = View.VISIBLE
-                binding.emailValid.text = "학교 이메일은 사용할 수 없습니다."
+                binding.emailValid.setTextColor(Color.parseColor("#FFF44336"))
+                binding.emailValid.setText(R.string.dankook_domain_info)
                 emailCheckButton.isEnabled = false
+                return false
             } else {
                 //사용가능
                 binding.emailValid.visibility = View.GONE
                 emailCheckButton.isEnabled = true
+                return true
+
             }
 
         }
