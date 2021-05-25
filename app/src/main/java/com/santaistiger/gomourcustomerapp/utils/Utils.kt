@@ -1,3 +1,6 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.utils
 
 import android.util.DisplayMetrics

@@ -17,13 +17,8 @@
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView_store"
+            style="@style/gs_element_card_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="3dp"
-            android:layout_marginTop="3dp"
-            android:layout_marginBottom="5dp"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="3dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/container_cost"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,16 +27,12 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="5dp"
-                android:paddingVertical="5dp">
+                android:padding="5dp">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_store"
-                    android:layout_width="40dp"
-                    android:layout_height="24dp"
-                    android:background="@android:color/transparent"
+                    style="@style/gs_icon"
                     android:padding="2dp"
-                    android:scaleType="fitCenter"
                     android:tint="@color/icon_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -62,20 +53,20 @@
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_store_address"
+                        style="@style/gs_text_bold_14"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="5dp"
                         android:text="@{item.place.getDisplayName}"
-                        tools:text="가게 도로명 주소 \n(가게명)"
-                        style="@style/gs_text_bold_14" />
+                        tools:text="가게 도로명 주소 \n(가게명)" />
 
                     <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_menu"
+                        style="@style/gs_text_regular_13"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="@{item.menu}"
-                        tools:text="메뉴 메뉴 메뉴 메뉴 메뉴 "
-                        style="@style/gs_text_regular_13" />
+                        tools:text="메뉴 메뉴 메뉴 메뉴 메뉴 " />
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.constraintlayout.widget.ConstraintLayout>
         </androidx.cardview.widget.CardView>

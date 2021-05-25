@@ -12,13 +12,9 @@ import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.model.Status
 import com.santaistiger.gomourcustomerapp.data.model.Store
-import com.santaistiger.gomourcustomerapp.data.repository.Repository
-import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.ui.customview.*
 import com.santaistiger.gomourcustomerapp.ui.adapter.DoOrderStoreAdapter
-import com.santaistiger.gomourcustomerapp.ui.adapter.OrderDetailStoreAdapater
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
+import com.santaistiger.gomourcustomerapp.ui.adapter.OrderDetailStoreAdapter
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
@@ -82,9 +78,9 @@ object BindingUtils {
             if (recyclerView.adapter == null) {
                 recyclerView.layoutManager =
                     LinearLayoutManager(recyclerView.context)
-                recyclerView.adapter = OrderDetailStoreAdapater()
+                recyclerView.adapter = OrderDetailStoreAdapter()
             }
-            (recyclerView.adapter as OrderDetailStoreAdapater).items = stores ?: ArrayList()
+            (recyclerView.adapter as OrderDetailStoreAdapter).items = stores ?: ArrayList()
             recyclerView.adapter?.notifyDataSetChanged()
         }
     }

@@ -1,3 +1,6 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.ui.view
 
 import android.os.Bundle
@@ -5,9 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -15,13 +16,11 @@ import androidx.navigation.fragment.findNavController
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.databinding.FragmentSearchPlaceBinding
+import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.DoOrderViewModel
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.SearchPlaceViewModel
 import kotlinx.android.synthetic.main.activity_base.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -29,7 +28,7 @@ import net.daum.mf.map.api.MapView
 class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
     companion object {
         private val DANKOOKUNIV_LOCATION =
-            MapPoint.mapPointWithGeoCoord(37.32224683322665, 127.12683613068711)
+            MapPoint.mapPointWithGeoCoord(37.323177, 127.125758)
         private const val TAG = "SearchPlaceFragment"
     }
 
@@ -39,9 +38,9 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
     private val sharedViewModel: DoOrderViewModel by activityViewModels()
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
 
         init(inflater, container)
@@ -50,21 +49,24 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
         return binding.root
     }
 
-    /**
-     * viewModel 및 binding 설정
-     */
+    /** viewModel, binding, 툴바 및 지도 설정 */
     private fun init(inflater: LayoutInflater, container: ViewGroup?) {
         binding = DataBindingUtil.inflate(
-                inflater,
-                R.layout.fragment_search_place,
-                container,
-                false
+            inflater,
+            R.layout.fragment_search_place,
+            container,
+            false
         )
         viewModel = ViewModelProvider(this).get(SearchPlaceViewModel::class.java)
         binding.viewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
-        setToolbar()
+        // 툴바 설정
+        (requireActivity() as BaseActivity).setToolbar(
+            requireContext(), false, null, false
+        )
+
+        // 지도 설정
         initKakaoMap()
     }
 
@@ -73,17 +75,7 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
         addSearchBtnObserver()
     }
 
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.GONE    // 툴바 숨기기
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
-        }
-    }
-
-    /**
-     * 카카오 지도 MapView를 띄우고, POIITem 이벤트 리스너를 설정하고,
-     * 지도의 중심점을 단국대학교로 이동
-     */
+    /** 카카오 지도 MapView를 생성한 후, POIITem 이벤트 리스너를 설정하고 지도의 중심점을 단국대학교로 이동한다 */
     private fun initKakaoMap() {
         mapView = MapView(context).apply {
             binding.mapView.addView(this)
@@ -93,8 +85,8 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
     }
 
     /**
-     * viewModel의 places를 관찰하는 observer 추가
-     * places에 요소가 있으면 기존의 마커를 모두 지우고 places 요소의 위치에 마커를 표시한다.
+     * SearchPlaceViewModel의 places 값이 변경되면,
+     * 기존의 pin을 모두 제거한 후 각 place의 위치에 pin을 찍도록 설정한다.
      */
     private fun addPlacesObserver() {
         viewModel.places.observe(viewLifecycleOwner, { places ->
@@ -115,7 +107,8 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
     }
 
     /**
-     * 검색 버튼이 클릭되면, 현재 지도의 위치를 전달해주는 Observer 추가
+     * 현재 보고있는 지도의 중심을 기준으로 장소를 검색하기 위해,
+     * 검색 버튼 터치 시, SearchPlaceViewModel의 curMapPos에 현재 위치를 저장하도록 설정한다.
      */
     private fun addSearchBtnObserver() {
         viewModel.buttonClicked.observe(viewLifecycleOwner, { clicked ->
@@ -128,44 +121,45 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
 
 
     /**
-     * 마커 클릭하면 위에 표시되는 말풍선 클릭했을 때, 아래와 같은 알림창 띄우기
-     * 메시지: {장소명}을 선택하시겠습니까?
-     * 버튼: 확인 / 취소
-     * 확인 누르면 '주문하기'화면으로 넘어가면서 선택한 장소의 위치(위도/경도), 도로명주소 넘기기
+     * pin 터치 시 나타나는 말풍선을 터치했을 때, 해당 장소를 선택할 것이냐는 알림창을 띄운 후,
+     * 사용자가 '확인'을 터치하면 주문하기화면(DoOrderFragment)으로 넘어가면서
+     * 선택한 장소의 위치(위도/경도)와 도로명주소를 argument로 전달한다.
      */
     override fun onCalloutBalloonOfPOIItemTouched(
-            mapView: MapView?,
-            item: MapPOIItem?,
-            ballonBtnType: MapPOIItem.CalloutBalloonButtonType?) {
+        mapView: MapView?,
+        item: MapPOIItem?,
+        ballonBtnType: MapPOIItem.CalloutBalloonButtonType?
+    ) {
 
         if (item != null) {
             RoundedAlertDialog()
-                .setMessage("${item.itemName}을 선택하시겠습니까?")
-                .setPositiveButton("확인") {
+                .setMessage(
+                    String.format(
+                        resources.getString(R.string.check_select_place),
+                        item.itemName
+                    )
+                )
+                .setPositiveButton(resources.getString(R.string.ok)) {
                     val position = SearchPlaceFragmentArgs.fromBundle(requireArguments()).position
                     val place = item.userObject as Place
                     Log.i(TAG, "item: $item")
 
-                    if (position == -1) { // 목적지 주소 변경
-                        sharedViewModel.destination.set(place)
-                    } else { // 가게 주소 변경
-                        sharedViewModel.storeList[position].place = place
+                    when (position) {
+                        -1 -> sharedViewModel.destination.set(place) // 목적지 주소 변경
+                        else -> sharedViewModel.storeList[position].place = place // 가게 주소 변경
                     }
+
                     findNavController().navigate(
                         SearchPlaceFragmentDirections.actionSearchPlaceFragmentToDoOrderFragment()
                     )
                 }
-                .setNegativeButton("취소", null)
+                .setNegativeButton(resources.getString(R.string.cancel), null)
                 .show(requireActivity().supportFragmentManager, "search place fragment")
-
         }
     }
 
-    /**
-     * 인터페이스 구현을 위해 override한 메소드들
-     * 따로 구현하지 않음
-     */
-    override fun onPOIItemSelected(mapView: MapView?, item: MapPOIItem?) {  }
-    override fun onDraggablePOIItemMoved(mapView: MapView?, item: MapPOIItem?, point: MapPoint?) {  }
-    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, item: MapPOIItem?) {    }
+    /** 인터페이스 구현을 위해 override한 메소드들 */
+    override fun onPOIItemSelected(mapView: MapView?, item: MapPOIItem?) {}
+    override fun onDraggablePOIItemMoved(mapView: MapView?, item: MapPOIItem?, point: MapPoint?) {}
+    override fun onCalloutBalloonOfPOIItemTouched(mapView: MapView?, item: MapPOIItem?) {}
 }

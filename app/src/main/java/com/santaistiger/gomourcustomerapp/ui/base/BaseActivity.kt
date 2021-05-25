@@ -12,8 +12,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
@@ -26,8 +24,6 @@ import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.ActivityBaseBinding
-import com.santaistiger.gomourcustomerapp.ui.view.OrderDetailFragment
-import com.santaistiger.gomourcustomerapp.utils.BindingUtils
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import java.util.*
@@ -36,6 +32,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     companion object {
         private const val TAG = "BaseActivityLog"
     }
+
     private lateinit var binding: ActivityBaseBinding
     private val repository: Repository = RepositoryImpl
 
@@ -67,18 +64,18 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun setToolbar(context: Context, isVisible: Boolean, title: String, isSwapable: Boolean) {
+    fun setToolbar(context: Context, isVisible: Boolean, title: String?, isSwapable: Boolean) {
         context.apply {
             val swapable = when (isSwapable) {
                 true -> DrawerLayout.LOCK_MODE_UNLOCKED
-                false ->DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+                false -> DrawerLayout.LOCK_MODE_LOCKED_CLOSED
             }
 
             toolbar.visibility = when (isVisible) {
                 true -> View.VISIBLE
-                false -> View.INVISIBLE
+                false -> View.GONE
             }
-            binding.toolbarTitle.text = title
+            binding.toolbarTitle.text = title ?: String()
             binding.drawerLayout.setDrawerLockMode(swapable)
         }
     }

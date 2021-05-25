@@ -1,5 +1,7 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.ui.customview
-
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,7 +10,6 @@ import android.widget.LinearLayout
 import androidx.databinding.DataBindingUtil
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.databinding.ItemDoMessageBinding
-
 
 class DoMessageView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0

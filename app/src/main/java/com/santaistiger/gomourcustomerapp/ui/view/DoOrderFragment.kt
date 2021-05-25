@@ -75,8 +75,10 @@ class DoOrderFragment : Fragment() {
         binding.cvPrice.binding.ibRefresh.setOnClickListener { viewModel.getDeliveryCharge() }
     }
 
-    /** DoOrderViewModel의 orderRequest에 값이 설정되면 기사 매칭 화면 (WaitMatchFragment)로 이동
-     * 이때 navigate args로 orderId를 전달한다. */
+    /**
+     * DoOrderViewModel의 orderRequest에 값이 설정되면 기사 매칭 화면 (WaitMatchFragment)로 이동
+     * 이때 navigate args로 orderId를 전달한다.
+     */
     private fun addOrderRequestObserver() {
         viewModel.orderRequest.observe(viewLifecycleOwner, Observer { orderRequest ->
             if (orderRequest != null) {
@@ -102,7 +104,7 @@ class DoOrderFragment : Fragment() {
         if (viewModel.storeList.size < MAX_SIZE) {
             viewModel.appendStore()
         } else {
-            showAlertDialog(resources.getString(R.string.limit_store_count_message))
+            showAlertDialog(resources.getString(R.string.warning_limit_store_count_message))
         }
     }
 

@@ -31,11 +31,11 @@
     <style name="gs_bottom_btn">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">36dp</item>
-        <item name="android:layout_gravity">bottom</item>
         <item name="android:background">@drawable/shape_bottom_btn</item>
         <item name="android:fontFamily">@font/nsbold</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">15dp</item>
+        <item name="android:letterSpacing">0.02</item>
     </style>
     
     <style name="gs_root_container">

@@ -1,34 +1,16 @@
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="3dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="3dp">
+    <androidx.cardview.widget.CardView style="@style/gs_element_card_view">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
-            android:paddingVertical="5dp">
+        <androidx.constraintlayout.widget.ConstraintLayout style="@style/gs_element_root">
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_message"
+                style="@style/gs_text_regular_14"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:background="@android:color/transparent"
-                android:fontFamily="@font/nsregular"
-                android:gravity="center_vertical"
-                android:lineSpacingExtra="3dp"
                 android:minHeight="24dp"
-                android:textColor="@color/black"
-                android:textSize="14dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.santaistiger.gomourcustomerapp.data.model.Store
 import com.santaistiger.gomourcustomerapp.databinding.ItemDetailStoreBinding
 
-class OrderDetailStoreAdapater : RecyclerView.Adapter<OrderDetailStoreAdapater.ViewHolder>() {
-    val TAG = "StoreAdapter"
+class OrderDetailStoreAdapter : RecyclerView.Adapter<OrderDetailStoreAdapter.ViewHolder>() {
+    companion object {
+        private const val TAG = "OrderDetailStoreAdapter"
+    }
     var items = ArrayList<Store>()
 
     override fun getItemCount(): Int = items.size
@@ -20,7 +22,7 @@ class OrderDetailStoreAdapater : RecyclerView.Adapter<OrderDetailStoreAdapater.V
         holder.bind(items[position])
     }
 
-    class ViewHolder private constructor(val viewBinding: ItemDetailStoreBinding) :
+    class ViewHolder private constructor(private val viewBinding: ItemDetailStoreBinding) :
         RecyclerView.ViewHolder(viewBinding.root) {
 
         fun bind(item: Store) {

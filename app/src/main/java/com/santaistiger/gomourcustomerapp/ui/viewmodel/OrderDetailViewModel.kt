@@ -1,3 +1,6 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.ui.viewmodel
 
 import android.content.ClipboardManager
@@ -14,7 +17,6 @@ import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-
 
 class OrderDetailViewModel(val orderId: String) : ViewModel() {
     companion object {

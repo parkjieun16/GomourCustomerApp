@@ -1,3 +1,6 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.ui.view
 
 import android.content.ClipData
@@ -25,10 +28,7 @@ import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.OrderDetailViewModel
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.OrderDetailViewModelFactory
 import kotlinx.android.synthetic.main.activity_base.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView

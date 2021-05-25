@@ -1,3 +1,6 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.ui.adapter
 
 import android.view.LayoutInflater
@@ -39,7 +42,7 @@ class DoOrderStoreAdapter : RecyclerView.Adapter<DoOrderStoreAdapter.ViewHolder>
         }
     }
 
-    fun deleteItem(position: Int) {
+    private fun deleteItem(position: Int) {
         items.removeAt(position)
     }
 
