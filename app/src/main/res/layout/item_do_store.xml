@@ -12,32 +12,20 @@
     </data>
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="3dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="5dp"
-        app:cardCornerRadius="10dp"
-        app:cardElevation="3dp">
+        style="@style/gs_element_card_view">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="5dp"
-            android:paddingVertical="5dp">
+            style="@style/gs_element_root_with_icon" >
 
             <androidx.appcompat.widget.AppCompatImageView
                 android:id="@+id/iv_store"
-                android:layout_width="40dp"
-                android:layout_height="24dp"
-                android:background="@android:color/transparent"
                 android:padding="2dp"
-                android:scaleType="fitCenter"
                 android:tint="@color/icon_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_store" />
+                app:srcCompat="@drawable/ic_store"
+                style="@style/gs_icon" />
 
             <LinearLayout
                 android:id="@+id/linearLayout"
@@ -45,7 +33,6 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:orientation="vertical"
-                android:layout_marginLeft="3dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/ib_del_item"
                 app:layout_constraintStart_toEndOf="@id/iv_store"
@@ -55,38 +42,28 @@
                     android:id="@+id/tv_store_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="7dp"
-                    android:fontFamily="@font/nsbold"
-                    android:lineSpacingExtra="3dp"
-                    android:textColor="@color/black"
-                    android:textSize="14dp"
-                    android:hint="주문 장소를 입력하려면 클릭하세요"
-                    android:text="@{item.place.getDisplayName}"/>
+                    android:layout_marginBottom="5dp"
+                    android:hint="@string/hint_store_address"
+                    android:text="@{item.place.getDisplayName}"
+                    style="@style/gs_text_bold_14" />
 
                 <androidx.appcompat.widget.AppCompatEditText
                     android:id="@+id/et_menu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@android:color/transparent"
-                    android:fontFamily="@font/nsregular"
-                    android:lineSpacingExtra="3dp"
-                    android:textColor="@color/black"
-                    android:textSize="13dp"
-                    android:hint="요청사항 입력"
-                    android:text="@={item.menu}" />
+                    android:hint="@string/hint_store_menu"
+                    android:text="@={item.menu}"
+                    style="@style/gs_text_regular_13" />
             </LinearLayout>
 
             <androidx.appcompat.widget.AppCompatImageButton
                 android:id="@+id/ib_del_item"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@android:color/transparent"
-                android:padding="13dp"
-                android:scaleType="fitCenter"
+                android:padding="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                tools:srcCompat="@drawable/ic_del_btn" />
+                tools:srcCompat="@drawable/ic_del_btn"
+                style="@style/gs_icon" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

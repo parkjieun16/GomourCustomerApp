@@ -3,6 +3,7 @@ package com.santaistiger.gomourcustomerapp.ui.customview
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -13,12 +14,13 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.databinding.DialogRoundedAlertBinding
+import com.santaistiger.gomourcustomerapp.utils.toDp
 
 class RoundedAlertDialog() : DialogFragment() {
     private lateinit var binding: DialogRoundedAlertBinding
     private lateinit var message: String
-    private lateinit var positiveBtnProperty: DialogBtnProperty
-    private lateinit var negativeBtnProperty: DialogBtnProperty
+    private var positiveBtnProperty: DialogBtnProperty? = null
+    private var negativeBtnProperty: DialogBtnProperty? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,12 +35,15 @@ class RoundedAlertDialog() : DialogFragment() {
             false
         )
 
-
         binding.tvMessage.text = message
-        binding.btnPositive.text = positiveBtnProperty.text
-        binding.btnPositive.setOnClickListener(positiveBtnProperty.listener)
-        binding.btnNegative.text = negativeBtnProperty.text
-        binding.btnNegative.setOnClickListener(negativeBtnProperty.listener)
+        if (positiveBtnProperty != null) {
+            binding.btnPositive.text = positiveBtnProperty!!.text
+            binding.btnPositive.setOnClickListener(positiveBtnProperty!!.listener)
+        }
+        if (negativeBtnProperty != null) {
+            binding.btnNegative.text = negativeBtnProperty!!.text
+            binding.btnNegative.setOnClickListener(negativeBtnProperty!!.listener)
+        }
 
         return binding.root
     }
@@ -51,7 +56,7 @@ class RoundedAlertDialog() : DialogFragment() {
 
         dialog?.window?.apply {
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            setLayout(toDp(width), WindowManager.LayoutParams.WRAP_CONTENT)
+            setLayout(toDp(resources.displayMetrics, width), WindowManager.LayoutParams.WRAP_CONTENT)
         }
     }
 
@@ -78,9 +83,4 @@ class RoundedAlertDialog() : DialogFragment() {
     }
 
     data class DialogBtnProperty(val text: String, val listener: View.OnClickListener?)
-
-    private fun toDp(px: Int): Int {
-        val metrics = resources.displayMetrics
-        return TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, px.toFloat(), metrics).toInt()
-    }
 }

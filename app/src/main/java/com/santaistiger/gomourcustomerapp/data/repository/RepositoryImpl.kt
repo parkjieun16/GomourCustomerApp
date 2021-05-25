@@ -70,7 +70,17 @@ object RepositoryImpl : Repository {
     override suspend fun readDeliveryManPhone(deliveryManUid: String): String? {
         val response = FireStoreApi.getDeliveryMan(deliveryManUid)
         val deliveryMan = response.deliveryMan
+
         return deliveryMan?.phone
+    }
+
+    override suspend fun readDeliveryManAccount(deliveryManUid: String): String? {
+        val response = FireStoreApi.getDeliveryMan(deliveryManUid)
+        val deliveryMan = response.deliveryMan
+
+        return deliveryMan?.run {
+            "${accountInfo?.bank} ${accountInfo?.account} $name"
+        }
     }
 
     override fun getUid(): String = AuthApi.readUid()?:String()

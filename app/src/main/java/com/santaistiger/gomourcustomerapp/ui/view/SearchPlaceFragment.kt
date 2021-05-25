@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.databinding.FragmentSearchPlaceBinding
+import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.DoOrderViewModel
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.SearchPlaceViewModel
 import kotlinx.android.synthetic.main.activity_base.*
@@ -138,25 +139,25 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
             ballonBtnType: MapPOIItem.CalloutBalloonButtonType?) {
 
         if (item != null) {
-            AlertDialog.Builder(requireActivity())
-                    .setMessage("${item.itemName}을 선택하시겠습니까?")
-                    .setPositiveButton("확인") { _, _ ->
-                        val position = SearchPlaceFragmentArgs.fromBundle(requireArguments()).position
-                        val place = item.userObject as Place
-                        Log.i(TAG, "item: $item")
+            RoundedAlertDialog()
+                .setMessage("${item.itemName}을 선택하시겠습니까?")
+                .setPositiveButton("확인") {
+                    val position = SearchPlaceFragmentArgs.fromBundle(requireArguments()).position
+                    val place = item.userObject as Place
+                    Log.i(TAG, "item: $item")
 
-                        if (position == -1) { // 목적지 주소 변경
-                            sharedViewModel.destination.set(place)
-                        } else { // 가게 주소 변경
-                            sharedViewModel.storeList[position].place = place
-                        }
-                        findNavController().navigate(
-                            SearchPlaceFragmentDirections.actionSearchPlaceFragmentToDoOrderFragment()
-                        )
+                    if (position == -1) { // 목적지 주소 변경
+                        sharedViewModel.destination.set(place)
+                    } else { // 가게 주소 변경
+                        sharedViewModel.storeList[position].place = place
                     }
-                    .setNegativeButton("취소", null)
-                    .create()
-                    .show()
+                    findNavController().navigate(
+                        SearchPlaceFragmentDirections.actionSearchPlaceFragmentToDoOrderFragment()
+                    )
+                }
+                .setNegativeButton("취소", null)
+                .show(requireActivity().supportFragmentManager, "search place fragment")
+
         }
     }
 

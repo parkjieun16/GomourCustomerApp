@@ -17,15 +17,17 @@ import com.santaistiger.gomourcustomerapp.utils.NotEnteredException
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
-private const val TAG = "DoOrderViewModel"
-
 class DoOrderViewModel : ViewModel() {
+    companion object {
+        private const val TAG = "DoOrderViewModel"
+    }
+
     val storeList = ObservableArrayList<Store>()
-    val destination = ObservableParcelable<Place>()
+    val destination = ObservableField<Place>()
     val message = ObservableField<String>()
     val price = ObservableInt()
     val orderRequest = MutableLiveData<OrderRequest?>()
-    val notEnteredException = MutableLiveData<NotEnteredException?>()
+    val exception = MutableLiveData<Exception?>()
 
     private val repository: Repository = RepositoryImpl
 
@@ -63,7 +65,7 @@ class DoOrderViewModel : ViewModel() {
                     orderRequest.value = it
                 }
             } catch (e: NotEnteredException) {
-                notEnteredException.value = e
+                exception.value = e
             }
         }
 
@@ -123,13 +125,13 @@ class DoOrderViewModel : ViewModel() {
                 price.set(storeList.size * 1000 + (distance / 100f).roundToInt() * 100)
             }
         } catch (e: NotEnteredException) {
-            notEnteredException.value = e
+            exception.value = e
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun doneNotEnteredExceptionProcess() {
-        notEnteredException.value = null
+    fun doneExceptionProcess() {
+        exception.value = null
     }
 }

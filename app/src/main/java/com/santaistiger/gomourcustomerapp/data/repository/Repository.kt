@@ -13,5 +13,6 @@ interface Repository {
     suspend fun readOrderDetail(orderId: String): Order?
     suspend fun readDeliveryManPhone(deliveryManUid: String): String?
     suspend fun writeOrderRequest(orderRequest: OrderRequest)
+    suspend fun readDeliveryManAccount(deliveryManUid: String): String?
     fun getUid(): String
 }

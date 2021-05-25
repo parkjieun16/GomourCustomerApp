@@ -97,7 +97,7 @@
                         android:layout_marginHorizontal="5dp"
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/nsbold"
-                        android:text="@string/address_do_order_fragment"
+                        android:text="@string/title_address"
                         android:textColor="@color/black"
                         android:textSize="17dp" />
 
@@ -133,7 +133,7 @@
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/nsbold"
                         android:paddingLeft="5dp"
-                        android:text="@string/message_do_order_fragment"
+                        android:text="@string/title_message"
                         android:textColor="@color/black"
                         android:textSize="17dp" />
 
@@ -160,7 +160,7 @@
                         android:layout_marginBottom="5dp"
                         android:fontFamily="@font/nsbold"
                         android:paddingLeft="5dp"
-                        android:text="@string/price_do_order_fragment"
+                        android:text="계좌번호 및 비용"
                         android:textColor="@color/black"
                         android:textSize="17dp" />
 
@@ -168,6 +168,7 @@
                     <com.santaistiger.gomourcustomerapp.ui.customview.DetailPriceView
                         android:id="@+id/cv_price"
                         bind_detail_price="@{viewModel.order}"
+                        bind_detail_account_info="@{viewModel.accountInfo}"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </androidx.appcompat.widget.LinearLayoutCompat>

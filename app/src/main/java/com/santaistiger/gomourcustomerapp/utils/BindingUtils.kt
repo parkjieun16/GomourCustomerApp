@@ -12,15 +12,19 @@ import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.model.Status
 import com.santaistiger.gomourcustomerapp.data.model.Store
+import com.santaistiger.gomourcustomerapp.data.repository.Repository
+import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.ui.customview.*
 import com.santaistiger.gomourcustomerapp.ui.adapter.DoOrderStoreAdapter
 import com.santaistiger.gomourcustomerapp.ui.adapter.OrderDetailStoreAdapater
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
 
 object BindingUtils {
-    val numberFormat = NumberFormat.getInstance()
+    private val numberFormat = NumberFormat.getInstance()
 
     @BindingAdapter("bind_do_store_list")
     @JvmStatic fun bindStoreList(recyclerView: RecyclerView, items: ObservableArrayList<Store>) {
@@ -34,7 +38,7 @@ object BindingUtils {
     }
 
     @BindingAdapter("bind_do_destination")
-    @JvmStatic fun setDestination(view: DoDestinationView, item: ObservableParcelable<Place>) {
+    @JvmStatic fun setDestination(view: DoDestinationView, item: ObservableField<Place>) {
         if (view.binding.item != item.get()) {
             view.binding.item = item.get()
         }
@@ -143,6 +147,13 @@ object BindingUtils {
             view.binding.tvPrice.text = numberFormat.format(price) + " 원"
         }
     }
+
+    @BindingAdapter("bind_detail_account_info")
+    @JvmStatic
+    fun bindDetailAccountInfo(view: DetailPriceView, item: ObservableField<String>) {
+        view.binding.tvAccount.text = item.get()
+    }
+
 
 
     @BindingAdapter("bind_detail_cost")
