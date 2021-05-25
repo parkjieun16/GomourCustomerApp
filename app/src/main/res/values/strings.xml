@@ -33,13 +33,14 @@
 
     <string name="warning_limit_store_count_message">최대 3곳까지만 설정할 수 있습니다.</string>
 
+    <string name="check_sms">배달 기사에게 문자를 보내시겠습니까?</string>
+    <string name="check_call">배달 기사에게 전화를 거시겠습니까까?</string>
+    <string name="check_select_place">%s을(를)를 선택하시겠습니까?</string>
+
 <!--    <string name="warning_store_address_input">모든 칸에 주문 장소를 설정해주세요</string>-->
 <!--    <string name="warning_store_menu_input">모든 칸에 요청사항을 입력해주세요</string>-->
 <!--    <string name="warning_destination_address_input">배달 장소를 설정해주세요</string>-->
 
-    <string name="check_sms">배달 기사에게 문자를 보내시겠습니까?</string>
-    <string name="check_call">배달 기사에게 전화를 거시겠습니까까?</string>
-    <string name="check_select_place">%s을(를)를 선택하시겠습니까?</string>
 
 
 

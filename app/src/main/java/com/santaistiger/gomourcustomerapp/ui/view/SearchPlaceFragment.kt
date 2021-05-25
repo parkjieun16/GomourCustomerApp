@@ -145,7 +145,7 @@ class SearchPlaceFragment : Fragment(), MapView.POIItemEventListener {
                     Log.i(TAG, "item: $item")
 
                     when (position) {
-                        -1 -> sharedViewModel.destination.set(place) // 목적지 주소 변경
+                        -1 -> sharedViewModel.destination.set(place) // 배달 장소 주소 변경
                         else -> sharedViewModel.storeList[position].place = place // 가게 주소 변경
                     }
 

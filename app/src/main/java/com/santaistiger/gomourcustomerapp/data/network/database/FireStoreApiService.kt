@@ -11,7 +11,7 @@ object FireStoreApi {
     private const val TAG = "FireStoreApiService"
     private const val CUSTOMER_TABLE = "customer"
     private const val DELIVERY_MAN_TABLE = "deliveryMan"
-    
+
     private val database = Firebase.firestore
     private val customerTable = database.collection(CUSTOMER_TABLE)
     private val deliveryManTable = database.collection(DELIVERY_MAN_TABLE)

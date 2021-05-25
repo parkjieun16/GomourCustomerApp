@@ -95,7 +95,7 @@ class DoOrderViewModel : ViewModel() {
         message = message.get()
     )
 
-    /** 각 주문 장소를 거치고 목적지까지 도착하는 길의 거리를 계산하고 리턴하는 함수 */
+    /** 각 주문 장소를 거치고 배달 장소까지 도착하는 길의 거리를 계산하고 리턴하는 함수 */
     private suspend fun getDistance(): Int? {
         var start: String? = null
         var waypoints: String? = null

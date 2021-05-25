@@ -68,8 +68,8 @@ class OrderDetailFragment : Fragment() {
             false
         )
 
-        val orderId = "1621792306797ZFTxzqW60Pea9m0oCliRkoB4qkP2"
-//        val orderId = OrderDetailFragmentArgs.fromBundle(requireArguments()).orderId
+
+        val orderId = OrderDetailFragmentArgs.fromBundle(requireArguments()).orderId
         viewModel = ViewModelProvider(this, OrderDetailViewModelFactory(orderId))
             .get(OrderDetailViewModel::class.java)
         binding.viewModel = viewModel
@@ -115,7 +115,7 @@ class OrderDetailFragment : Fragment() {
         }
     }
 
-    /** 주문 장소와 목적지에 pin(POIItem)을 찍는다. */
+    /** 주문 장소와 배달 장소에 pin(POIItem)을 찍는 함수. */
     private fun setOrderObserver() {
         viewModel.order.observe(viewLifecycleOwner, Observer { order ->
             viewModel.getAccountInfo()

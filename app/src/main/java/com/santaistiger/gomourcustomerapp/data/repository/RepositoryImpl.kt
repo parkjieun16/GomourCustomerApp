@@ -18,7 +18,7 @@ private const val TAG = "RepositoryImpl"
 object RepositoryImpl : Repository {
 
     /**
-     * 출발지, 목적지, 경유지를 매개변수로 받아서
+     * 출발지, 배달 장소, 경유지를 매개변수로 받아서
      * 네이버 Directions API를 이용해서 최적 경로의 거리(단위: m)를 가져오는 함수
      */
     override suspend fun getDistance(start: String, goal: String): Int? {

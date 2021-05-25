@@ -65,10 +65,10 @@ class DoOrderFragment : Fragment() {
     }
 
     private fun addClickListener() {
-        // 목적지 입력 창의 + 버튼 클릭 시 주문 장소 및 메뉴 입력창이 추가되도록 설정
+        // 배달 장소 입력 창의 + 버튼 클릭 시 주문 장소 및 메뉴 입력창이 추가되도록 설정
         binding.cvDestination.binding.ibAddItem.setOnClickListener { appendStore() }
 
-        // 목적지 입력 창 클릭 시 장소를 선택할 수 있도록 SearchPlaceFragment로 이동하도록 설정
+        // 배달 장소 입력 창 클릭 시 장소를 선택할 수 있도록 SearchPlaceFragment로 이동하도록 설정
         binding.cvDestination.binding.tvStoreAddress.setOnClickListener { searchPlace() }
 
         // 배달료 창의 ↻ 버튼 클릭 시 배달료를 갱신하도록 설정

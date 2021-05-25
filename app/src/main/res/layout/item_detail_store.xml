@@ -82,24 +82,19 @@
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView_cost"
+                style="@style/gs_element_card_view"
                 android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_marginHorizontal="3dp"
-                android:layout_marginTop="3dp"
-                android:layout_marginBottom="5dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="3dp">
+                android:layout_height="match_parent" >
 
                 <androidx.appcompat.widget.AppCompatTextView
                     android:id="@+id/tv_input_price"
+                    style="@style/gs_text_regular_13"
                     bind_detail_cost="@{item.cost}"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@color/light_gray"
-                    android:fontFamily="@font/nsregular"
                     android:gravity="center"
                     android:hint="미입력"
-                    android:textColor="@color/black"
                     android:textSize="10dp" />
             </androidx.cardview.widget.CardView>
         </androidx.appcompat.widget.LinearLayoutCompat>

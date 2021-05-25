@@ -24,6 +24,7 @@ class RoundedAlertDialog() : DialogFragment() {
         private const val FONT_SIZE = 14
         private const val PADDING_SIZE = 50
     }
+
     private lateinit var binding: DialogRoundedAlertBinding
     private lateinit var message: String
     private var positiveBtnProperty: DialogBtnProperty? = null

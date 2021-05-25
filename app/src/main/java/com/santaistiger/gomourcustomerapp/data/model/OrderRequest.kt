@@ -8,7 +8,7 @@ package com.santaistiger.gomourcustomerapp.data.model
  * @property customer 주문자에 대한 정보
  * @property stores 각 가게에 대한 주소와 요청사항
  * @property deliveryCharge 배달료
- * @property destination 목적지 주소
+ * @property destination 배달 장소 주소
  * @property message 배송 메시지
  * @property orderDate 주문 시간. 주문 요청 객체가 생성된 시간
  */

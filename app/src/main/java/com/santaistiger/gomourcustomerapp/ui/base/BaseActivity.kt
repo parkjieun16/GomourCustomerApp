@@ -64,6 +64,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    /** 각 fragment의 툴바를 설정하는 함수 */
     fun setToolbar(context: Context, isVisible: Boolean, title: String?, isSwapable: Boolean) {
         context.apply {
             val swapable = when (isSwapable) {
