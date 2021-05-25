@@ -6,6 +6,7 @@ import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.network.database.AuthApi
+import com.santaistiger.gomourcustomerapp.data.network.database.AuthResponse
 import com.santaistiger.gomourcustomerapp.data.network.database.FireStoreApi
 import com.santaistiger.gomourcustomerapp.data.network.database.RealtimeApi
 import com.santaistiger.gomourcustomerapp.data.network.map.KakaoMapApi
@@ -70,18 +71,10 @@ object RepositoryImpl : Repository {
         return deliveryMan?.phone
     }
 
-    override suspend fun login(firebaseAuth: FirebaseAuth, email: String, password: String
-    ): Boolean {
-        val login_state = AuthApi.login(firebaseAuth,email,password)
-        if(login_state==null)
-        {
-            return false
-        }
-        else{
-            return true
-        }
+    override suspend fun login(firebaseAuth: FirebaseAuth, email: String, password: String): AuthResult? {
+        val response = AuthApi.login(firebaseAuth,email,password)
+        return response.authResult
     }
-
 
     override fun getUid(): String = AuthApi.readUid()?:String()
 }

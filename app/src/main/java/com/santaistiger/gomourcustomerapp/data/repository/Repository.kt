@@ -6,6 +6,7 @@ import com.google.firebase.database.DatabaseReference
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
+import com.santaistiger.gomourcustomerapp.data.network.database.AuthResponse
 import net.daum.mf.map.api.MapPoint
 
 interface Repository {
@@ -14,7 +15,7 @@ interface Repository {
     suspend fun searchPlace(placeName: String, curMapPos: MapPoint.GeoCoordinate): List<Place>
     suspend fun readOrderDetail(orderId: String): Order?
     suspend fun readDeliveryManPhone(deliveryManUid: String): String?
-    suspend fun login(firebaseAuth: FirebaseAuth, email:String, password:String): Boolean
+    suspend fun login(firebaseAuth: FirebaseAuth, email:String, password:String): AuthResult?
     fun writeOrderRequest(orderRequest: OrderRequest)
     fun getUid(): String
 

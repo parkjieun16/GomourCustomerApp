@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
@@ -26,8 +27,7 @@ import com.santaistiger.gomourcustomerapp.databinding.FragmentLoginBinding
 import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_base.*
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 
@@ -52,40 +52,31 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate<FragmentLoginBinding>(inflater,R.layout.fragment_login,container,false)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-
-        viewModel.login_state.observe(viewLifecycleOwner, {
-            if(it){
+        viewModel.loginInfo.observe(viewLifecycleOwner, Observer { loginInfo ->
+            if (loginInfo != null) {
                 findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
-            }
-            else{
+            } else {
                 alertCancel()
             }
         })
 
-
-
-
-
-
-
-
-
         binding.emailLogin.addTextChangedListener(mTextWatcher) // 이메일 입력 감지
         binding.passwordLogin.addTextChangedListener(mTextWatcher) // 패스워드 입력 감지
 
-
-        //로그인
+        // 로그인
         binding.loginButton.setOnClickListener{
             viewModel.email = binding.emailLogin.text.toString()
             viewModel.password = binding.passwordLogin.text.toString()
-            viewModel.login()
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.login().join()
+                (requireActivity() as BaseActivity).setNavigationDrawerHeader()
+            }
         }
 
         //회원가입 페이지로 이동
         binding.goSignUpPage.setOnClickListener{
             findNavController().navigate(R.id.action_loginFragment_to_joinFragment)
         }
-
 
         return binding.root
     }
