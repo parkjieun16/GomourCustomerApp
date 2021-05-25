@@ -1,5 +1,7 @@
 package com.santaistiger.gomourcustomerapp.data.repository
 
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
@@ -67,6 +69,19 @@ object RepositoryImpl : Repository {
         val deliveryMan = response.deliveryMan
         return deliveryMan?.phone
     }
+
+    override suspend fun login(firebaseAuth: FirebaseAuth, email: String, password: String
+    ): Boolean {
+        val login_state = AuthApi.login(firebaseAuth,email,password)
+        if(login_state==null)
+        {
+            return false
+        }
+        else{
+            return true
+        }
+    }
+
 
     override fun getUid(): String = AuthApi.readUid()?:String()
 }
