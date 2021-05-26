@@ -6,12 +6,10 @@ package com.santaistiger.gomourcustomerapp.ui.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
-import androidx.appcompat.app.AlertDialog
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
@@ -20,10 +18,11 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
 import com.santaistiger.gomourcustomerapp.R
-import com.santaistiger.gomourcustomerapp.data.network.database.RealtimeApi
 import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentWaitMatchBinding
+import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
+import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.WaitMatchViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 
@@ -74,14 +73,16 @@ class WaitMatchFragment : Fragment() {
             }
         })
 
-         // 현재 주문이 realtime database의 order_request 테이블에 존재하는지 검사
-         // 만약 존재하지 않을 경우(매칭이 완료되어 order_request 테이블에서 삭제된 경우) 주문 정보 전달하며 주문 상세 페이지로 이동
+        // 현재 주문이 realtime database의 order_request 테이블에 존재하는지 검사
+        // 만약 존재하지 않을 경우(매칭이 완료되어 order_request 테이블에서 삭제된 경우) 주문 정보 전달하며 주문 상세 페이지로 이동
         viewModel.checkDatabase(orderId)
         viewModel.isCurrentOrderExist.observe(viewLifecycleOwner, Observer<Boolean> { it ->
             if (!it) {
                 view?.findNavController()
                     ?.navigate(
-                        WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(orderId)
+                        WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(
+                            orderId
+                        )
                     )
             }
         })
@@ -111,14 +112,12 @@ class WaitMatchFragment : Fragment() {
 
     // 주문 취소 확인 다이얼로그
     fun alertCancel() {
-        AlertDialog.Builder(requireActivity())
+        RoundedAlertDialog()
             .setMessage("주문을 취소하시겠습니까?")
-            .setPositiveButton("예") { _, _ ->
-                cancelOrder()
-            }
+            .setPositiveButton("예") { cancelOrder() }
             .setNegativeButton("아니오", null)
-            .create()
-            .show()
+            .show((activity as BaseActivity).supportFragmentManager, "rounded alert dialog")
+
     }
 
     /**

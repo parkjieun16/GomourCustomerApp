@@ -6,12 +6,14 @@
         <item name="android:textSize">18dp</item>
         <item name="android:fontFamily">@font/nsbold</item>
         <item name="android:textColor">@color/black</item>
+        <item name="android:letterSpacing">0.03</item>
     </style>
 
     <!-- 네비게이션 드로어 텍스트 스타일 리소스 -->
     <style name="je_nav_drawer_text" parent="android:Widget.TextView">
         <item name="android:fontFamily">@font/nsregular</item>
         <item name="android:textSize">15dp</item>
+        <item name="android:letterSpacing">0.02</item>
     </style>
 
     <!-- 금실쓰 리소스 -->
