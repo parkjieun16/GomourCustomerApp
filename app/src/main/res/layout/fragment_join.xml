@@ -26,99 +26,131 @@
                 android:text="@string/toolbar_title_join" />
         </androidx.appcompat.widget.Toolbar>
 
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="match_parent"
+            android:layout_height="31dp" />
+
         <EditText
             android:id="@+id/nameEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext"
             android:ems="10"
             android:hint="이름"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:paddingLeft="15dp" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/emailLinearLayout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext">
 
             <EditText
                 android:id="@+id/emailEditText"
-                android:layout_width="281dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
+                android:layout_width="273dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="5dp"
+                android:background="@null"
                 android:ems="10"
+                android:focusable="true"
                 android:hint="이메일"
                 android:inputType="textEmailAddress"
+                android:paddingLeft="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
-
-            <Button
-                android:id="@+id/emailCheckButton"
-                android:layout_width="77dp"
-                android:layout_height="wrap_content"
-                android:text="중복확인"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.448"
-                app:layout_constraintStart_toEndOf="@+id/emailEditText"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.038"
-                android:enabled="false"/>
 
             <TextView
-                android:id="@+id/emailValid"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="9dp"
-                android:visibility="gone"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/emailEditText"
-                app:layout_constraintVertical_bias="0.0" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:id="@+id/emailCheckButton"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:enabled="false"
+                android:gravity="center"
+                android:text="@string/join_email_duplicate_check"
+                android:textColor="@color/main" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/emailValid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:textColor="@color/black"
+            android:visibility="gone" />
 
         <EditText
             android:id="@+id/passwordEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext"
             android:ems="10"
             android:hint="비밀번호"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:paddingLeft="15dp" />
 
         <EditText
             android:id="@+id/passwordCheckEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
+            android:background="@drawable/edittext"
             android:ems="10"
             android:hint="비밀번호확인"
-            android:inputType="textPassword" />
+            android:inputType="textPassword"
+            android:paddingLeft="15dp" />
 
         <TextView
             android:id="@+id/passwordValid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="5dp"
+            android:textColor="@color/black"
             android:visibility="gone" />
 
         <EditText
             android:id="@+id/PhoneEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@drawable/edittext"
             android:ems="10"
             android:hint="전화번호"
             android:inputType="phone"
-            android:maxLength="11"/>
+            android:maxLength="11"
+            android:paddingLeft="15dp" />
 
-        <Button
-            android:id="@+id/signUpButton"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:text="회원가입" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+
+            <Button
+                android:id="@+id/signUpButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="3dp"
+                android:layout_weight="1"
+                android:background="@drawable/confirm_button"
+                android:enabled="false"
+                android:text="@string/join_button"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
 
     </LinearLayout>
+
+
 </layout>

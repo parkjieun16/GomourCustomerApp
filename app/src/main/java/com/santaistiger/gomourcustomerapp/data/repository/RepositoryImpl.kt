@@ -1,6 +1,10 @@
 package com.santaistiger.gomourcustomerapp.data.repository
 
-
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.santaistiger.gomourcustomerapp.data.model.Customer
 import android.util.Log
 import android.widget.TextView
 import com.google.firebase.database.Query
@@ -8,6 +12,7 @@ import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.network.database.AuthApi
+import com.santaistiger.gomourcustomerapp.data.network.database.AuthResponse
 import com.santaistiger.gomourcustomerapp.data.network.database.FireStoreApi
 import com.santaistiger.gomourcustomerapp.data.network.database.RealtimeApi
 import com.santaistiger.gomourcustomerapp.data.network.map.KakaoMapApi
@@ -71,12 +76,70 @@ object RepositoryImpl : Repository {
         RealtimeApi.writeRequest(key, orderRequest)
     }
 
+    override fun deleteAuthCustomer() {
+        AuthApi.deleteAuthCustomer()
+    }
+
+    override fun deleteFireStoreCustomer(customerUid: String) {
+        FireStoreApi.deleteFireStoreCustomer(customerUid)
+    }
+
+    override fun writeFireStoreCustomer(customer: Customer) {
+        FireStoreApi.writeFireStoreCustomer(customer)
+    }
+
+    override fun writeAuthCustomer(email: String, password: String) {
+        AuthApi.writeAuthCustomer(email, password)
+    }
+
     override suspend fun readDeliveryManPhone(deliveryManUid: String): String? {
         val response = FireStoreApi.getDeliveryMan(deliveryManUid)
         val deliveryMan = response.deliveryMan
 
         return deliveryMan?.phone
     }
+
+    override suspend fun readCustomerInfo(customerUid: String): Customer? {
+        val response = FireStoreApi.getCustomer(customerUid)
+        val customer = response.customer
+        return customer
+    }
+
+    override suspend fun login(
+        firebaseAuth: FirebaseAuth,
+        email: String,
+        password: String
+    ): AuthResult? {
+        val response = AuthApi.login(firebaseAuth, email, password)
+        return response.authResult
+    }
+
+    override suspend fun join(
+        firebaseAuth: FirebaseAuth,
+        email: String,
+        password: String
+    ): AuthResult? {
+        val response = AuthApi.join(firebaseAuth, email, password)
+        return response.authResult
+    }
+
+    // 가입할 수 있으면 true, 가입할 수 없으면 false
+    override suspend fun checkJoinable(email: String): Boolean = FireStoreApi.checkJoinable(email)
+
+
+    override fun updateFireStorePassword(customerUid: String, password: String) {
+        FireStoreApi.updateFireStorePassword(customerUid, password)
+    }
+
+    override fun updateAuthPassword(password: String) {
+        AuthApi.updateAuthPassword(password)
+    }
+
+    override fun updatePhone(customerUid: String, phone: String) {
+        FireStoreApi.updatePhone(customerUid, phone)
+    }
+
+    override fun getUid(): String = AuthApi.readUid() ?: String()
 
     override suspend fun readDeliveryManAccount(deliveryManUid: String): String? {
         val response = FireStoreApi.getDeliveryMan(deliveryManUid)
