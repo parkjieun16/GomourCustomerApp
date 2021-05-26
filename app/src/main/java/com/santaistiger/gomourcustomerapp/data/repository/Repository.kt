@@ -8,6 +8,7 @@ import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.network.database.AuthResponse
+import com.santaistiger.gomourcustomerapp.data.network.database.CustomerResponse
 import net.daum.mf.map.api.MapPoint
 
 interface Repository {
@@ -17,6 +18,9 @@ interface Repository {
     suspend fun readOrderDetail(orderId: String): Order?
     suspend fun readDeliveryManPhone(deliveryManUid: String): String?
     suspend fun readCustomerInfo(customerUid:String): Customer?
+    suspend fun login(firebaseAuth: FirebaseAuth, email:String, password:String): AuthResult?
+    suspend fun join(firebaseAuth:FirebaseAuth, email:String, password:String):AuthResult?
+    suspend fun checkJoinable(email:String):Boolean
     fun updateAuthPassword(password:String)
     fun updateFireStorePassword(customerUid: String,password:String)
     fun updatePhone(customerUid: String,phone:String)
@@ -25,7 +29,6 @@ interface Repository {
     fun deleteFireStoreCustomer(customerUid: String)
     fun writeFireStoreCustomer(customer:Customer)
     fun writeAuthCustomer(email:String,password: String)
-    fun login(email: String,password: String):Boolean
     fun getUid(): String
 
 

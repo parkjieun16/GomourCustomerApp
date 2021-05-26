@@ -1,4 +1,5 @@
 package com.santaistiger.gomourcustomerapp.ui.view
+
 /**
  * Created by Jangeunhye
  */
@@ -47,21 +48,37 @@ class LoginFragment : Fragment() {
         setToolbar()
 
         auth = Firebase.auth
-        binding = DataBindingUtil.inflate<FragmentLoginBinding>(inflater,R.layout.fragment_login,container,false)
+        binding = DataBindingUtil.inflate<FragmentLoginBinding>(
+            inflater,
+            R.layout.fragment_login,
+            container,
+            false
+        )
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
         binding.emailLogin.addTextChangedListener(mTextWatcher) // 이메일 입력 감지
         binding.passwordLogin.addTextChangedListener(mTextWatcher) // 패스워드 입력 감지
 
         // 로그인
-        binding.loginButton.setOnClickListener{
-            val email = binding.emailLogin.text.toString()
-            val password = binding.passwordLogin.text.toString()
-            signIn(email,password)
+        binding.loginButton.setOnClickListener {
+            viewModel.email = binding.emailLogin.text.toString()
+            viewModel.password = binding.passwordLogin.text.toString()
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.login().join()
+                if (viewModel.loginInfo.value != null) { // 로그인 성공 시
+                    findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
+                    (requireActivity() as BaseActivity).setNavigationDrawerHeader()
+                } else { // 로그인 실패 시
+                    launch(Dispatchers.Main) {
+                        alertCancel(this@LoginFragment.requireContext())
+                    }
+                }
+            }
+
         }
 
         //회원가입 페이지로 이동
-        binding.goSignUpPage.setOnClickListener{
+        binding.goSignUpPage.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_joinFragment)
         }
 
@@ -70,7 +87,7 @@ class LoginFragment : Fragment() {
 
     private fun setToolbar() {
         requireActivity().apply {
-            toolbar.visibility = View.GONE	// 툴바 숨기기
+            toolbar.visibility = View.GONE    // 툴바 숨기기
             drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
         }
     }
@@ -93,23 +110,22 @@ class LoginFragment : Fragment() {
     }
 
     // 로그인
-    private fun signIn(email:String, password:String){
+    private fun signIn(email: String, password: String) {
         // 단국이메일인 경우
-        if ( email.contains(R.string.dankook_domain.toString())){
-            alertCancel()
-        }
-        else{
+        if (email.contains(R.string.dankook_domain.toString())) {
+            alertCancel(requireContext())
+        } else {
             auth?.signInWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener(){ task ->
-                    if(task.isSuccessful){
+                ?.addOnCompleteListener() { task ->
+                    if (task.isSuccessful) {
                         val user = auth!!.currentUser
 
                         // 자동로그인을 위해 shared preference에 정보 저장
                         val auto = this.requireActivity()
                             .getSharedPreferences("auto", Context.MODE_PRIVATE)
                         val autoLogin = auto.edit()
-                        autoLogin.putString("email",email)
-                        autoLogin.putString("password",password)
+                        autoLogin.putString("email", email)
+                        autoLogin.putString("password", password)
                         autoLogin.commit()
 
                         //로그인 후 주문하기 페이지로 이동
@@ -119,21 +135,18 @@ class LoginFragment : Fragment() {
                 }
                 // 로그인 실패시
                 ?.addOnFailureListener {
-                    alertCancel()
+                    alertCancel(requireContext())
                 }
         }
     }
 
-    fun alertCancel() {
-        AlertDialog.Builder(requireActivity())
+    private fun alertCancel(context: Context) {
+        AlertDialog.Builder(context)
             .setMessage(R.string.login_fail_dialog)
-            .setPositiveButton(R.string.login_fail_ok,null)
+            .setPositiveButton(R.string.login_fail_ok, null)
             .create()
             .show()
     }
-
-
-
 
 
 }

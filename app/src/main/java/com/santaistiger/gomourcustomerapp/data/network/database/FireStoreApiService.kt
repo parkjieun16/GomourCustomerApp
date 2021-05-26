@@ -40,6 +40,11 @@ object FireStoreApi{
         return response
     }
 
+    suspend fun checkJoinable(email:String): Boolean{
+        return customerTable.whereEqualTo("email",email).get().await().isEmpty
+    }
+
+
     fun updateFireStorePassword(customerUid: String,password:String){
         customerTable.document(customerUid).update("password",password)
     }

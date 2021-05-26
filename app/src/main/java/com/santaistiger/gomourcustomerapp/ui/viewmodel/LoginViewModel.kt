@@ -18,5 +18,10 @@ class LoginViewModel : ViewModel() {
 
     var email = String()
     var password = String()
+    val loginInfo = MutableLiveData<AuthResult>()
+
+    fun login() =
+        viewModelScope.launch { loginInfo.value = repository.login(auth!!, email, password) }
+
 
 }

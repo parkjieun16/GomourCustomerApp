@@ -8,6 +8,34 @@ import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.tasks.await
 
 object AuthApi {
+    // 로그인
+    suspend fun login(firebaseAuth: FirebaseAuth, email: String, password: String): AuthResponse {
+        val authResponse = AuthResponse()
+
+        try {
+            authResponse.authResult = firebaseAuth
+                .signInWithEmailAndPassword(email, password)
+                .await()
+        } catch (e: Exception) {
+            authResponse.exception = e
+        }
+
+        return authResponse
+    }
+
+    //회원가입
+    suspend fun join(firebaseAuth:FirebaseAuth, email:String, password:String):AuthResponse{
+        val authResponse = AuthResponse()
+        try{
+            authResponse.authResult = firebaseAuth
+                .createUserWithEmailAndPassword(email,password)
+                .await()
+        } catch (e:java.lang.Exception){
+            authResponse.exception = e
+        }
+        return authResponse
+    }
+
 
     fun login(email:String, password:String){
         Firebase.auth.signInWithEmailAndPassword(email,password)

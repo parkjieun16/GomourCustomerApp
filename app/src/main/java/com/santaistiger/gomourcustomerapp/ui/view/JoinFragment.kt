@@ -1,4 +1,5 @@
 package com.santaistiger.gomourcustomerapp.ui.view
+
 /**
  * Created by Jangeunhye
  */
@@ -32,6 +33,10 @@ import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.JoinViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.fragment_join.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 
 
@@ -39,7 +44,7 @@ class JoinFragment : Fragment() {
     private var auth: FirebaseAuth? = null
     private lateinit var binding: FragmentJoinBinding
     private lateinit var viewModel: JoinViewModel
-    private val repository:Repository = RepositoryImpl
+    private val repository: Repository = RepositoryImpl
     val db = Firebase.firestore
 
 
@@ -77,31 +82,25 @@ class JoinFragment : Fragment() {
 
         //이메일 중복 버튼
         binding.emailCheckButton.setOnClickListener {
-
-            checkEmail(object : EmailCallback {
-                override fun isEmailExist(exist: Boolean) {
-                    if (exist) {
-                        emailValidWrong()
-
-
-                    } else {
-                        // 사용가능한 이메일
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.duplicateCheck().join()
+                if (viewModel.isAvailable.value == true) {
+                    launch(Dispatchers.Main) {
+                        //사용 가능함
                         emailValidCorrect()
+                    }
+                } else {
+                    launch(Dispatchers.Main) {
+                        //이미 사용하고 있음
+                        emailValidWrong()
 
                     }
                 }
-            })
+            }
         }
 
         //회원가입버튼
         binding.signUpButton.setOnClickListener {
-            val mInputMethodManager: InputMethodManager =
-                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            mInputMethodManager.hideSoftInputFromWindow(
-                PhoneEditText.getWindowToken(),
-                0
-            )
-
 
             val email: String = binding.emailEditText.text.toString()
             val password: String = binding.passwordEditText.text.toString()
@@ -109,28 +108,44 @@ class JoinFragment : Fragment() {
             val name: String = binding.nameEditText.text.toString()
             val phone = binding.PhoneEditText.text.toString()
             //uid는 회원가입완료 후 생성됨. 일단은 임시로 ..!
-            val uid = ""
-            var customer = Customer(email, password, name, phone, uid)
-
-            //이메일 검사 -> 비밀번호 검사 -> 계정 생성
-            if(emailValidCheck()==true){
-                checkEmail(object : EmailCallback {
-                    override fun isEmailExist(exist: Boolean) {
-                        if (exist) {
-                            emailValidWrong()
-                            Toast.makeText(context, R.string.confirm_fail, Toast.LENGTH_LONG).show()
-                        } else {
-                            emailValidCorrect()
-                            if (password(password) && passwordEqual(passwordCheck)) {
-                                createAccount(customer)
-                            }
+            var customer = Customer(email, password, name, phone, null)
+            viewModel.email = binding.emailEditText.text.toString()
+            CoroutineScope(Dispatchers.IO).launch {
+                viewModel.duplicateCheck().join()
+                if (viewModel.isAvailable.value == true) {
+                    launch(Dispatchers.Main) {
+                        //사용 가능함
+                        emailValidCorrect()
+                        if(password(password)&&passwordEqual(passwordCheck)){
+                            createAccount(customer)
                         }
                     }
-                })
+                } else {
+                    launch(Dispatchers.Main) {
+                        //이미 사용하고 있음
+                        emailValidWrong()
+
+                    }
+                }
             }
-            else{
-                Toast.makeText(context,R.string.confirm_fail,Toast.LENGTH_SHORT).show()
-            }
+            /*if (checkEmail()) {
+                // 사용가능 이메일
+                binding.emailValid.visibility = View.VISIBLE
+                binding.emailValid.setTextColor(Color.parseColor("#000000"))
+                binding.emailValid.setText(R.string.join_email_available_info)
+
+                if(password(password)&&passwordEqual(passwordCheck)){
+                    createAccount(customer)
+                }
+            } else {
+
+                // 이미 사용중인 이메일입니다.
+                binding.emailValid.visibility = View.VISIBLE
+                binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
+                binding.emailValid.setText(R.string.join_email_duplicate_info)
+            }*/
+
+
         }
         return binding.root
     }
@@ -196,8 +211,7 @@ class JoinFragment : Fragment() {
         if (Pattern.matches(pwPattern, password)) {
             binding.passwordValid.visibility = View.GONE
             return true
-        }
-        else {
+        } else {
             // 비밀번호 형식 맞지 않을떄
             binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
             binding.passwordValid.visibility = View.VISIBLE
@@ -206,15 +220,14 @@ class JoinFragment : Fragment() {
         }
     }
 
-    private fun passwordEqual(passwordCheck: CharSequence):Boolean{
+    private fun passwordEqual(passwordCheck: CharSequence): Boolean {
         val password = binding.passwordEditText.text.toString()
-        if(password == passwordCheck.toString()){
+        if (password == passwordCheck.toString()) {
             binding.passwordValid.setTextColor(Color.parseColor("#000000"))
             binding.passwordValid.visibility = View.VISIBLE
             binding.passwordValid.setText(R.string.password_available_info)
             return true
-        }
-        else{
+        } else {
             // 비밀번호 같지 않을 때
             binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
             binding.passwordValid.visibility = View.VISIBLE
@@ -238,7 +251,7 @@ class JoinFragment : Fragment() {
 
 
     //이메일 형식 체크
-    private fun emailValidCheck():Boolean{
+    private fun emailValidCheck(): Boolean {
         val email = binding.emailEditText.text.toString()
 
         //이메일 형식이 맞지 않을 경우
@@ -271,29 +284,15 @@ class JoinFragment : Fragment() {
     }
 
 
-    interface EmailCallback {
-        fun isEmailExist(exist: Boolean)
+    fun checkEmail() = CoroutineScope(Dispatchers.IO).launch {
+        viewModel.email = binding.emailEditText.text.toString()
+        viewModel.duplicateCheck().join()
+        viewModel.isAvailable.value == true
     }
 
-
-    fun checkEmail(emailCallback: EmailCallback) {
-        val db = FirebaseFirestore.getInstance()
-        val email = binding.emailEditText.text.toString()
-        db.collection("customer").whereEqualTo("email", email).get()
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    if (task.result?.isEmpty == true) {
-                        emailCallback.isEmailExist((false)) //사용 가능
-                    } else {
-                        emailCallback.isEmailExist(true) //사용 불가
-                    }
-
-                }
-            }
-    }
 
     //emailValid 관련 텍스트
-    fun emailValidWrong(){
+    fun emailValidWrong() {
         // 이미 사용중인 이메일입니다.
         binding.emailValid.visibility = View.VISIBLE
         binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
@@ -302,7 +301,7 @@ class JoinFragment : Fragment() {
 
     }
 
-    fun emailValidCorrect(){
+    fun emailValidCorrect() {
         // 사용가능 이메일
         binding.emailValid.visibility = View.VISIBLE
         binding.emailValid.setTextColor(Color.parseColor("#000000"))
@@ -311,33 +310,28 @@ class JoinFragment : Fragment() {
 
     //회원가입
     private fun createAccount(customer: Customer) {
-        auth?.createUserWithEmailAndPassword(customer.email, customer.password)
-            ?.addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    customer.uid = task.result?.user?.uid
-                    Log.d("TESTTEST", customer.uid!!)
-                    repository.writeFireStoreCustomer(customer)
-
-                    // 자동로그인에 저장
-                    val auto = this.requireActivity()
-                        .getSharedPreferences("auto", Context.MODE_PRIVATE)
-                    val autoLogin = auto.edit()
-                    autoLogin.putString("email", customer.email)
-                    autoLogin.putString("password", customer.password)
-                    autoLogin.commit()
-
-                    // 회원가입 완료 후 주문하기 페이지로 이동
-                    findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
-                    (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
-
+        viewModel.email = binding.emailEditText.text.toString()
+        viewModel.password = binding.passwordCheckEditText.text.toString()
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.join().join()
+            if (viewModel.joinInfo.value != null) {
+                // 회원가입
+                customer.uid = repository.getUid()
+                repository.writeFireStoreCustomer(customer)
+                // 자동로그인에 저장
+                val auto = requireActivity()
+                    .getSharedPreferences("auto", Context.MODE_PRIVATE)
+                val autoLogin = auto.edit()
+                autoLogin.putString("email", customer.email)
+                autoLogin.putString("password", customer.password)
+                autoLogin.commit()
+                findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
+                (requireActivity() as BaseActivity).setNavigationDrawerHeader()
+            } else {
+                launch(Dispatchers.Main) {
+                    Toast.makeText(context, R.string.join_fail_info, Toast.LENGTH_LONG).show()
                 }
-
             }
-
-
-
-
+        }
     }
-
-
 }

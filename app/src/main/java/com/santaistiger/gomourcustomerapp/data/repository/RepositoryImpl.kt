@@ -81,7 +81,7 @@ object RepositoryImpl : Repository {
     }
 
     override fun writeAuthCustomer(email: String, password: String) {
-        AuthApi.writeAuthCustomer(email,password)
+        AuthApi.writeAuthCustomer(email, password)
     }
 
     override suspend fun readDeliveryManPhone(deliveryManUid: String): String? {
@@ -96,19 +96,30 @@ object RepositoryImpl : Repository {
         return customer
     }
 
-    override fun login(email: String, password: String):Boolean {
-        AuthApi.login(email, password)
-        if(Firebase.auth.currentUser==null){
-            return false
-        }
-        else{
-            return true
-        }
-
+    override suspend fun login(
+        firebaseAuth: FirebaseAuth,
+        email: String,
+        password: String
+    ): AuthResult? {
+        val response = AuthApi.login(firebaseAuth, email, password)
+        return response.authResult
     }
 
-    override fun updateFireStorePassword(customerUid: String, password: String){
-        FireStoreApi.updateFireStorePassword(customerUid,password)
+    override suspend fun join(
+        firebaseAuth: FirebaseAuth,
+        email: String,
+        password: String
+    ): AuthResult? {
+        val response = AuthApi.join(firebaseAuth, email, password)
+        return response.authResult
+    }
+
+    // 가입할 수 있으면 true, 가입할 수 없으면 false
+    override suspend fun checkJoinable(email: String): Boolean = FireStoreApi.checkJoinable(email)
+
+
+    override fun updateFireStorePassword(customerUid: String, password: String) {
+        FireStoreApi.updateFireStorePassword(customerUid, password)
     }
 
     override fun updateAuthPassword(password: String) {
@@ -119,7 +130,7 @@ object RepositoryImpl : Repository {
         FireStoreApi.updatePhone(customerUid, phone)
     }
 
-    override fun getUid(): String = AuthApi.readUid()?:String()
+    override fun getUid(): String = AuthApi.readUid() ?: String()
 
 
 }
