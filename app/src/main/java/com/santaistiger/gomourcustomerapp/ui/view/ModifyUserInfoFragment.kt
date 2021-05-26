@@ -94,7 +94,7 @@ class ModifyUserInfoFragment : Fragment() {
     private fun setToolbar() {
         requireActivity().apply {
             toolbar.visibility = View.VISIBLE     // 툴바 보이도록 설정
-            toolbar_title.setText("회원 정보 변경")     // 툴바 타이틀 변경
+            toolbar_title.setText(R.string.toolbar_title_modify_user_info)     // 툴바 타이틀 변경
             drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)  // 스와이프 활성화
         }
     }

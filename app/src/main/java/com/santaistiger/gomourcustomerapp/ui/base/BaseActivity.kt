@@ -24,9 +24,10 @@ import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import java.util.*
 
-val TAG = "BaseActivityLog"
-
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+    companion object {
+        private const val TAG = "BaseActivityLog"
+    }
     private val repository: Repository = RepositoryImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -22,11 +22,10 @@
 
                 <TextView
                     android:id="@+id/toolbar_title"
-                    style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                    style="@style/je_toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="툴바 제목" />
+                    android:layout_gravity="center" />
             </androidx.appcompat.widget.Toolbar>
 
             <fragment
@@ -44,9 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:paddingHorizontal="7dp"
             app:headerLayout="@layout/nav_header"
-            app:menu="@menu/navdrawer_menu" >
-        </com.google.android.material.navigation.NavigationView>
+            app:itemTextAppearance="@style/je_nav_drawer_text"
+            app:menu="@menu/navdrawer_menu" />
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
