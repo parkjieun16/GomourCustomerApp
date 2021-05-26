@@ -1,3 +1,6 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.ui.viewmodel
 
 import androidx.lifecycle.ViewModel

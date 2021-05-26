@@ -3,7 +3,6 @@ package com.santaistiger.gomourcustomerapp.data.network.database
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.Query
@@ -14,12 +13,10 @@ import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.ui.adapter.OrderListAdapter
 import kotlinx.coroutines.tasks.await
-import java.lang.Exception
 
-
-private const val TAG: String = "RealtimeApiService"
 
 object RealtimeApi {
+    private const val TAG = "RealtimeApiService"
     private const val ORDER_REQUEST_TABLE = "order_request"
     private const val ORDER_TABLE = "order"
 

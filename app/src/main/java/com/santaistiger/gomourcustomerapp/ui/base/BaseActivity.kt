@@ -7,8 +7,11 @@ import android.os.Bundle
 import android.telephony.PhoneNumberUtils
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.ktx.auth
@@ -20,6 +23,7 @@ import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
+import com.santaistiger.gomourcustomerapp.databinding.ActivityBaseBinding
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.nav_header.view.*
 import java.util.*
@@ -28,11 +32,20 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     companion object {
         private const val TAG = "BaseActivityLog"
     }
+
+    private lateinit var binding: ActivityBaseBinding
     private val repository: Repository = RepositoryImpl
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_base)
+        binding = DataBindingUtil.inflate(
+            layoutInflater,
+            R.layout.activity_base,
+            null,
+            false
+        )
+
+        setContentView(binding.root)
 
         // Auto permission
         AutoPermissions.loadAllPermissions(this, 1)
@@ -48,6 +61,23 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             setDisplayHomeAsUpEnabled(true)   // 툴바 홈버튼 활성화
             setHomeAsUpIndicator(R.drawable.hamburger_btn)     // 홈버튼 이미지 변경
             setDisplayShowTitleEnabled(false)     // 툴바에 앱 타이틀 보이지 않도록 설정
+        }
+    }
+
+    /** 각 fragment의 툴바를 설정하는 함수 */
+    fun setToolbar(context: Context, isVisible: Boolean, title: String?, isSwapable: Boolean) {
+        context.apply {
+            val swapable = when (isSwapable) {
+                true -> DrawerLayout.LOCK_MODE_UNLOCKED
+                false -> DrawerLayout.LOCK_MODE_LOCKED_CLOSED
+            }
+
+            toolbar.visibility = when (isVisible) {
+                true -> View.VISIBLE
+                false -> View.GONE
+            }
+            binding.toolbarTitle.text = title ?: String()
+            binding.drawerLayout.setDrawerLockMode(swapable)
         }
     }
 

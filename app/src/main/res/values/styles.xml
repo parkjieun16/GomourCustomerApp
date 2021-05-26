@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <!-- 툴바 제목 스타일 리소스 -->
     <style name="je_toolbar_title">
@@ -12,5 +13,108 @@
         <item name="android:fontFamily">@font/nsregular</item>
         <item name="android:textSize">15dp</item>
     </style>
+
+    <!-- 금실쓰 리소스 -->
+    <style name="gs_title">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">5dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:fontFamily">@font/nsbold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">17dp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+
+    <style name="gs_order_element_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginBottom">25dp</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="gs_recycler_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:nestedScrollingEnabled">false</item>
+    </style>
+
+    <style name="gs_bottom_btn">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:background">@drawable/shape_bottom_btn</item>
+        <item name="android:fontFamily">@font/nsbold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">15dp</item>
+        <item name="android:letterSpacing">0.02</item>
+    </style>
+    
+    <style name="gs_root_container">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_margin">15dp</item>
+    </style>
+
+    <style name="gs_element_card_view">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">3dp</item>
+        <item name="android:layout_marginBottom">5dp</item>
+        <item name="android:layout_marginHorizontal">3dp</item>
+        <item name="cardCornerRadius">10dp</item>
+        <item name="cardElevation">3dp</item>
+    </style>
+
+    <style name="gs_element_root">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginHorizontal">8dp</item>
+        <item name="android:layout_marginVertical">5dp</item>
+    </style>
+
+    <style name="gs_element_root_with_icon">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">5dp</item>
+    </style>
+
+    <style name="gs_icon">
+        <item name="android:layout_width">40dp</item>
+        <item name="android:layout_height">24dp</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:scaleType">fitCenter</item>
+    </style>
+
+    <style name="gs_text_bold_14">
+        <item name="android:fontFamily">@font/nsbold</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="gs_text_regular_14">
+        <item name="android:fontFamily">@font/nsregular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">14dp</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <style name="gs_text_regular_13">
+        <item name="android:fontFamily">@font/nsregular</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textSize">13dp</item>
+        <item name="android:lineSpacingExtra">3dp</item>
+        <item name="android:letterSpacing">0.02</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
 
 </resources>
