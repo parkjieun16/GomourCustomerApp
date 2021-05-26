@@ -1,5 +1,9 @@
 package com.santaistiger.gomourcustomerapp.ui.customview
 
+/**
+ * Created by Jieun Park.
+ */
+
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater

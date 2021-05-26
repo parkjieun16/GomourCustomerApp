@@ -1,5 +1,7 @@
+/**
+ * created by Kang Gumsil
+ */
 package com.santaistiger.gomourcustomerapp.ui.customview
-
 
 import android.content.Context
 import android.util.AttributeSet
@@ -9,15 +11,14 @@ import androidx.databinding.DataBindingUtil
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.databinding.ItemDetailDestinationBinding
 
-
 class DetailDestinationView @JvmOverloads constructor(
-        context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
     val binding: ItemDetailDestinationBinding = DataBindingUtil.inflate(
-            LayoutInflater.from(context),
-            R.layout.item_detail_destination,
-            this,
-            true
+        LayoutInflater.from(context),
+        R.layout.item_detail_destination,
+        this,
+        true
     )
 }

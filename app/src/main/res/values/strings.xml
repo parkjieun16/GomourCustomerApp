@@ -1,26 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <string name="app_name">곰아워</string>
     <string name="hello_blank_fragment">none</string>
 
-    <!-- 주문하기 화면 (doOrderFragment) 관련 resource -->
-    <string name="title_do_order_fragment">주문하기</string>
-    <string name="address_do_order_fragment">출발지 및 목적지</string>
-    <string name="message_do_order_fragment">배송 메시지</string>
-    <string name="price_do_order_fragment">비용</string>
-    <string name="order_btn_do_order_fragment">주        문</string>
-    <string name="hint_address_do_order_fragment">주소를 입력하세요.</string>
-    <string name="hint_menu_do_order_fragment">메뉴를 입력하세요.</string>
+    <!-- 금실쓰 리소스 -->
+    <string name="do_order">주문하기</string>
+    <string name="lock_up_order">주문 조회</string>
+    <string name="ok">확인</string>
+    <string name="cancel">취소</string>
 
-    <string name="show_price_do_order_fragment">음식 가격 + %d원 (배달료)</string>
+    <string name="title_address">주문 및 배달 장소</string>
+    <string name="title_message">배송 메시지</string>
+    <string name="title_price">배달료</string>
+    <string name="title_price_and_account">비용 및 계좌번호</string>
+
+    <string name="do_order_spaced">주ㅤㅤㅤㅤㅤㅤㅤㅤ문</string>
+    <string name="copy">복ㅤ사</string>
+    <string name="call_delivery_man">배달 기사에게 전화하기</string>
+    <string name="sms_delivery_man">배달 기사에게 문자하기</string>
+
+    <string name="hint_store_address">주문 장소를 설정하려면 클릭하세요</string>
+    <string name="hint_store_menu">요청사항 입력</string>
+    <string name="hint_destination_address">배달 장소를 설정하려면 클릭하세요</string>
+    <string name="hint_message">내용을 입력하세요</string>
+    <string name="hint_price">배달료</string>
+
+    <string name="message_copy_account">계좌번호가 복사되었습니다.</string>
+    <string name="message_sms_greeting">곰아워 주문자입니다.</string>
+    <string name="message_pick_up_complete">픽업 완료</string>
+    <string name="message_delivery_complete">배달 완료</string>
+
+    <string name="warning_limit_store_count_message">최대 3곳까지만 설정할 수 있습니다.</string>
+
+    <string name="check_sms">배달 기사에게 문자를 보내시겠습니까?</string>
+    <string name="check_call">배달 기사에게 전화를 거시겠습니까까?</string>
+    <string name="check_select_place">%s을(를)를 선택하시겠습니까?</string>
+
+<!--    <string name="warning_store_address_input">모든 칸에 주문 장소를 설정해주세요</string>-->
+<!--    <string name="warning_store_menu_input">모든 칸에 요청사항을 입력해주세요</string>-->
+<!--    <string name="warning_destination_address_input">배달 장소를 설정해주세요</string>-->
 
     <!-- 기사 매칭 화면 관련 resource -->
     <string name="matching_wait_match_fragment">기사 매칭 중입니다...</string>
+    <string name="cancel_wait_match_fragment">주\t\t\t\t\t문\t\t\t\t\t취\t\t\t\t\t소</string>
 
     <!-- 주문 목록 화면 관련 resource -->
     <string name="title_order_list_fragment">주문 목록</string>
-    <string name="order_time_item_order_info">주문 시각</string>
-    <string name="delivery_status_item_order_info">배달 상태</string>
-    <string name="price_item_order_info">금액</string>
     <string name="empty_order_list_fragment">주문 내역이 없습니다.</string>
 
     <!-- 네비게이션 드로어 관련 resource -->
@@ -69,5 +95,13 @@
     <string name="withdrawal_fail">탈퇴 실패</string>
     <string name="withdrawal_success">탈퇴 성공</string>
 
+    <!-- 툴바 관련 resource -->
+    <string name="toolbar_title_login">로그인</string>
+    <string name="toolbar_title_join">회원가입</string>
+    <string name="toolbar_title_modify_user_info">회원 정보 변경</string>
+    <string name="toolbar_title_do_order">주문하기</string>
+    <string name="toolbar_title_order_detail">주문 조회</string>
+    <string name="toolbar_title_order_list">주문 목록</string>
+    <string name="toolbar_title_search_place">장소 검색</string>
 
 </resources>

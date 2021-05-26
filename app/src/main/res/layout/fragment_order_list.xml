@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="orderListViewModel"
             type="com.santaistiger.gomourcustomerapp.ui.viewmodel.OrderListViewModel" />
@@ -19,9 +18,12 @@
             android:id="@+id/empty_notice_string"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fontFamily="@font/nsregular"
             android:gravity="center"
-            android:visibility="gone"
-            android:text="@string/empty_order_list_fragment" />
+            android:text="@string/empty_order_list_fragment"
+            android:textColor="@color/black"
+            android:textSize="14dp"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/order_list"

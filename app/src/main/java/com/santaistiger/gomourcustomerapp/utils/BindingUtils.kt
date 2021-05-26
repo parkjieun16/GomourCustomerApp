@@ -12,57 +12,67 @@ import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.model.Status
 import com.santaistiger.gomourcustomerapp.data.model.Store
-import com.santaistiger.gomourcustomerapp.ui.customview.*
 import com.santaistiger.gomourcustomerapp.ui.adapter.DoOrderStoreAdapter
-import com.santaistiger.gomourcustomerapp.ui.adapter.OrderDetailStoreAdapater
+import com.santaistiger.gomourcustomerapp.ui.adapter.OrderDetailStoreAdapter
+import com.santaistiger.gomourcustomerapp.ui.customview.*
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 
 
 object BindingUtils {
-    val numberFormat = NumberFormat.getInstance()
+    private val numberFormat = NumberFormat.getInstance()
 
-    @BindingAdapter("bind_store_list")
-    @JvmStatic fun bindStoreList(recyclerView: RecyclerView, items: ObservableArrayList<Store>) {
+    @BindingAdapter("bind_do_store_list")
+    @JvmStatic
+    fun bindStoreList(recyclerView: RecyclerView, items: ObservableArrayList<Store>) {
         if (recyclerView.adapter == null) {
             recyclerView.layoutManager =
-                    LinearLayoutManager(recyclerView.context)
+                LinearLayoutManager(recyclerView.context)
             recyclerView.adapter = DoOrderStoreAdapter()
         }
         (recyclerView.adapter as DoOrderStoreAdapter).items = items
         recyclerView.adapter?.notifyDataSetChanged()
     }
 
-    @BindingAdapter("bind_destination")
-    @JvmStatic fun setDestination(view: DestinationView, item: ObservableParcelable<Place>) {
+    @BindingAdapter("bind_do_destination")
+    @JvmStatic
+    fun setDestination(view: DoDestinationView, item: ObservableField<Place>) {
         if (view.binding.item != item.get()) {
             view.binding.item = item.get()
         }
     }
 
-    @BindingAdapter("bind_message")
-    @JvmStatic fun setMessage(view: MessageView, item: ObservableField<String>) {
+    @BindingAdapter("bind_do_message")
+    @JvmStatic
+    fun setMessage(view: DoMessageView, item: ObservableField<String>) {
         if (view.binding.message != item.get()) {
             view.binding.message = item.get()
+            view.binding.etMessage.setSelection(item.get()?.length ?: 0)
         }
     }
 
-    @InverseBindingAdapter(attribute = "bind_message", event = "bind_messageAttrChanged")
-    @JvmStatic fun getMessage(view: MessageView) : String {
+    @InverseBindingAdapter(attribute = "bind_do_message", event = "bind_do_messageAttrChanged")
+    @JvmStatic
+    fun getMessage(view: DoMessageView): String {
         return view.getMessage()
     }
 
-    @BindingAdapter("bind_messageAttrChanged")
-    @JvmStatic fun setListener(view: MessageView, listener: InverseBindingListener?) {
+    @BindingAdapter("bind_do_messageAttrChanged")
+    @JvmStatic
+    fun setListener(view: DoMessageView, listener: InverseBindingListener?) {
         view.binding.etMessage.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) { listener?.onChange() }
+            override fun afterTextChanged(s: Editable?) {
+                listener?.onChange()
+            }
+
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
         })
     }
 
-    @BindingAdapter("bind_price")
-    @JvmStatic fun setPrice(view: PriceView, item: ObservableInt) {
+    @BindingAdapter("bind_do_price")
+    @JvmStatic
+    fun setPrice(view: DoPriceView, item: ObservableInt) {
         if (view.binding.price != item.get()) {
             view.binding.price = item.get()
         }
@@ -78,9 +88,9 @@ object BindingUtils {
             if (recyclerView.adapter == null) {
                 recyclerView.layoutManager =
                     LinearLayoutManager(recyclerView.context)
-                recyclerView.adapter = OrderDetailStoreAdapater()
+                recyclerView.adapter = OrderDetailStoreAdapter()
             }
-            (recyclerView.adapter as OrderDetailStoreAdapater).items = stores ?: ArrayList()
+            (recyclerView.adapter as OrderDetailStoreAdapter).items = stores ?: ArrayList()
             recyclerView.adapter?.notifyDataSetChanged()
         }
     }
@@ -142,6 +152,12 @@ object BindingUtils {
             }
             view.binding.tvPrice.text = numberFormat.format(price) + " 원"
         }
+    }
+
+    @BindingAdapter("bind_detail_account_info")
+    @JvmStatic
+    fun bindDetailAccountInfo(view: DetailPriceView, item: ObservableField<String>) {
+        view.binding.tvAccount.text = item.get()
     }
 
 
