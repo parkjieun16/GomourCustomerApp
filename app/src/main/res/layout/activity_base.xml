@@ -25,8 +25,7 @@
                     style="@style/je_toolbar_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="툴바 제목" />
+                    android:layout_gravity="center" />
             </androidx.appcompat.widget.Toolbar>
 
             <fragment

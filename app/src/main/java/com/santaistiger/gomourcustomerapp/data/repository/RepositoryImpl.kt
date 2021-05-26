@@ -1,5 +1,7 @@
 package com.santaistiger.gomourcustomerapp.data.repository
 
+import android.widget.TextView
+import com.google.firebase.database.Query
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
@@ -9,6 +11,7 @@ import com.santaistiger.gomourcustomerapp.data.network.database.RealtimeApi
 import com.santaistiger.gomourcustomerapp.data.network.map.KakaoMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.NaverMapApi
 import com.santaistiger.gomourcustomerapp.data.network.map.asDomainModel
+import com.santaistiger.gomourcustomerapp.ui.adapter.OrderListAdapter
 import net.daum.mf.map.api.MapPoint
 
 val TAG = "RepositoryImpl"
@@ -69,4 +72,21 @@ object RepositoryImpl : Repository {
     }
 
     override fun getUid(): String = AuthApi.readUid()?:String()
+
+    // realtime database의 order_request 테이블에서 인자로 받은 주문 번호에 해당하는 주문 정보를 받아와 해당 값을 반환한다.
+    override fun readCurrentOrder(orderId: String): Query {
+        val currentOrder = RealtimeApi.readCurrentOrder(orderId)
+        return currentOrder
+    }
+
+    // realtime database에서 인자로 받은 주문 번호에 해당하는 주문 정보를 삭제한다.
+    override fun deleteCurrentOrder(orderId: String) {
+        RealtimeApi.deleteCurrentOrder(orderId)
+    }
+
+    // realtime database의 order 테이블에 있는 소비자의 주문 목록을 받아와 해당 값을 반환한다.
+    override fun readOrderList(customerUid: String): Query {
+        val orderList = RealtimeApi.readOrderList(customerUid)
+        return orderList
+    }
 }

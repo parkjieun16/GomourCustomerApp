@@ -16,13 +16,13 @@
             android:orientation="horizontal"
             android:paddingHorizontal="7dp">
 
+            <!-- 주문 시각 -->
             <TextView
                 android:id="@+id/order_time_string"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nsregular"
                 android:paddingStart="4dp"
-                android:text="@string/order_time_item_order_info"
                 android:textColor="@color/black"
                 android:textSize="14dp" />
 
@@ -30,13 +30,13 @@
                 android:layout_width="15dp"
                 android:layout_height="match_parent" />
 
+            <!-- 배달 상태 -->
             <TextView
                 android:id="@+id/order_status_string"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/nsregular"
                 android:gravity="start"
-                android:text="@string/delivery_status_item_order_info"
                 android:textColor="@color/black"
                 android:textSize="14dp" />
         </LinearLayout>
@@ -54,17 +54,20 @@
                 android:orientation="vertical"
                 android:padding="7dp">
 
+                <!-- 가게 -->
                 <LinearLayout
                     android:id="@+id/stores"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical" />
 
+                <!-- 도착지 -->
                 <com.santaistiger.gomourcustomerapp.ui.customview.StoreNameView
                     android:id="@+id/list_destination"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 
+                <!-- 금액 -->
                 <TextView
                     android:id="@+id/order_price_string"
                     android:layout_width="match_parent"
@@ -74,7 +77,6 @@
                     android:paddingTop="8dp"
                     android:paddingEnd="4dp"
                     android:paddingBottom="4dp"
-                    android:text="@string/price_item_order_info"
                     android:textColor="@color/black"
                     android:textSize="13dp" />
             </LinearLayout>

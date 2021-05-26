@@ -81,7 +81,7 @@ class OrderDetailFragment : Fragment() {
     private fun setToolbar() {
         requireActivity().apply {
             toolbar.visibility = View.VISIBLE       // 툴바 보이도록 설정
-            toolbar_title.text = "주문 조회"        // 툴바 타이틀 변경
+            toolbar_title.setText(R.string.toolbar_title_order_detail)        // 툴바 타이틀 변경
             drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED) // 스와이프 활성화
         }
     }

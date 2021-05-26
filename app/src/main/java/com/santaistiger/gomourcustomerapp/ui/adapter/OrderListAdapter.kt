@@ -1,5 +1,9 @@
 package com.santaistiger.gomourcustomerapp.ui.adapter
 
+/**
+ * Created by Jieun Park.
+ */
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
@@ -18,18 +22,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class OrderListAdapter(val context: Context?) : RecyclerView.Adapter<OrderListAdapter.ViewHolder>() {
-    var orders = mutableListOf<Order>()
+    var orderList = mutableListOf<Order>()
 
-    override fun getItemCount(): Int = orders.size
+    override fun getItemCount(): Int = orderList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val orderId = orders[position].orderId.toString()
+        val orderId = orderList[position].orderId.toString()
         if (context != null) {
-            holder.bind(orders[position], context)
+            holder.bind(orderList[position], context)
         }
         holder.itemView.setOnClickListener {
             // 아이템 클릭하면 해당 아이템의 주문 번호를 넘겨주며 주문 상세 화면으로 이동
@@ -48,6 +52,7 @@ class OrderListAdapter(val context: Context?) : RecyclerView.Adapter<OrderListAd
 
     class ViewHolder private constructor(val binding: ItemOrderInfoBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        // 각 아이템에 주문 정보를 넣어준다.
         @SuppressLint("SetTextI18n")
         fun bind(order: Order, context: Context) {
             // 주문 날짜

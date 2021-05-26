@@ -1,5 +1,9 @@
 package com.santaistiger.gomourcustomerapp.ui.view
 
+/**
+ * Created by Jieun Park.
+ */
+
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -15,11 +19,10 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.bumptech.glide.Glide
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.network.database.RealtimeApi
+import com.santaistiger.gomourcustomerapp.data.repository.Repository
+import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentWaitMatchBinding
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.WaitMatchViewModel
 import kotlinx.android.synthetic.main.activity_base.*
@@ -38,6 +41,7 @@ class WaitMatchFragment : Fragment() {
 
     private lateinit var binding: FragmentWaitMatchBinding
     private lateinit var viewModel: WaitMatchViewModel
+    private val repository: Repository = RepositoryImpl
     private lateinit var callback: OnBackPressedCallback
     private lateinit var orderId: String
 
@@ -53,31 +57,39 @@ class WaitMatchFragment : Fragment() {
         binding.waitMatchViewModel = viewModel
         binding.lifecycleOwner = viewLifecycleOwner
 
+        // 툴바 설정
         setToolbar()
 
         // 로딩 gif 이미지 설정
         Glide.with(this).load(R.raw.wait_match_loading).into(binding.loadingImage)
 
-        // 주문하기 화면에서 받아온 현재 주문 번호 orderId에 저장
+        // 주문하기 화면에서 받아온 현재 주문 번호를 orderId에 저장
         val args = WaitMatchFragmentArgs.fromBundle(requireArguments())
         orderId = args.orderId
 
-        // 주문 취소 버튼 누른 경우
+        // 주문 취소 버튼 누른 경우 다이얼로그 출력
         viewModel.eventCancelOrder.observe(viewLifecycleOwner, Observer<Boolean> { it ->
             if (it) {
                 alertCancel()
             }
         })
 
+         // 현재 주문이 realtime database의 order_request 테이블에 존재하는지 검사
+         // 만약 존재하지 않을 경우(매칭이 완료되어 order_request 테이블에서 삭제된 경우) 주문 정보 전달하며 주문 상세 페이지로 이동
+        viewModel.checkDatabase(orderId)
+        viewModel.isCurrentOrderExist.observe(viewLifecycleOwner, Observer<Boolean> { it ->
+            if (!it) {
+                view?.findNavController()
+                    ?.navigate(
+                        WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(orderId)
+                    )
+            }
+        })
+
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-
-        checkDatabase(orderId)      // 데이터베이스에 현재 주문이 존재하는지 체크
-    }
-
+    // 툴바 설정
     private fun setToolbar() {
         requireActivity().apply {
             toolbar.visibility = View.GONE    // 툴바 숨기기
@@ -85,47 +97,19 @@ class WaitMatchFragment : Fragment() {
         }
     }
 
-    // 현재 주문이 realtime database에 존재하는지 확인
-    fun checkDatabase(orderId: String) {
-        val currentOrder = RealtimeApi.readCurrentOrder(orderId)
-
-        currentOrder.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-
-                // 현재 주문이 realtime database에 존재할 경우
-                if (snapshot.exists()) {
-                    Log.d(TAG, "current order is in realtime database")
-                }
-
-                // 현재 주문이 realtime database에 존재하지 않을 경우
-                else {
-                    Log.d(TAG, "current order is not in realtime database")
-                    // 주문상세 페이지로 이동
-                    view?.findNavController()
-                        ?.navigate(
-                            WaitMatchFragmentDirections.actionWaitMatchFragmentToOrderDetailFragment(
-                                orderId
-                            )
-                        )
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Log.w(TAG, "loadPost:onCancelled", error.toException())
-            }
-        })
-    }
-
-    // 주문하기 페이지로 이동 후 realtime database에서 현재 주문 정보 삭제
+    /**
+     * 주문 취소하기
+     * 주문하기 페이지로 이동하고 현재 주문 정보를 realtime database의 order_request 테이블에서 삭제한다.
+     */
     fun cancelOrder() {
         // 주문하기 페이지로 이동
         view?.findNavController()?.navigate(R.id.action_waitMatchFragment_to_doOrderFragment)
 
         // realtime database에서 현재 주문 정보 삭제
-        RealtimeApi.deleteCurrentOrder(orderId)
+        repository.deleteCurrentOrder(orderId)
     }
 
-    // 주문 취소 경고창
+    // 주문 취소 확인 다이얼로그
     fun alertCancel() {
         AlertDialog.Builder(requireActivity())
             .setMessage("주문을 취소하시겠습니까?")
@@ -137,12 +121,14 @@ class WaitMatchFragment : Fragment() {
             .show()
     }
 
-    // 뒤로 가기 버튼 누른 경우 주문을 취소할지 확인하는 경고창 띄우기
+    /**
+     * 뒤로 가기 버튼 클릭 동작 정의
+     * 뒤로 가기 버튼을 누그면 주문을 취소할지 확인하는 경고창을 띄운다.
+     */
     override fun onAttach(context: Context) {
         super.onAttach(context)
         callback = object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                Log.d(TAG, "backPressed")
                 alertCancel()
             }
         }
