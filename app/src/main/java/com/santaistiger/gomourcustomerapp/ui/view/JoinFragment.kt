@@ -141,6 +141,7 @@ class JoinFragment : Fragment() {
         override fun afterTextChanged(s: Editable?) {
             isUniqueEmail = false
         }
+
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             emailValidCheck()
         }
