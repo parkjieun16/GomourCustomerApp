@@ -17,6 +17,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.santaistiger.gomourcustomerapp.R
+import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentOrderListBinding
@@ -58,12 +59,11 @@ class OrderListFragment : Fragment() {
          */
         viewModel.getOrderList(customerUid)
 
-        viewModel.isOrderExist.observe(viewLifecycleOwner, Observer<Boolean> { it ->
-            if (it) {
+        viewModel.orders.observe(viewLifecycleOwner, Observer<ArrayList<Order>> { orders ->
+            if (!orders.isNullOrEmpty()) {
                 // 최근 날짜 순으로 주문 목록 재배열 후 adapter의 orders에 할당
-                adapter.orderList = viewModel.orders.asReversed()
+                adapter.orderList = orders.asReversed()
                 adapter.notifyDataSetChanged()
-
                 emptyNoticeTextView.visibility = View.GONE     // 빈 리싸이클러뷰 안내 문구 숨김
             } else {
                 emptyNoticeTextView.visibility = View.VISIBLE  // 빈 리싸이클러뷰 안내 문구 표시
