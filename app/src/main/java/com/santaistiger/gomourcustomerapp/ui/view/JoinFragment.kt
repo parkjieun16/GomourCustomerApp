@@ -3,16 +3,15 @@ package com.santaistiger.gomourcustomerapp.ui.view
 /**
  * Created by Jangeunhye
  */
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
@@ -21,7 +20,6 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.R
@@ -35,8 +33,8 @@ import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.fragment_join.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import java.util.regex.Pattern
 
 
@@ -46,6 +44,7 @@ class JoinFragment : Fragment() {
     private lateinit var viewModel: JoinViewModel
     private val repository: Repository = RepositoryImpl
     val db = Firebase.firestore
+    var isUniqueEmail = false
 
 
     override fun onCreateView(
@@ -82,70 +81,39 @@ class JoinFragment : Fragment() {
 
         //이메일 중복 버튼
         binding.emailCheckButton.setOnClickListener {
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.duplicateCheck().join()
-                if (viewModel.isAvailable.value == true) {
-                    launch(Dispatchers.Main) {
-                        //사용 가능함
-                        emailValidCorrect()
-                    }
-                } else {
-                    launch(Dispatchers.Main) {
-                        //이미 사용하고 있음
-                        emailValidWrong()
+            viewModel.email = binding.emailEditText.text.toString()
 
-                    }
+            CoroutineScope(Dispatchers.IO).launch {
+                val deferredCheckResult = async { viewModel.duplicateCheck() }
+                val checkResult: Boolean = deferredCheckResult.await()
+
+                launch(Dispatchers.Main) {
+                    if (checkResult) emailValidCorrect() //사용 가능함
+                    else emailValidWrong() //이미 사용하고 있음
                 }
             }
         }
 
         //회원가입버튼
         binding.signUpButton.setOnClickListener {
-
             val email: String = binding.emailEditText.text.toString()
             val password: String = binding.passwordEditText.text.toString()
             val passwordCheck: String = binding.passwordCheckEditText.text.toString()
             val name: String = binding.nameEditText.text.toString()
             val phone = binding.PhoneEditText.text.toString()
-            //uid는 회원가입완료 후 생성됨. 일단은 임시로 ..!
+
             var customer = Customer(email, password, name, phone, null)
-            viewModel.email = binding.emailEditText.text.toString()
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.duplicateCheck().join()
-                if (viewModel.isAvailable.value == true) {
-                    launch(Dispatchers.Main) {
-                        //사용 가능함
-                        emailValidCorrect()
-                        if(password(password)&&passwordEqual(passwordCheck)){
-                            createAccount(customer)
-                        }
-                    }
-                } else {
-                    launch(Dispatchers.Main) {
-                        //이미 사용하고 있음
-                        emailValidWrong()
-
-                    }
-                }
-            }
-            /*if (checkEmail()) {
-                // 사용가능 이메일
-                binding.emailValid.visibility = View.VISIBLE
-                binding.emailValid.setTextColor(Color.parseColor("#000000"))
-                binding.emailValid.setText(R.string.join_email_available_info)
-
-                if(password(password)&&passwordEqual(passwordCheck)){
+            if (isUniqueEmail) {
+                if (password(password) && passwordEqual(passwordCheck)) {
                     createAccount(customer)
                 }
             } else {
-
-                // 이미 사용중인 이메일입니다.
-                binding.emailValid.visibility = View.VISIBLE
-                binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
-                binding.emailValid.setText(R.string.join_email_duplicate_info)
-            }*/
-
-
+                AlertDialog.Builder(requireContext())
+                    .setMessage("먼저 이메일 중복 검사를 수행해주세요")
+                    .setPositiveButton("확인", null)
+                    .create()
+                    .show()
+            }
         }
         return binding.root
     }
@@ -170,7 +138,9 @@ class JoinFragment : Fragment() {
     //이메일 변경될 때 마다 인식
     private val emailChangeWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-        override fun afterTextChanged(s: Editable?) {}
+        override fun afterTextChanged(s: Editable?) {
+            isUniqueEmail = false
+        }
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             emailValidCheck()
         }
@@ -208,15 +178,16 @@ class JoinFragment : Fragment() {
     // 패스워드 체크 제한
     private fun password(password: CharSequence): Boolean {
         val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
-        if (Pattern.matches(pwPattern, password)) {
+
+        return if (Pattern.matches(pwPattern, password)) {
             binding.passwordValid.visibility = View.GONE
-            return true
+            true
         } else {
             // 비밀번호 형식 맞지 않을떄
             binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
             binding.passwordValid.visibility = View.VISIBLE
             binding.passwordValid.setText(R.string.password_form_info)
-            return false
+            false
         }
     }
 
@@ -277,22 +248,13 @@ class JoinFragment : Fragment() {
                 binding.emailValid.visibility = View.GONE
                 emailCheckButton.isEnabled = true
                 return true
-
             }
-
         }
     }
 
 
-    fun checkEmail() = CoroutineScope(Dispatchers.IO).launch {
-        viewModel.email = binding.emailEditText.text.toString()
-        viewModel.duplicateCheck().join()
-        viewModel.isAvailable.value == true
-    }
-
-
     //emailValid 관련 텍스트
-    fun emailValidWrong() {
+    private fun emailValidWrong() {
         // 이미 사용중인 이메일입니다.
         binding.emailValid.visibility = View.VISIBLE
         binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
@@ -301,11 +263,12 @@ class JoinFragment : Fragment() {
 
     }
 
-    fun emailValidCorrect() {
+    private fun emailValidCorrect() {
         // 사용가능 이메일
         binding.emailValid.visibility = View.VISIBLE
         binding.emailValid.setTextColor(Color.parseColor("#000000"))
         binding.emailValid.setText(R.string.join_email_available_info)
+        isUniqueEmail = true
     }
 
     //회원가입

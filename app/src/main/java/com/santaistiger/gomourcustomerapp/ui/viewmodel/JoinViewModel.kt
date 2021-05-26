@@ -20,10 +20,11 @@ class JoinViewModel: ViewModel() {
     var email = String()
     var password = String()
     val joinInfo = MutableLiveData<AuthResult>()
-    val isAvailable = MutableLiveData<Boolean>()
+
     fun join() =
         viewModelScope.launch { joinInfo.value = repository.join(auth!!, email, password) }
 
-    fun duplicateCheck() = viewModelScope.launch {
-        isAvailable.value = repository.checkJoinable(email) }
+    suspend fun duplicateCheck(): Boolean {
+        return repository.checkJoinable(email)
+    }
 }
