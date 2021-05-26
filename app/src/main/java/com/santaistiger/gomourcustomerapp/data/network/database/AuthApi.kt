@@ -36,10 +36,6 @@ object AuthApi {
         return authResponse
     }
 
-
-    fun login(email:String, password:String){
-        Firebase.auth.signInWithEmailAndPassword(email,password)
-    }
     fun writeAuthCustomer(email:String,password: String){
         Firebase.auth.createUserWithEmailAndPassword(email, password)
     }

@@ -109,7 +109,7 @@ class JoinFragment : Fragment() {
                 }
             } else {
                 AlertDialog.Builder(requireContext())
-                    .setMessage("먼저 이메일 중복 검사를 수행해주세요")
+                    .setMessage(R.string.join_email_check_info)
                     .setPositiveButton("확인", null)
                     .create()
                     .show()

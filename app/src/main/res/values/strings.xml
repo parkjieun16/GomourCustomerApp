@@ -46,6 +46,7 @@
     <string name = "join_email_available_info">사용 가능한 이메일입니다.</string>
     <string name = "join_email_form_info">이메일 형식이 아닙니다.</string>
     <string name = "join_fail_info">회원가입에 실패하였습니다.</string>
+    <string name ="join_email_check_info">이메일 중복 검사를 수행하세요.</string>
 
     <!-- 회원가입 및 회원정보 관련 resource -->
     <string name = "password_available_info">사용 가능한 비밀번호입니다.</string>
