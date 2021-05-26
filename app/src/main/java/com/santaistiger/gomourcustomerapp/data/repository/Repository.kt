@@ -3,6 +3,7 @@ package com.santaistiger.gomourcustomerapp.data.repository
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
@@ -15,9 +16,18 @@ interface Repository {
     suspend fun searchPlace(placeName: String, curMapPos: MapPoint.GeoCoordinate): List<Place>
     suspend fun readOrderDetail(orderId: String): Order?
     suspend fun readDeliveryManPhone(deliveryManUid: String): String?
-    suspend fun login(firebaseAuth: FirebaseAuth, email:String, password:String): AuthResult?
+    suspend fun readCustomerInfo(customerUid:String): Customer?
+    fun updateAuthPassword(password:String)
+    fun updateFireStorePassword(customerUid: String,password:String)
+    fun updatePhone(customerUid: String,phone:String)
     fun writeOrderRequest(orderRequest: OrderRequest)
+    fun deleteAuthCustomer()
+    fun deleteFireStoreCustomer(customerUid: String)
+    fun writeFireStoreCustomer(customer:Customer)
+    fun writeAuthCustomer(email:String,password: String)
+    fun login(email: String,password: String):Boolean
     fun getUid(): String
+
 
 
 }

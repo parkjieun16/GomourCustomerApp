@@ -2,6 +2,9 @@ package com.santaistiger.gomourcustomerapp.data.repository
 
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
+import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
@@ -65,16 +68,58 @@ object RepositoryImpl : Repository {
         RealtimeApi.writeRequest(key, orderRequest)
     }
 
+    override fun deleteAuthCustomer() {
+        AuthApi.deleteAuthCustomer()
+    }
+
+    override fun deleteFireStoreCustomer(customerUid: String) {
+        FireStoreApi.deleteFireStoreCustomer(customerUid)
+    }
+
+    override fun writeFireStoreCustomer(customer: Customer) {
+        FireStoreApi.writeFireStoreCustomer(customer)
+    }
+
+    override fun writeAuthCustomer(email: String, password: String) {
+        AuthApi.writeAuthCustomer(email,password)
+    }
+
     override suspend fun readDeliveryManPhone(deliveryManUid: String): String? {
         val response = FireStoreApi.getDeliveryMan(deliveryManUid)
         val deliveryMan = response.deliveryMan
         return deliveryMan?.phone
     }
 
-    override suspend fun login(firebaseAuth: FirebaseAuth, email: String, password: String): AuthResult? {
-        val response = AuthApi.login(firebaseAuth,email,password)
-        return response.authResult
+    override suspend fun readCustomerInfo(customerUid: String): Customer? {
+        val response = FireStoreApi.getCustomer(customerUid)
+        val customer = response.customer
+        return customer
+    }
+
+    override fun login(email: String, password: String):Boolean {
+        AuthApi.login(email, password)
+        if(Firebase.auth.currentUser==null){
+            return false
+        }
+        else{
+            return true
+        }
+
+    }
+
+    override fun updateFireStorePassword(customerUid: String, password: String){
+        FireStoreApi.updateFireStorePassword(customerUid,password)
+    }
+
+    override fun updateAuthPassword(password: String) {
+        AuthApi.updateAuthPassword(password)
+    }
+
+    override fun updatePhone(customerUid: String, phone: String) {
+        FireStoreApi.updatePhone(customerUid, phone)
     }
 
     override fun getUid(): String = AuthApi.readUid()?:String()
+
+
 }

@@ -1,5 +1,7 @@
 package com.santaistiger.gomourcustomerapp.ui.view
-
+/**
+ * Created by Jangeunhye
+ */
 import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
@@ -31,15 +33,11 @@ import kotlinx.coroutines.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 
-/**
- *
- */
 class LoginFragment : Fragment() {
 
     private var auth: FirebaseAuth? = null
     private lateinit var binding: FragmentLoginBinding
     private lateinit var viewModel: LoginViewModel
-    private var repository:Repository = RepositoryImpl
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -52,25 +50,14 @@ class LoginFragment : Fragment() {
         binding = DataBindingUtil.inflate<FragmentLoginBinding>(inflater,R.layout.fragment_login,container,false)
         viewModel = ViewModelProvider(this).get(LoginViewModel::class.java)
 
-        viewModel.loginInfo.observe(viewLifecycleOwner, Observer { loginInfo ->
-            if (loginInfo != null) {
-                findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
-            } else {
-                alertCancel()
-            }
-        })
-
         binding.emailLogin.addTextChangedListener(mTextWatcher) // 이메일 입력 감지
         binding.passwordLogin.addTextChangedListener(mTextWatcher) // 패스워드 입력 감지
 
         // 로그인
         binding.loginButton.setOnClickListener{
-            viewModel.email = binding.emailLogin.text.toString()
-            viewModel.password = binding.passwordLogin.text.toString()
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.login().join()
-                (requireActivity() as BaseActivity).setNavigationDrawerHeader()
-            }
+            val email = binding.emailLogin.text.toString()
+            val password = binding.passwordLogin.text.toString()
+            signIn(email,password)
         }
 
         //회원가입 페이지로 이동

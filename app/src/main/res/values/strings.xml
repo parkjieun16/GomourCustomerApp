@@ -62,8 +62,8 @@
     <string name="withdrawal_dialog">정말 탈퇴하시겠습니까?</string>
     <string name="withdrawal_yes">네</string>
     <string name ="withdrawal_no">아니오</string>
-    <string name="modify_password_success">비밀번호 변경 성공</string>
-    <string name="modify_password_fail">비밀번호 변경 실패</string>
+    <string name="modify_success">회원정보 변경 성공</string>
+    <string name="modify_fail">회원정보 변경 실패</string>
     <string name="withdrawal_fail">탈퇴 실패</string>
     <string name="withdrawal_success">탈퇴 성공</string>
 

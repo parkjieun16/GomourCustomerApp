@@ -1,5 +1,7 @@
 package com.santaistiger.gomourcustomerapp.ui.view
-
+/**
+ * Created by Jangeunhye
+ */
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -23,6 +25,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Customer
+import com.santaistiger.gomourcustomerapp.data.repository.Repository
+import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentJoinBinding
 import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.JoinViewModel
@@ -35,6 +39,7 @@ class JoinFragment : Fragment() {
     private var auth: FirebaseAuth? = null
     private lateinit var binding: FragmentJoinBinding
     private lateinit var viewModel: JoinViewModel
+    private val repository:Repository = RepositoryImpl
     val db = Firebase.firestore
 
 
@@ -76,17 +81,12 @@ class JoinFragment : Fragment() {
             checkEmail(object : EmailCallback {
                 override fun isEmailExist(exist: Boolean) {
                     if (exist) {
-                        // 이미 사용중인 이메일
-                        binding.emailValid.visibility = View.VISIBLE
-                        binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
-                        binding.emailValid.setText(R.string.join_email_duplicate_info)
+                        emailValidWrong()
 
 
                     } else {
                         // 사용가능한 이메일
-                        binding.emailValid.visibility = View.VISIBLE
-                        binding.emailValid.setTextColor(Color.parseColor("#000000"))
-                        binding.emailValid.setText(R.string.join_email_available_info)
+                        emailValidCorrect()
 
                     }
                 }
@@ -102,6 +102,7 @@ class JoinFragment : Fragment() {
                 0
             )
 
+
             val email: String = binding.emailEditText.text.toString()
             val password: String = binding.passwordEditText.text.toString()
             val passwordCheck: String = binding.passwordCheckEditText.text.toString()
@@ -116,18 +117,12 @@ class JoinFragment : Fragment() {
                 checkEmail(object : EmailCallback {
                     override fun isEmailExist(exist: Boolean) {
                         if (exist) {
-                            // 이미 사용중인 이메일입니다.
-                            binding.emailValid.visibility = View.VISIBLE
-                            binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
-                            binding.emailValid.setText(R.string.join_email_duplicate_info)
+                            emailValidWrong()
                             Toast.makeText(context, R.string.confirm_fail, Toast.LENGTH_LONG).show()
                         } else {
-                            // 사용가능 이메일
-                            binding.emailValid.visibility = View.VISIBLE
-                            binding.emailValid.setTextColor(Color.parseColor("#000000"))
-                            binding.emailValid.setText(R.string.join_email_available_info)
-                            if (passwordCheck(passwordCheck) && password(password)) {
-                                createAccount(customer, passwordCheck)
+                            emailValidCorrect()
+                            if (password(password) && passwordEqual(passwordCheck)) {
+                                createAccount(customer)
                             }
                         }
                     }
@@ -136,11 +131,7 @@ class JoinFragment : Fragment() {
             else{
                 Toast.makeText(context,R.string.confirm_fail,Toast.LENGTH_SHORT).show()
             }
-
-
-
         }
-
         return binding.root
     }
 
@@ -194,29 +185,16 @@ class JoinFragment : Fragment() {
 
         override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
             if (s != null) {
-                passwordCheck(s)
+                passwordEqual(s)
             }
         }
     }
 
-    // 패스워드 제한
+    // 패스워드 체크 제한
     private fun password(password: CharSequence): Boolean {
-        val passwordCheck = binding.passwordCheckEditText.text.toString()
         val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
         if (Pattern.matches(pwPattern, password)) {
-            if (password == passwordCheck) {
-                // 사용할 수 있는 비밀번호 입니다.
-                binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.setTextColor(Color.parseColor("#000000"))
-                binding.passwordValid.setText(R.string.password_available_info)
-            }
-
-            else {
-                // 비밀번호가 같지 않을 때
-                binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
-                binding.passwordValid.setText(R.string.password_different_info)
-            }
+            binding.passwordValid.visibility = View.GONE
             return true
         }
         else {
@@ -228,29 +206,18 @@ class JoinFragment : Fragment() {
         }
     }
 
-
-    //패스워드 체크 제한 확인
-    private fun passwordCheck(s: CharSequence): Boolean {
+    private fun passwordEqual(passwordCheck: CharSequence):Boolean{
         val password = binding.passwordEditText.text.toString()
-        val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
-        if (password == s.toString()) {
-            if (Pattern.matches(pwPattern, password)) {
-                // 사용할 수 있는 비밀번호 입니다.
-                binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.setTextColor(Color.parseColor("#000000"))
-                binding.passwordValid.setText(R.string.password_available_info)
-                return true
-            } else {
-                // 비밀번호 형식 맞지 않을떄
-                binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
-                binding.passwordValid.visibility = View.VISIBLE
-                binding.passwordValid.setText(R.string.password_form_info)
-                return false
-            }
-        } else {
-            // 비밀번호가 같지 않을 때
+        if(password == passwordCheck.toString()){
+            binding.passwordValid.setTextColor(Color.parseColor("#000000"))
             binding.passwordValid.visibility = View.VISIBLE
+            binding.passwordValid.setText(R.string.password_available_info)
+            return true
+        }
+        else{
+            // 비밀번호 같지 않을 때
             binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
+            binding.passwordValid.visibility = View.VISIBLE
             binding.passwordValid.setText(R.string.password_different_info)
             return false
         }
@@ -325,39 +292,50 @@ class JoinFragment : Fragment() {
             }
     }
 
+    //emailValid 관련 텍스트
+    fun emailValidWrong(){
+        // 이미 사용중인 이메일입니다.
+        binding.emailValid.visibility = View.VISIBLE
+        binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
+        binding.emailValid.setText(R.string.join_email_duplicate_info)
+        Toast.makeText(context, R.string.confirm_fail, Toast.LENGTH_LONG).show()
+
+    }
+
+    fun emailValidCorrect(){
+        // 사용가능 이메일
+        binding.emailValid.visibility = View.VISIBLE
+        binding.emailValid.setTextColor(Color.parseColor("#000000"))
+        binding.emailValid.setText(R.string.join_email_available_info)
+    }
 
     //회원가입
-    private fun createAccount(customer: Customer, passwordCheck: String) {
+    private fun createAccount(customer: Customer) {
         auth?.createUserWithEmailAndPassword(customer.email, customer.password)
             ?.addOnCompleteListener() { task ->
                 if (task.isSuccessful) {
-                    Log.d("TEST", "createUserWithEmail: success")
-                    val user = auth!!.currentUser
-                    customer.uid = user.uid
-                    // Add a new document with a generated ID
-                    db.collection("customer")
-                        .document(customer.uid!!).set(customer)
-                        .addOnSuccessListener { documentReference ->
+                    customer.uid = task.result?.user?.uid
+                    Log.d("TESTTEST", customer.uid!!)
+                    repository.writeFireStoreCustomer(customer)
 
-                            // 자동로그인에 저장
-                            val auto = this.requireActivity()
-                                .getSharedPreferences("auto", Context.MODE_PRIVATE)
-                            val autoLogin = auto.edit()
-                            autoLogin.putString("email", customer.email)
-                            autoLogin.putString("password", customer.password)
-                            autoLogin.commit()
+                    // 자동로그인에 저장
+                    val auto = this.requireActivity()
+                        .getSharedPreferences("auto", Context.MODE_PRIVATE)
+                    val autoLogin = auto.edit()
+                    autoLogin.putString("email", customer.email)
+                    autoLogin.putString("password", customer.password)
+                    autoLogin.commit()
 
-                            // 회원가입 완료 후 주문하기 페이지로 이동
-                            findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
-                            (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w("TEST", "Error adding document", e)
-                        }
-                } else {
-                    Log.w("TEST", "createUserWithEmail: failure", task.exception)
+                    // 회원가입 완료 후 주문하기 페이지로 이동
+                    findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
+                    (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
+
                 }
+
             }
+
+
+
 
     }
 
