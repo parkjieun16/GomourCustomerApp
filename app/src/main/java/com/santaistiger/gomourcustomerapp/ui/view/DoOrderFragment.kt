@@ -73,6 +73,7 @@ class DoOrderFragment : Fragment() {
 
         // 배달료 창의 ↻ 버튼 클릭 시 배달료를 갱신하도록 설정
         binding.cvPrice.binding.ibRefresh.setOnClickListener { viewModel.getDeliveryCharge() }
+
     }
 
     /**

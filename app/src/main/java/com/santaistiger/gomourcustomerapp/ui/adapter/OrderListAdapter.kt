@@ -1,11 +1,16 @@
 package com.santaistiger.gomourcustomerapp.ui.adapter
 
+/**
+ * Created by Jieun Park.
+ */
+
 import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.Status
 import com.santaistiger.gomourcustomerapp.databinding.ItemOrderInfoBinding
@@ -17,18 +22,18 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 class OrderListAdapter(val context: Context?) : RecyclerView.Adapter<OrderListAdapter.ViewHolder>() {
-    var orders = mutableListOf<Order>()
+    var orderList = mutableListOf<Order>()
 
-    override fun getItemCount(): Int = orders.size
+    override fun getItemCount(): Int = orderList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder.from(parent)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val orderId = orders[position].orderId.toString()
+        val orderId = orderList[position].orderId.toString()
         if (context != null) {
-            holder.bind(orders[position], context)
+            holder.bind(orderList[position], context)
         }
         holder.itemView.setOnClickListener {
             // 아이템 클릭하면 해당 아이템의 주문 번호를 넘겨주며 주문 상세 화면으로 이동
@@ -47,6 +52,7 @@ class OrderListAdapter(val context: Context?) : RecyclerView.Adapter<OrderListAd
 
     class ViewHolder private constructor(val binding: ItemOrderInfoBinding) : RecyclerView.ViewHolder(binding.root) {
 
+        // 각 아이템에 주문 정보를 넣어준다.
         @SuppressLint("SetTextI18n")
         fun bind(order: Order, context: Context) {
             // 주문 날짜
@@ -64,22 +70,16 @@ class OrderListAdapter(val context: Context?) : RecyclerView.Adapter<OrderListAd
             // 가게
             binding.stores.removeAllViewsInLayout()
             if (order.stores!!.size >= 1) {
-                for (i in 0 until order.stores.size) {
+                for (store in order.stores) {
                     val view = StoreNameView(context)
-                    view.store_num_string.text = "가게 " + (i + 1) + " : "
-                    view.store_name_string.text = order.stores[i].place.placeName
+                    view.list_store_name_string.text = store.place.placeName
                     binding.stores.addView(view)
                 }
             }
 
             // 도착지
-            binding.destinationString.store_num_string.text = "도착지 : "
-            binding.destinationString.store_name_string.text = order.destination?.placeName
-
-            // 배송 메시지
-            if (order.message != null) {
-                binding.orderMessageString.setText(order.message)
-            }
+            binding.listDestination.list_store_img.setImageResource(R.drawable.ic_destination)
+            binding.listDestination.list_store_name_string.text = order.destination?.placeName
 
             // 금액
             var totalItemPrice = 0
@@ -102,7 +102,7 @@ class OrderListAdapter(val context: Context?) : RecyclerView.Adapter<OrderListAd
 
             // 아직 모든 장소에서 픽업이 완료되지 않은 경우
             else {
-                binding.orderPriceString.setText("상품 가격 + " + decimalformat.format(order.deliveryCharge) + " (배달료) 원")
+                binding.orderPriceString.setText("@ + " + decimalformat.format(order.deliveryCharge) + " (배달료) 원")
             }
         }
 

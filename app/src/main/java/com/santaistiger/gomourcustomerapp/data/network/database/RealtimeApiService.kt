@@ -42,54 +42,23 @@ object RealtimeApi {
         return response
     }
 
-
-    // realtime database에 현재 주문이 존재하는지 확인
+    // realtime database의 order_request 테이블에서 인자로 받은 주문 번호에 해당하는 주문 정보를 받아와 해당 값을 반환한다.
     fun readCurrentOrder(orderId: String): Query {
         val currentOrder = orderRequestTable.orderByKey().equalTo(orderId)
 
         return currentOrder
     }
 
-    // realtime database에서 주문 삭제
+    // realtime database에서 인자로 받은 주문 번호에 해당하는 주문 정보를 삭제한다.
     fun deleteCurrentOrder(orderId: String) {
         orderRequestTable.child(orderId).removeValue()
     }
 
-    // 소비자의 주문 목록 받아오기
-    fun readOrderList(customerUid: String, adapter: OrderListAdapter, textView: TextView) {
-        val orders = mutableListOf<Order>()
-        val ordersReference = orderTable.orderByChild("customerUid").equalTo(customerUid)
+    // realtime database의 order 테이블에 있는 소비자의 주문 목록을 받아와 해당 값을 반환한다.
+    fun readOrderList(customerUid: String): Query {
+        val orderList = orderTable.orderByChild("customerUid").equalTo(customerUid)
 
-        val ordersListener = object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                orders.clear()
-                adapter.orders.clear()
-
-                for (messageSnapshot in dataSnapshot.children) {
-                    val order: Order? = messageSnapshot.getValue(Order::class.java)
-                    if (order != null) {
-                        orders.add(order)
-                    }
-                }
-
-                // 날짜 역순으로 재배열 후 adapter의 orders에 할당
-                adapter.orders = orders.asReversed()
-                Log.d(TAG, "orders was changed")
-                adapter.notifyDataSetChanged()
-
-                // 주문 내역이 없을 경우 안내 문구 표시
-                if (adapter.orders.count() == 0) {
-                    textView.visibility = View.VISIBLE
-                } else {
-                    textView.visibility = View.GONE
-                }
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                Log.w(TAG, "loadPost:onCancelled", databaseError.toException())
-            }
-        }
-        ordersReference.addValueEventListener(ordersListener)
+        return orderList
     }
 
 

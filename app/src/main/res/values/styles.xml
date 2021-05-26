@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
+    <!-- 툴바 제목 스타일 리소스 -->
+    <style name="je_toolbar_title">
+        <item name="android:textSize">18dp</item>
+        <item name="android:fontFamily">@font/nsbold</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
+    <!-- 네비게이션 드로어 텍스트 스타일 리소스 -->
+    <style name="je_nav_drawer_text" parent="android:Widget.TextView">
+        <item name="android:fontFamily">@font/nsregular</item>
+        <item name="android:textSize">15dp</item>
+    </style>
 
     <!-- 금실쓰 리소스 -->
     <style name="gs_title">

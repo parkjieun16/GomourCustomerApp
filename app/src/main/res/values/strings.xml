@@ -49,12 +49,10 @@
 
     <!-- 기사 매칭 화면 관련 resource -->
     <string name="matching_wait_match_fragment">기사 매칭 중입니다...</string>
+    <string name="cancel_wait_match_fragment">주\t\t\t\t\t문\t\t\t\t\t취\t\t\t\t\t소</string>
 
     <!-- 주문 목록 화면 관련 resource -->
     <string name="title_order_list_fragment">주문 목록</string>
-    <string name="order_time_item_order_info">주문 시각</string>
-    <string name="delivery_status_item_order_info">배달 상태</string>
-    <string name="price_item_order_info">금액</string>
     <string name="empty_order_list_fragment">주문 내역이 없습니다.</string>
 
     <!-- 네비게이션 드로어 관련 resource -->
@@ -63,5 +61,13 @@
     <string name="modify_user_info_navdrawer_menu">회원 정보 변경</string>
     <string name="logout_navdrawer_menu">로그아웃</string>
 
+    <!-- 툴바 관련 resource -->
+    <string name="toolbar_title_login">로그인</string>
+    <string name="toolbar_title_join">회원가입</string>
+    <string name="toolbar_title_modify_user_info">회원 정보 변경</string>
+    <string name="toolbar_title_do_order">주문하기</string>
+    <string name="toolbar_title_order_detail">주문 조회</string>
+    <string name="toolbar_title_order_list">주문 목록</string>
+    <string name="toolbar_title_search_place">장소 검색</string>
 
 </resources>
