@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat
 
 
 object BindingUtils {
-    private val numberFormat = NumberFormat.getInstance()
 
     @BindingAdapter("bind_do_store_list")
     @JvmStatic

@@ -28,6 +28,7 @@ import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentLoginBinding
 import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
+import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.LoginViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.coroutines.*
@@ -45,7 +46,9 @@ class LoginFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        setToolbar()
+        // 툴바 설정
+        (requireActivity() as BaseActivity).setToolbar(
+            requireContext(), false, null, false)
 
         auth = Firebase.auth
         binding = DataBindingUtil.inflate<FragmentLoginBinding>(
@@ -70,7 +73,7 @@ class LoginFragment : Fragment() {
                     (requireActivity() as BaseActivity).setNavigationDrawerHeader()
                 } else { // 로그인 실패 시
                     launch(Dispatchers.Main) {
-                        alertCancel(this@LoginFragment.requireContext())
+                        showAlertDialog(resources.getString(R.string.login_fail_dialog))
                     }
                 }
             }
@@ -83,13 +86,6 @@ class LoginFragment : Fragment() {
         }
 
         return binding.root
-    }
-
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.GONE    // 툴바 숨기기
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
-        }
     }
 
     // 빈칸 감지
@@ -113,7 +109,7 @@ class LoginFragment : Fragment() {
     private fun signIn(email: String, password: String) {
         // 단국이메일인 경우
         if (email.contains(R.string.dankook_domain.toString())) {
-            alertCancel(requireContext())
+            showAlertDialog(resources.getString(R.string.login_fail_dialog))
         } else {
             auth?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener() { task ->
@@ -135,18 +131,15 @@ class LoginFragment : Fragment() {
                 }
                 // 로그인 실패시
                 ?.addOnFailureListener {
-                    alertCancel(requireContext())
+                    showAlertDialog(resources.getString(R.string.login_fail_dialog))
                 }
         }
     }
 
-    private fun alertCancel(context: Context) {
-        AlertDialog.Builder(context)
-            .setMessage(R.string.login_fail_dialog)
-            .setPositiveButton(R.string.login_fail_ok, null)
-            .create()
-            .show()
+    private fun showAlertDialog(msg: String) {
+        RoundedAlertDialog()
+            .setMessage(msg)
+            .setPositiveButton(resources.getString(R.string.ok), null)
+            .show((requireActivity() as BaseActivity).supportFragmentManager, "rounded alert dialog")
     }
-
-
 }

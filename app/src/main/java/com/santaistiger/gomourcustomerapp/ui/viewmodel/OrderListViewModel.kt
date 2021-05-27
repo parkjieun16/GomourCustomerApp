@@ -1,5 +1,3 @@
-//mvvm
-
 package com.santaistiger.gomourcustomerapp.ui.viewmodel
 
 /**

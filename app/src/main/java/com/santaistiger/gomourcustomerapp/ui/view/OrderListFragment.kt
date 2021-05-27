@@ -1,5 +1,3 @@
-// mvvm
-
 package com.santaistiger.gomourcustomerapp.ui.view
 
 /**
@@ -22,6 +20,7 @@ import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentOrderListBinding
 import com.santaistiger.gomourcustomerapp.ui.adapter.OrderListAdapter
+import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.OrderListViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 
@@ -38,7 +37,9 @@ class OrderListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        setToolbar()
+        (requireActivity() as BaseActivity).setToolbar(
+            requireContext(), true, resources.getString(R.string.toolbar_title_order_list), true
+        )
 
         binding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_order_list, container, false
@@ -74,15 +75,4 @@ class OrderListFragment : Fragment() {
 
         return binding.root
     }
-
-    // 툴바 설정
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.VISIBLE     // 툴바 보이도록 설정
-            toolbar_title.setText(R.string.toolbar_title_order_list)    // 툴바 타이틀 변경
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)  // 스와이프 활성화
-        }
-    }
-
-
 }

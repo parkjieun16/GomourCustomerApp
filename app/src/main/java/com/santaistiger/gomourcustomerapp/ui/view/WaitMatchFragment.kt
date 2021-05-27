@@ -57,7 +57,8 @@ class WaitMatchFragment : Fragment() {
         binding.lifecycleOwner = viewLifecycleOwner
 
         // 툴바 설정
-        setToolbar()
+        (requireActivity() as BaseActivity).setToolbar(
+            requireContext(), false, null, false)
 
         // 로딩 gif 이미지 설정
         Glide.with(this).load(R.raw.wait_match_loading).into(binding.loadingImage)
@@ -88,14 +89,6 @@ class WaitMatchFragment : Fragment() {
         })
 
         return binding.root
-    }
-
-    // 툴바 설정
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.GONE    // 툴바 숨기기
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
-        }
     }
 
     /**

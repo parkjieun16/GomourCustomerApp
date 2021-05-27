@@ -3,7 +3,6 @@ package com.santaistiger.gomourcustomerapp.ui.view
 /**
  * Created by Jangeunhye
  */
-import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -28,6 +27,7 @@ import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentJoinBinding
 import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
+import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.JoinViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.android.synthetic.main.fragment_join.*
@@ -52,7 +52,9 @@ class JoinFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        setToolbar()
+        // 툴바 설정
+        (requireActivity() as BaseActivity).setToolbar(
+            requireContext(), false, null, false)
 
         auth = Firebase.auth
         binding = DataBindingUtil.inflate<FragmentJoinBinding>(
@@ -108,23 +110,12 @@ class JoinFragment : Fragment() {
                     createAccount(customer)
                 }
             } else {
-                AlertDialog.Builder(requireContext())
-                    .setMessage(R.string.join_email_check_info)
-                    .setPositiveButton("확인", null)
-                    .create()
-                    .show()
+                showAlertDialog(resources.getString(R.string.join_email_check_info))
             }
         }
         return binding.root
     }
 
-
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.GONE    // 툴바 숨기기
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
-        }
-    }
 
     // 모든 영역이 채워져있는지 있는지 감지
     private val mTextWatcher: TextWatcher = object : TextWatcher {
@@ -297,5 +288,15 @@ class JoinFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showAlertDialog(msg: String) {
+        RoundedAlertDialog()
+            .setMessage(msg)
+            .setPositiveButton(resources.getString(R.string.ok), null)
+            .show(
+                (requireActivity() as BaseActivity).supportFragmentManager,
+                "rounded alert dialog"
+            )
     }
 }

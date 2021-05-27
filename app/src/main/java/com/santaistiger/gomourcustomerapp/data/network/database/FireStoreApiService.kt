@@ -39,7 +39,6 @@ object FireStoreApi {
             response.exception = e
         }
 
-        Log.i(com.santaistiger.gomourcustomerapp.data.repository.TAG, response.toString())
         return response
     }
 

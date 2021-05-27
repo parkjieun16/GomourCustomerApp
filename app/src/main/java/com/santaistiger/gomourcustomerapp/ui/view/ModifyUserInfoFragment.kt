@@ -32,6 +32,7 @@ import com.santaistiger.gomourcustomerapp.data.repository.Repository
 import com.santaistiger.gomourcustomerapp.data.repository.RepositoryImpl
 import com.santaistiger.gomourcustomerapp.databinding.FragmentModifyUserInfoBinding
 import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
+import com.santaistiger.gomourcustomerapp.ui.customview.RoundedAlertDialog
 import com.santaistiger.gomourcustomerapp.ui.viewmodel.ModifyUserInfoViewModel
 import kotlinx.android.synthetic.main.activity_base.*
 import kotlinx.coroutines.CoroutineScope
@@ -53,7 +54,9 @@ class ModifyUserInfoFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        setToolbar()
+        // 툴바 설정
+        (requireActivity() as BaseActivity).setToolbar(
+            requireContext(), true, resources.getString(R.string.toolbar_title_modify_user_info), true)
 
         auth = Firebase.auth
         binding = DataBindingUtil.inflate<FragmentModifyUserInfoBinding>(inflater,R.layout.fragment_modify_user_info,container,false)
@@ -67,8 +70,9 @@ class ModifyUserInfoFragment : Fragment() {
             binding.apply {
 
                 //비어 있지 않을 때 비밀번호 감지하여 판단
-                passwordCheckModify.addTextChangedListener(passwordCheckChangeWatcher)
                 passwordModify.addTextChangedListener(passwordChangeWatcher)
+                passwordCheckModify.addTextChangedListener(passwordCheckChangeWatcher)
+
 
                 // 비밀번호 입력창 누르면 사라져
                 passwordModify.setOnFocusChangeListener { v, hasFocus ->
@@ -101,22 +105,12 @@ class ModifyUserInfoFragment : Fragment() {
 
             //탈퇴 버튼 클릭 시
             binding.withdrawalButton.setOnClickListener {
-                alertCancel()
+                showAlertDialog(resources.getString(R.string.withdrawal_dialog))
             }
 
 
         return binding.root
     }
-
-
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.VISIBLE     // 툴바 보이도록 설정
-            toolbar_title.setText(R.string.toolbar_title_modify_user_info)     // 툴바 타이틀 변경
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)  // 스와이프 활성화
-        }
-    }
-
 
     //비밀번호 변경될때마다 인식
     private val passwordChangeWatcher = object : TextWatcher {
@@ -209,16 +203,12 @@ class ModifyUserInfoFragment : Fragment() {
 
 
 
-    fun alertCancel() {
-        AlertDialog.Builder(requireActivity())
-            .setMessage(R.string.withdrawal_dialog)
-            .setPositiveButton(R.string.withdrawal_yes) { _, _ ->
-                //탈퇴
-                withdrawal()
-            }
-            .setNegativeButton(R.string.withdrawal_no, null)
-            .create()
-            .show()
+    private fun showAlertDialog(msg: String) {
+        RoundedAlertDialog()
+            .setMessage(msg)
+            .setPositiveButton(resources.getString(R.string.ok)) { withdrawal() }
+            .setNegativeButton(resources.getString(R.string.cancel), null)
+            .show((requireActivity() as BaseActivity).supportFragmentManager, "rounded alert dialog")
     }
 
     //탈퇴

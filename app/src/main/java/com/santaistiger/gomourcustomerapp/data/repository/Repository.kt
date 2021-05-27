@@ -2,20 +2,11 @@ package com.santaistiger.gomourcustomerapp.data.repository
 
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
 import com.santaistiger.gomourcustomerapp.data.model.Customer
 import com.santaistiger.gomourcustomerapp.data.model.Order
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
-import com.santaistiger.gomourcustomerapp.data.network.database.AuthResponse
-import com.santaistiger.gomourcustomerapp.data.network.database.CustomerResponse
-import android.widget.TextView
-import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.Query
-import com.santaistiger.gomourcustomerapp.data.model.Order
-import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
-import com.santaistiger.gomourcustomerapp.data.model.Place
-import com.santaistiger.gomourcustomerapp.ui.adapter.OrderListAdapter
 import net.daum.mf.map.api.MapPoint
 
 interface Repository {
@@ -37,9 +28,7 @@ interface Repository {
     fun writeFireStoreCustomer(customer:Customer)
     fun writeAuthCustomer(email:String,password: String)
     fun getUid(): String
-    suspend fun writeOrderRequest(orderRequest: OrderRequest)
     suspend fun readDeliveryManAccount(deliveryManUid: String): String?
-    fun getUid(): String
     fun readCurrentOrder(orderId: String): Query
     fun deleteCurrentOrder(orderId: String)
     fun readOrderList(customerUid: String): Query

@@ -33,17 +33,12 @@ class LoadingFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        setToolbar()
+        // 툴바 설정
+        (requireActivity() as BaseActivity).setToolbar(
+            requireContext(), false, null, false)
 
         startLoading()
         return inflater.inflate(R.layout.fragment_loading, container, false)
-    }
-
-    private fun setToolbar() {
-        requireActivity().apply {
-            toolbar.visibility = View.GONE	// 툴바 숨기기
-            drawer_layout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED) // 스와이프 비활성화
-        }
     }
 
     // 1.5초 대기

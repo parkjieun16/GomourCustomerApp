@@ -71,7 +71,7 @@ object RepositoryImpl : Repository {
      * orderRequest를 받아서 Firebase Realtime Database의 order_reqeust 테이블에 write
      * 이때, data key는 orderRequest의 orderId를 사용
      */
-    override suspend fun writeOrderRequest(orderRequest: OrderRequest) {
+    override fun writeOrderRequest(orderRequest: OrderRequest) {
         val key = orderRequest.orderId
         RealtimeApi.writeRequest(key, orderRequest)
     }
@@ -149,8 +149,6 @@ object RepositoryImpl : Repository {
             "${accountInfo?.bank} ${accountInfo?.account} $name"
         }
     }
-
-    override fun getUid(): String = AuthApi.readUid()?:String()
 
     // realtime database의 order_request 테이블에서 인자로 받은 주문 번호에 해당하는 주문 정보를 받아와 해당 값을 반환한다.
     override fun readCurrentOrder(orderId: String): Query {
