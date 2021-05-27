@@ -43,7 +43,6 @@ class JoinFragment : Fragment() {
     private lateinit var binding: FragmentJoinBinding
     private lateinit var viewModel: JoinViewModel
     private val repository: Repository = RepositoryImpl
-    val db = Firebase.firestore
     var isUniqueEmail = false
 
 

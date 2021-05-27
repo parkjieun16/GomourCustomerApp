@@ -62,23 +62,7 @@ class LoginFragment : Fragment() {
         binding.emailLogin.addTextChangedListener(mTextWatcher) // 이메일 입력 감지
         binding.passwordLogin.addTextChangedListener(mTextWatcher) // 패스워드 입력 감지
 
-        // 로그인
-        binding.loginButton.setOnClickListener {
-            viewModel.email = binding.emailLogin.text.toString()
-            viewModel.password = binding.passwordLogin.text.toString()
-            CoroutineScope(Dispatchers.IO).launch {
-                viewModel.login().join()
-                if (viewModel.loginInfo.value != null) { // 로그인 성공 시
-                    findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
-                    (requireActivity() as BaseActivity).setNavigationDrawerHeader()
-                } else { // 로그인 실패 시
-                    launch(Dispatchers.Main) {
-                        showAlertDialog(resources.getString(R.string.login_fail_dialog))
-                    }
-                }
-            }
-
-        }
+        setLoginBtnClickListener()
 
         //회원가입 페이지로 이동
         binding.goSignUpPage.setOnClickListener {
@@ -86,6 +70,48 @@ class LoginFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    private fun setLoginBtnClickListener() {
+        binding.loginButton.setOnClickListener {
+            viewModel.email = binding.emailLogin.text.toString()
+            viewModel.password = binding.passwordLogin.text.toString()
+
+            // 단국대 이메일이 아니면 로그인
+            if (viewModel.email.contains(R.string.dankook_domain.toString())) {
+                showAlertDialog(resources.getString(R.string.login_fail_dialog))
+            } else {
+                login()
+            }
+        }
+    }
+
+    private fun login() {
+        CoroutineScope(Dispatchers.IO).launch {
+            viewModel.login().join()
+            if (viewModel.loginInfo.value != null) { // 로그인 성공 시
+                findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
+                (requireActivity() as BaseActivity).setNavigationDrawerHeader()
+
+                // 자동로그인을 위해 shared preference에 정보 저장
+                setSharedPreference()
+
+            } else { // 로그인 실패 시
+                launch(Dispatchers.Main) {
+                    showAlertDialog(resources.getString(R.string.login_fail_dialog))
+                }
+            }
+        }
+    }
+
+    private fun setSharedPreference() {
+        val auto = requireActivity()
+            .getSharedPreferences("auto", Context.MODE_PRIVATE)
+        val autoLogin = auto.edit()
+        autoLogin.putString("email", viewModel.email)
+        autoLogin.putString("password", viewModel.password)
+        autoLogin.commit()
+
     }
 
     // 빈칸 감지
@@ -103,37 +129,6 @@ class LoginFragment : Fragment() {
         val email = binding.emailLogin.text.toString()
         val password: String = binding.passwordLogin.text.toString()
         loginButton.isEnabled = !(email == "" || password == "")
-    }
-
-    // 로그인
-    private fun signIn(email: String, password: String) {
-        // 단국이메일인 경우
-        if (email.contains(R.string.dankook_domain.toString())) {
-            showAlertDialog(resources.getString(R.string.login_fail_dialog))
-        } else {
-            auth?.signInWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener() { task ->
-                    if (task.isSuccessful) {
-                        val user = auth!!.currentUser
-
-                        // 자동로그인을 위해 shared preference에 정보 저장
-                        val auto = this.requireActivity()
-                            .getSharedPreferences("auto", Context.MODE_PRIVATE)
-                        val autoLogin = auto.edit()
-                        autoLogin.putString("email", email)
-                        autoLogin.putString("password", password)
-                        autoLogin.commit()
-
-                        //로그인 후 주문하기 페이지로 이동
-                        findNavController().navigate(R.id.action_loginFragment_to_doOrderFragment)
-                        (activity as BaseActivity).setNavigationDrawerHeader()  // 네비게이션 드로어 헤더 설정
-                    }
-                }
-                // 로그인 실패시
-                ?.addOnFailureListener {
-                    showAlertDialog(resources.getString(R.string.login_fail_dialog))
-                }
-        }
     }
 
     private fun showAlertDialog(msg: String) {
