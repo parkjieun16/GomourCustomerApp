@@ -36,12 +36,13 @@
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_negative"
-                    android:layout_width="30dp"
+                    style="@style/gs_text_regular_14"
+                    android:layout_width="38dp"
                     android:layout_height="20dp"
-                    android:layout_marginRight="20dp"
+                    android:layout_marginEnd="20dp"
+                    android:textAlignment="textEnd"
                     android:textColor="@color/main"
-                    tools:text="취 소"
-                    style="@style/gs_text_regular_14" />
+                    tools:text="취 소" />
 
                 <androidx.appcompat.widget.AppCompatButton
                     android:id="@+id/btn_positive"
