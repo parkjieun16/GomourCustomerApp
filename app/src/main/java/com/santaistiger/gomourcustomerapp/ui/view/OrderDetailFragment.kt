@@ -70,6 +70,7 @@ class OrderDetailFragment : Fragment() {
 
 
         val orderId = OrderDetailFragmentArgs.fromBundle(requireArguments()).orderId
+
         viewModel = ViewModelProvider(this, OrderDetailViewModelFactory(orderId))
             .get(OrderDetailViewModel::class.java)
         binding.viewModel = viewModel
@@ -105,7 +106,6 @@ class OrderDetailFragment : Fragment() {
         )
         clipboard.setPrimaryClip(clip)
         Toast.makeText(context, resources.getString(R.string.message_copy_account), Toast.LENGTH_SHORT).show()
-
     }
 
     /** 카카오 지도 MapView를 생성한 후, POIITem 이벤트 리스너를 설정하고 지도의 중심점을 단국대학교로 이동 */
