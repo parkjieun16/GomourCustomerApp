@@ -3,16 +3,13 @@
  */
 package com.santaistiger.gomourcustomerapp.ui.viewmodel
 
-import android.app.Application
 import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
-import androidx.databinding.ObservableParcelable
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.model.Store
@@ -59,19 +56,18 @@ class DoOrderViewModel : ViewModel() {
 
     /** 주문하기 버튼 클릭 시 Order 객체 생성하고 데이터베이스 서버의 order_request 테이블에 write */
     fun onClickOrderBtn() {
-        viewModelScope.launch {
+        viewModelScope.launch { // 코루틴 수행
             try {
-                checkInput()
-                getDeliveryCharge().join()
-                createOrderRequest().let {
-                    repository.writeOrderRequest(it)
-                    orderRequest.value = it
+                checkInput()  // 정보 입력 검사
+                getDeliveryCharge().join() // 배달료 계산
+                createOrderRequest().let { newOrder ->
+                    repository.writeOrderRequest(newOrder) // 요청 정보를 DB서버에 전달
+                    orderRequest.value = newOrder
                 }
             } catch (e: NotEnteredException) {
                 exception.value = e
             }
         }
-
     }
 
     private fun checkInput() {
