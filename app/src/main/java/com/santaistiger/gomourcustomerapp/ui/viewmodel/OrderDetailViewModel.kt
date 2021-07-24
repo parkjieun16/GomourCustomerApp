@@ -23,6 +23,8 @@ class OrderDetailViewModel(val orderId: String) : ViewModel() {
         private const val TAG = "OrderDetailViewModel"
     }
 
+    // 생성자 함수의 인자로 넘어온 orderId를 이용하여 DB서버에서 해당 주문에
+    // 대한 정보를 받아오고 그 값을 LiveData의 값으로 설정한다.
     val order: MutableLiveData<Order> = liveData(Dispatchers.IO) {
         emit(repository.readOrderDetail(orderId))
     } as MutableLiveData<Order>

@@ -3,7 +3,6 @@
  */
 package com.santaistiger.gomourcustomerapp.ui.viewmodel
 
-import android.app.Application
 import android.util.Log
 import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
@@ -13,7 +12,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.OrderRequest
 import com.santaistiger.gomourcustomerapp.data.model.Place
 import com.santaistiger.gomourcustomerapp.data.model.Store

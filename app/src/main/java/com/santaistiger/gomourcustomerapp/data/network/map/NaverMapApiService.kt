@@ -30,9 +30,7 @@ private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .build()
 
-/**
- * A public interface that exposes the [getDirections] method
- */
+/** A public interface that exposes the [getDirections] method */
 interface NaverMapApiService {
 
     /**
@@ -48,9 +46,7 @@ interface NaverMapApiService {
     ): NaverMapProperty
 }
 
-/**
- * A public Api object that exposes the lazy-initialized Retrofit service
- */
+/** A public Api object that exposes the lazy-initialized Retrofit service */
 object NaverMapApi {
     val retrofitService : NaverMapApiService by lazy { retrofit.create(NaverMapApiService::class.java) }
 }

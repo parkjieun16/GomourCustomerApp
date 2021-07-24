@@ -29,9 +29,7 @@ private val retrofit = Retrofit.Builder()
     .build()
 
 
-/**
- * A public interface that exposes the [searchPlaces] method
- */
+/** A public interface that exposes the [searchPlaces] method */
 interface KakaoMapApiService {
 
     /**
@@ -49,9 +47,7 @@ interface KakaoMapApiService {
                              @Query("size") size: String = "15"): KakaoMapProperty
 }
 
-/**
- * A public Api object that exposes the lazy-initialized Retrofit service
- */
+/** A public Api object that exposes the lazy-initialized Retrofit service */
 object KakaoMapApi {
     val retrofitService : KakaoMapApiService by lazy { retrofit.create(KakaoMapApiService::class.java) }
 }
