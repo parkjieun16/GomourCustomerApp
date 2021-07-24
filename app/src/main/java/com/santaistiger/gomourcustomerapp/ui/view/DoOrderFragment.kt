@@ -13,6 +13,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.databinding.FragmentDoOrderBinding
 import com.santaistiger.gomourcustomerapp.ui.base.BaseActivity
@@ -22,7 +23,7 @@ import com.santaistiger.gomourcustomerapp.ui.viewmodel.DoOrderViewModel
 
 class DoOrderFragment : Fragment() {
     companion object {
-        private const val TAG = "DoOrderFragment"
+        private val TAG = this::class.java.canonicalName
         private const val MAX_SIZE = 3
     }
 
@@ -65,6 +66,9 @@ class DoOrderFragment : Fragment() {
     }
 
     private fun addClickListener() {
+        // 주문하기 버튼 클릭 시 입력창 검사하고 주문 생성하도록 설정
+        binding.btnDoOrder.setOnClickListener { onDoOrderBtnClick() }
+
         // 배달 장소 입력 창의 + 버튼 클릭 시 주문 장소 및 메뉴 입력창이 추가되도록 설정
         binding.cvDestination.binding.ibAddItem.setOnClickListener { appendStore() }
 
@@ -93,12 +97,15 @@ class DoOrderFragment : Fragment() {
 
     /** DoOrderViewModel의 exception에 값이 설정되면 경고 다이얼로그를 띄운다. */
     private fun addExceptionObserver() {
-        viewModel.exception.observe(viewLifecycleOwner, Observer { e ->
+        viewModel.exception.observe(viewLifecycleOwner) { e ->
             if (e != null) {
+                binding.ivLoading.visibility = View.GONE
+                binding.btnDoOrder.isClickable = true
                 showAlertDialog(e.message!!)
                 viewModel.doneExceptionProcess()
+                view
             }
-        })
+        }
     }
 
     private fun appendStore() {
@@ -121,5 +128,19 @@ class DoOrderFragment : Fragment() {
         findNavController().navigate(
             DoOrderFragmentDirections.actionDoOrderFragmentToSearchPlaceFragment()
         )
+    }
+
+    /** '주문하기' 버튼 클릭시 수행*/
+    private fun onDoOrderBtnClick() {
+        binding.btnDoOrder.isClickable = false
+        binding.ivLoading.apply {
+            visibility = View.VISIBLE
+            Glide.with(this)
+                .load(R.raw.wait_match_loading)
+                .into(this)
+            bringToFront()
+        }
+
+        viewModel.createOrder()
     }
 }

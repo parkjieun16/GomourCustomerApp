@@ -18,6 +18,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.ktx.Firebase
+import com.kakao.util.maps.helper.Utility
 import com.pedro.library.AutoPermissions
 import com.santaistiger.gomourcustomerapp.R
 import com.santaistiger.gomourcustomerapp.data.model.Customer
@@ -30,7 +31,7 @@ import java.util.*
 
 class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
     companion object {
-        private const val TAG = "BaseActivityLog"
+        private val TAG = BaseActivity::class.java.canonicalName
     }
 
     private lateinit var binding: ActivityBaseBinding
@@ -45,6 +46,7 @@ class BaseActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             false
         )
 
+        Log.d(TAG, "hash key: ${Utility.getKeyHash(this)}")
         setContentView(binding.root)
 
         // Auto permission

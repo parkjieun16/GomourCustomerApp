@@ -16,7 +16,7 @@
         android:layout_marginTop="0dp">
 
         <!-- 스크롤 - 지도 / 정보 확인칸 / 연락 버튼 -->
-        <ScrollView
+        <androidx.core.widget.NestedScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -26,10 +26,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <LinearLayout
+            <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 android:orientation="vertical">
 
                 <!-- 지도 -->
@@ -54,7 +54,7 @@
                     android:layout_marginBottom="15dp"
                     android:orientation="horizontal">
 
-                    <TextView
+                    <androidx.appcompat.widget.AppCompatTextView
                         android:id="@+id/tv_delivery_time"
                         style="@style/gs_text_regular_14"
                         bind_detail_delivery_time="@{viewModel.order}"
@@ -130,8 +130,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
-            </LinearLayout>
-        </ScrollView>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.core.widget.NestedScrollView>
 
 
         <!-- 배달기사에게 전화/문자하기 버튼 -->

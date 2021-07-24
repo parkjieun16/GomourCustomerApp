@@ -9,6 +9,7 @@ import androidx.databinding.ObservableArrayList
 import androidx.databinding.ObservableField
 import androidx.databinding.ObservableInt
 import androidx.databinding.ObservableParcelable
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,8 +32,12 @@ class DoOrderViewModel : ViewModel() {
     val destination = ObservableField<Place>()
     val message = ObservableField<String>()
     val price = ObservableInt()
-    val orderRequest = MutableLiveData<OrderRequest?>()
-    val exception = MutableLiveData<Exception?>()
+    
+    private val _orderRequest = MutableLiveData<OrderRequest?>()
+    val orderRequest: LiveData<OrderRequest?> = _orderRequest
+
+    private val _exception = MutableLiveData<Exception?>()
+    val exception: LiveData<Exception?> = _exception
 
     private val repository: Repository = RepositoryImpl
 
@@ -50,7 +55,7 @@ class DoOrderViewModel : ViewModel() {
     }
 
     fun doneNavigateWaitMatch() {
-        orderRequest.value = null
+        _orderRequest.value = null
         storeList.clear()
         message.set("")
         price.set(0)
@@ -58,23 +63,21 @@ class DoOrderViewModel : ViewModel() {
     }
 
     /** 주문하기 버튼 클릭 시 Order 객체 생성하고 데이터베이스 서버의 order_request 테이블에 write */
-    fun onClickOrderBtn() {
-        viewModelScope.launch {
-            try {
-                checkInput()
-                getDeliveryCharge().join()
-                createOrderRequest().let {
-                    repository.writeOrderRequest(it)
-                    orderRequest.value = it
-                }
-            } catch (e: NotEnteredException) {
-                exception.value = e
+    fun createOrder() = viewModelScope.launch {
+        try {
+            checkInput()
+            getDeliveryCharge().join()
+            createOrderRequest().let {
+                repository.writeOrderRequest(it)
+                _orderRequest.value = it
             }
+        } catch (e: NotEnteredException) {
+            _exception.value = e
         }
-
     }
 
-    private fun checkInput() {
+
+    private fun checkInput()  {
         for (store in storeList) {
             if (store.place.roadAddressName.isNullOrEmpty()) {
                 throw NotEnteredException("모든 칸에 주문 장소를 설정해주세요")
@@ -124,13 +127,13 @@ class DoOrderViewModel : ViewModel() {
                 price.set(storeList.size * 1000 + (distance / 100f).roundToInt() * 100)
             }
         } catch (e: NotEnteredException) {
-            exception.value = e
+            _exception.value = e
         } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
     fun doneExceptionProcess() {
-        exception.value = null
+        _exception.value = null
     }
 }
