@@ -48,7 +48,8 @@ class LoginFragment : Fragment() {
 
         // 툴바 설정
         (requireActivity() as BaseActivity).setToolbar(
-            requireContext(), false, null, false)
+            requireContext(), false, null, false
+        )
 
         auth = Firebase.auth
         binding = DataBindingUtil.inflate<FragmentLoginBinding>(
@@ -87,6 +88,7 @@ class LoginFragment : Fragment() {
     }
 
     private fun login() {
+        binding.loginButton.isClickable = false
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.login().join()
             if (viewModel.loginInfo.value != null) { // 로그인 성공 시
@@ -97,7 +99,8 @@ class LoginFragment : Fragment() {
                 setSharedPreference()
 
             } else { // 로그인 실패 시
-                launch(Dispatchers.Main) {
+                binding.loginButton.isClickable = true
+                withContext(Dispatchers.Main) {
                     showAlertDialog(resources.getString(R.string.login_fail_dialog))
                 }
             }
@@ -135,6 +138,9 @@ class LoginFragment : Fragment() {
         RoundedAlertDialog()
             .setMessage(msg)
             .setPositiveButton(resources.getString(R.string.ok), null)
-            .show((requireActivity() as BaseActivity).supportFragmentManager, "rounded alert dialog")
+            .show(
+                (requireActivity() as BaseActivity).supportFragmentManager,
+                "rounded alert dialog"
+            )
     }
 }
