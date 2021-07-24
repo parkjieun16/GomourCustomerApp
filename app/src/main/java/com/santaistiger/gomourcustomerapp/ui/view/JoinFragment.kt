@@ -49,11 +49,12 @@ class JoinFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         // 툴바 설정
         (requireActivity() as BaseActivity).setToolbar(
-            requireContext(), false, null, false)
+            requireContext(), false, null, false
+        )
 
         auth = Firebase.auth
         binding = DataBindingUtil.inflate<FragmentJoinBinding>(
@@ -80,7 +81,7 @@ class JoinFragment : Fragment() {
         }
 
 
-        //이메일 중복 버튼
+        // 이메일 중복 버튼
         binding.emailCheckButton.setOnClickListener {
             viewModel.email = binding.emailEditText.text.toString()
 
@@ -95,7 +96,7 @@ class JoinFragment : Fragment() {
             }
         }
 
-        //회원가입버튼
+        // 회원가입버튼
         binding.signUpButton.setOnClickListener {
             val email: String = binding.emailEditText.text.toString()
             val password: String = binding.passwordEditText.text.toString()
@@ -103,7 +104,7 @@ class JoinFragment : Fragment() {
             val name: String = binding.nameEditText.text.toString()
             val phone = binding.PhoneEditText.text.toString()
 
-            var customer = Customer(email, password, name, phone, null)
+            val customer = Customer(email, password, name, phone, null)
             if (isUniqueEmail) {
                 if (password(password) && passwordEqual(passwordCheck)) {
                     createAccount(customer)
@@ -125,7 +126,7 @@ class JoinFragment : Fragment() {
         }
     }
 
-    //이메일 변경될 때 마다 인식
+    // 이메일 변경될 때 마다 인식
     private val emailChangeWatcher = object : TextWatcher {
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
         override fun afterTextChanged(s: Editable?) {
@@ -137,7 +138,7 @@ class JoinFragment : Fragment() {
         }
     }
 
-    //비밀번호 변경될때마다 인식
+    // 비밀번호 변경될때마다 인식
     private val passwordChangeWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
         }
@@ -153,7 +154,7 @@ class JoinFragment : Fragment() {
     }
 
 
-    //비밀번호 체크 변경될때마다 인식
+    // 비밀번호 체크 변경될때마다 인식
     private val passwordCheckChangeWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {}
 
@@ -168,7 +169,7 @@ class JoinFragment : Fragment() {
 
     // 패스워드 체크 제한
     private fun password(password: CharSequence): Boolean {
-        val pwPattern = "^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@\$%^&*-]).{8,16}\$"
+        val pwPattern = "^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,16}\$"
 
         return if (Pattern.matches(pwPattern, password)) {
             binding.passwordValid.visibility = View.GONE
@@ -184,22 +185,23 @@ class JoinFragment : Fragment() {
 
     private fun passwordEqual(passwordCheck: CharSequence): Boolean {
         val password = binding.passwordEditText.text.toString()
-        if (password == passwordCheck.toString()) {
+        return if (password == passwordCheck.toString()) {
             binding.passwordValid.setTextColor(Color.parseColor("#000000"))
             binding.passwordValid.visibility = View.VISIBLE
             binding.passwordValid.setText(R.string.password_available_info)
-            return true
-        } else {
-            // 비밀번호 같지 않을 때
+            true
+
+        } // 비밀번호 같지 않을 때
+        else {
             binding.passwordValid.setTextColor(Color.parseColor("#FFF44336"))
             binding.passwordValid.visibility = View.VISIBLE
             binding.passwordValid.setText(R.string.password_different_info)
-            return false
+            false
         }
     }
 
 
-    //모든 영역 널이 아닌지 확인
+    // 모든 영역 널이 아닌지 확인
     fun checkFieldsForEmptyValues() {
         val signUpButton = binding.signUpButton
         val email = binding.emailEditText.text.toString()
@@ -212,11 +214,11 @@ class JoinFragment : Fragment() {
     }
 
 
-    //이메일 형식 체크
+    // 이메일 형식 체크
     private fun emailValidCheck(): Boolean {
         val email = binding.emailEditText.text.toString()
 
-        //이메일 형식이 맞지 않을 경우
+        // 이메일 형식이 맞지 않을 경우
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             binding.emailValid.visibility = View.VISIBLE
             binding.emailValid.setTextColor(Color.parseColor("#FFF44336"))
@@ -224,29 +226,29 @@ class JoinFragment : Fragment() {
             emailCheckButton.isEnabled = false
             return false
         }
-        //이메일 형식이 맞는 경우
+        // 이메일 형식이 맞는 경우
         else {
             binding.emailValid.visibility = View.GONE
-            //단국이메일인경우
-            if (email.contains(R.string.dankook_domain.toString())) {
+
+            return if (email.contains(R.string.dankook_domain.toString())) { //단국대학교 이메일인경우
                 binding.emailValid.visibility = View.VISIBLE
                 binding.emailValid.setTextColor(Color.parseColor("#FFF44336"))
                 binding.emailValid.setText(R.string.dankook_domain_info)
                 emailCheckButton.isEnabled = false
-                return false
-            } else {
-                //사용가능
+                false
+
+            } //사용가능
+            else {
                 binding.emailValid.visibility = View.GONE
                 emailCheckButton.isEnabled = true
-                return true
+                true
             }
         }
     }
 
 
-    //emailValid 관련 텍스트
+    // 사용중인 이메일
     private fun emailValidWrong() {
-        // 이미 사용중인 이메일입니다.
         binding.emailValid.visibility = View.VISIBLE
         binding.emailValid.setTextColor(Color.parseColor("#FFF44336")) //레드
         binding.emailValid.setText(R.string.join_email_duplicate_info)
@@ -254,8 +256,8 @@ class JoinFragment : Fragment() {
 
     }
 
+    // 사용 가능한 이메일
     private fun emailValidCorrect() {
-        // 사용가능 이메일
         binding.emailValid.visibility = View.VISIBLE
         binding.emailValid.setTextColor(Color.parseColor("#000000"))
         binding.emailValid.setText(R.string.join_email_available_info)
@@ -269,16 +271,18 @@ class JoinFragment : Fragment() {
         CoroutineScope(Dispatchers.IO).launch {
             viewModel.join().join()
             if (viewModel.joinInfo.value != null) {
+
                 // 회원가입
                 customer.uid = repository.getUid()
                 repository.writeFireStoreCustomer(customer)
+
                 // 자동로그인에 저장
                 val auto = requireActivity()
                     .getSharedPreferences("auto", Context.MODE_PRIVATE)
                 val autoLogin = auto.edit()
                 autoLogin.putString("email", customer.email)
                 autoLogin.putString("password", customer.password)
-                autoLogin.commit()
+                autoLogin.apply()
                 findNavController().navigate(R.id.action_joinFragment_to_doOrderFragment)
                 (requireActivity() as BaseActivity).setNavigationDrawerHeader()
             } else {
