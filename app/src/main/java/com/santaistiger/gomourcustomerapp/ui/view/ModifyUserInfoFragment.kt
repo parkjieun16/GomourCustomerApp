@@ -153,7 +153,7 @@ class ModifyUserInfoFragment : Fragment() {
 
     // 패스워드 체크 제한
     private fun password(password: CharSequence): Boolean {
-        val pwPattern = "^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,16}\$"
+        val pwPattern = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d~!@#\$%^&*()+|=]{8,16}$"
         if (Pattern.matches(pwPattern, password)) {
             binding.passwordModifyValid.visibility = View.GONE
             return true
